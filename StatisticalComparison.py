@@ -109,8 +109,6 @@ clfET = ExtraTreesClassifier(random_state=84,n_estimators=20)
 param_distET = {'n_estimators': [250, 500, 1000, 1500],
                 'min_samples_split': [2, 4, 8]}
 
-
-
 sys.stdout = open(conf["kfold_comparison"][0:conf["kfold_comparison"].rfind("/")+1] + conf["model"] + ".txt", "w")
 
 print("-------------------------------------------------")
