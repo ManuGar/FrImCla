@@ -1,0 +1,41 @@
+['444-ET' '888-ET' '161616-ET']
+==========================================================
+Report
+==========================================================
+**********************************************************
+Mean and std
+**********************************************************
+444-ET: 0.844406 (0.031400)
+888-ET: 0.817263 (0.051690)
+161616-ET: 0.756648 (0.035055)
+**********************************************************
+Statistical tests
+**********************************************************
+----------------------------------------------------------
+Checking parametric conditions 
+----------------------------------------------------------
+Checking independence 
+Ok
+Checking normality using Shapiro-Wilk's test for normality, alpha=0.05
+W: 0.976298, p:0.720922
+The null hypothesis (normality) is accepted
+Checking heteroscedasticity using Levene's test, alpha=0.05
+W: 0.879315, p:0.426619
+The null hypothesis (heteroscedasticity) is accepted
+Conditions for a parametric test are fulfilled
+----------------------------------------------------------
+Working with more than 2 algorithms
+----------------------------------------------------------
+----------------------------------------------------------
+Applying ANOVA test
+----------------------------------------------------------
+F-value: -0.234716, p-value: 1.0
+Null hypothesis is accepted; hence, we can't say that there is a significant difference in the performance of the models
+----------------------------------------------------------
+Analysing effect size
+----------------------------------------------------------
+We take the model with the best mean (444-ET, mean: 0.844406) and compare it with the other models: 
+Comparing effect size of 444-ET and 888-ET: Cohen's d=0.602115950816, Large
+Comparing effect size of 444-ET and 161616-ET: Cohen's d=2.50184478888, Large
+Eta squared: 0.452425 (Large)
+

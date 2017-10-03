@@ -1,0 +1,48 @@
+*************************************************************************************
+* How to use the different files
+*************************************************************************************
+
+*************************************************************************************
+* Performing a statistical comparison
+*************************************************************************************
+
+1. Open the conf.json file and edit the variable dataset_path
+   to indicate the path where the images are stored. Such a
+   folder must have a subfolder for each class.
+2. In the conf.json file modify the variable model to select
+   the model that you want to execute.
+3. Extract the features of the dataset using the following
+   command:
+   python index_features.py -c conf/conf.json
+4. Perform the statistical analysis comparing different methods.
+   New methods can be added in the StatisticalComparison.py file.
+   Currently the methods that are available are RandomForest, SVM, KNN, LR, MLP and
+   Gradient Boost.
+   To perform the analysis use the command:
+   python StatisticalComparison.py -c conf/conf.json
+   This will take some time but at the end you will get a report
+   comparing the different methods.
+
+
+*************************************************************************************
+* Training a classification model
+*************************************************************************************
+
+Once that you have determined the best model with the statistical
+comparison, you can create a classification model for further use.
+
+1. Open the conf.json file and edit the variable modelClassifier
+   indicating the model that you want to use.
+2. Train the model executing the command:
+   python train.py -c conf/conf.json
+
+*************************************************************************************
+* Using the trained model to predict the class of a new image
+*************************************************************************************
+
+After training a model, you can use it to predict the class of
+new images.
+
+1. Execute the command:
+   python prediction.py -c conf/conf.json -i imagePath
+   In the above command you must replace imagePath with the path of the image.

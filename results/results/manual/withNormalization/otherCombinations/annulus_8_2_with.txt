@@ -1,0 +1,117 @@
+Iteration 0
+RF
+SVM
+KNN
+LR
+MLP
+ET
+Iteration 1
+RF
+SVM
+KNN
+LR
+MLP
+ET
+Iteration 2
+RF
+SVM
+KNN
+LR
+MLP
+ET
+Iteration 3
+RF
+SVM
+KNN
+LR
+MLP
+ET
+Iteration 4
+RF
+SVM
+KNN
+LR
+MLP
+ET
+Iteration 5
+RF
+SVM
+KNN
+LR
+MLP
+ET
+Iteration 6
+RF
+SVM
+KNN
+LR
+MLP
+ET
+Iteration 7
+RF
+SVM
+KNN
+LR
+MLP
+ET
+Iteration 8
+RF
+SVM
+KNN
+LR
+MLP
+ET
+Iteration 9
+RF
+SVM
+KNN
+LR
+MLP
+ET
+results/fungiWithControl/kfold-comparison-annulus_8_2-with.csv
+['KNN' 'SVM' 'MLP' 'RF' 'LR' 'ET']
+==========================================================
+Report
+==========================================================
+**********************************************************
+Mean and std
+**********************************************************
+KNN: 0.725968 (0.062613)
+SVM: 0.693276 (0.035200)
+MLP: 0.664603 (0.049545)
+RF: 0.718025 (0.058576)
+LR: 0.568622 (0.040298)
+ET: 0.781930 (0.045604)
+**********************************************************
+Statistical tests
+**********************************************************
+----------------------------------------------------------
+Checking parametric conditions 
+----------------------------------------------------------
+Checking independence 
+Ok
+Checking normality using Shapiro-Wilk's test for normality, alpha=0.05
+W: 0.975272, p:0.261897
+The null hypothesis (normality) is accepted
+Checking heteroscedasticity using Levene's test, alpha=0.05
+W: 0.459478, p:0.804579
+The null hypothesis (heteroscedasticity) is accepted
+Conditions for a parametric test are fulfilled
+----------------------------------------------------------
+Working with more than 2 algorithms
+----------------------------------------------------------
+----------------------------------------------------------
+Applying ANOVA test
+----------------------------------------------------------
+F-value: 0.357919, p-value: 0.874912513117
+Null hypothesis is accepted; hence, we can't say that there is a significant difference in the performance of the models
+----------------------------------------------------------
+Analysing effect size
+----------------------------------------------------------
+We take the model with the best mean (ET, mean: 0.781930) and compare it with the other models: 
+Comparing effect size of ET and KNN: Cohen's d=0.969280990923, Large
+Comparing effect size of ET and SVM: Cohen's d=2.06463925609, Large
+Comparing effect size of ET and MLP: Cohen's d=2.33761690983, Large
+Comparing effect size of ET and RF: Cohen's d=1.15493816484, Large
+Comparing effect size of ET and LR: Cohen's d=4.7025090476, Large
+Eta squared: 0.637099 (Large)

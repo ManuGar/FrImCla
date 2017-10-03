@@ -1,0 +1,63 @@
+['Deep-Resnet-LR-Without' 'Deep-Resnet-SVM-With' 'Haralick-ET-Without'
+ 'HOG-ET-With' '444-ET-Without' '444-ET-With']
+==========================================================
+Report
+==========================================================
+**********************************************************
+Mean and std
+**********************************************************
+Deep-Resnet-LR-Without: 0.945407 (0.017527)
+Deep-Resnet-SVM-With: 0.965644 (0.016804)
+Haralick-ET-Without: 0.897150 (0.020320)
+HOG-ET-With: 0.954457 (0.015195)
+444-ET-Without: 0.932940 (0.027973)
+444-ET-With: 0.844406 (0.031400)
+**********************************************************
+Statistical tests
+**********************************************************
+----------------------------------------------------------
+Checking parametric conditions 
+----------------------------------------------------------
+Checking independence 
+Ok
+Checking normality using Shapiro-Wilk's test for normality, alpha=0.05
+W: 0.924496, p:0.001169
+The null hypothesis (normality) is rejected
+Checking heteroscedasticity using Levene's test, alpha=0.05
+W: 2.185133, p:0.069257
+The null hypothesis (heteroscedasticity) is accepted
+Conditions for a parametric test are not fulfilled, applying a non-parametric test
+----------------------------------------------------------
+Working with more than 2 algorithms
+----------------------------------------------------------
+----------------------------------------------------------
+Applying Friedman test
+----------------------------------------------------------
+F-value: 29.555692, p-value: 3.61821683725e-13
+Null hypothesis is rejected; hence, models have different performance
+Technique                 Ranking
+----------------------  ---------
+Deep-Resnet-SVM-With         5.25
+HOG-ET-With                  4.65
+Deep-Resnet-LR-Without       4.4
+444-ET-Without               3.6
+Haralick-ET-Without          2.1
+444-ET-With                  1
+Winner model: Deep-Resnet-SVM-With
+----------------------------------------------------------
+Applying Holm p-value adjustment procedure and analysing effect size
+----------------------------------------------------------
+Comparison                                        Zvalue      p-value    adjusted p-value
+----------------------------------------------  --------  -----------  ------------------
+Deep-Resnet-SVM-With vs 444-ET-With             5.07972   3.77988e-07         1.88994e-06
+Deep-Resnet-SVM-With vs Haralick-ET-Without     3.76497   0.000166569         0.000666276
+Deep-Resnet-SVM-With vs 444-ET-Without          1.97213   0.0485951           0.145785
+Deep-Resnet-SVM-With vs Deep-Resnet-LR-Without  1.01594   0.309656            0.619312
+Deep-Resnet-SVM-With vs HOG-ET-With             0.717137  0.473289            0.619312
+There is a significant difference between the models: Deep-Resnet-SVM-With (mean: 0.965644, std: 0.016804) and 444-ET-With (mean: 0.844406, std: 0.031400) (Cohen's d=4.56732849143, Large)
+There is a significant difference between the models: Deep-Resnet-SVM-With (mean: 0.965644, std: 0.016804) and Haralick-ET-Without (mean: 0.897150, std: 0.020320) (Cohen's d=3.48505970189, Large)
+We can't say that there is a significant difference in the performance of the models: Deep-Resnet-SVM-With (mean: 0.965644, std: 0.016804) and 444-ET-Without (mean: 0.932940, std: 0.027973) (Cohen's d=1.34463352009, Large)
+We can't say that there is a significant difference in the performance of the models: Deep-Resnet-SVM-With (mean: 0.965644, std: 0.016804) and Deep-Resnet-LR-Without (mean: 0.945407, std: 0.017527) (Cohen's d=1.11823307821, Large)
+We can't say that there is a significant difference in the performance of the models: Deep-Resnet-SVM-With (mean: 0.965644, std: 0.016804) and HOG-ET-With (mean: 0.954457, std: 0.015195) (Cohen's d=0.66251916599, Large)
+Eta squared: 0.773539 (Large)
+

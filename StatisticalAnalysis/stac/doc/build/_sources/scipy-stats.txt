@@ -1,0 +1,18 @@
+Tests for two groups comparison
+===============
+.. currentmodule:: scipy.stats
+
+.. autosummary::
+    :toctree:
+
+    ttest_ind
+    ttest_rel
+    wilcoxon
+    mannwhitneyu
+
+.. currentmodule:: stac.nonparametric_tests
+
+.. autosummary::
+    :toctree:
+
+    binomial_sign_test

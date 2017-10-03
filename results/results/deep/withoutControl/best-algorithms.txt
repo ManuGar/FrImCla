@@ -1,0 +1,51 @@
+['Densenet-ET' 'Googlenet-ET' 'Inception-LR' 'Overfeat-SVM' 'Resnet-LR'
+ 'VGG16-LR' 'VGG19-LR' 'Xception-LR']
+==========================================================
+Report
+==========================================================
+**********************************************************
+Mean and std
+**********************************************************
+Densenet-ET: 0.914529 (0.017039)
+Googlenet-ET: 0.924797 (0.021412)
+Inception-LR: 0.926440 (0.012203)
+Overfeat-SVM: 0.925641 (0.023155)
+Resnet-LR: 0.945407 (0.017527)
+VGG16-LR: 0.917685 (0.018226)
+VGG19-LR: 0.927184 (0.023261)
+Xception-LR: 0.935146 (0.016470)
+**********************************************************
+Statistical tests
+**********************************************************
+----------------------------------------------------------
+Checking parametric conditions 
+----------------------------------------------------------
+Checking independence 
+Ok
+Checking normality using Shapiro-Wilk's test for normality, alpha=0.05
+W: 0.974391, p:0.108240
+The null hypothesis (normality) is accepted
+Checking heteroscedasticity using Levene's test, alpha=0.05
+W: 0.433272, p:0.878213
+The null hypothesis (heteroscedasticity) is accepted
+Conditions for a parametric test are fulfilled
+----------------------------------------------------------
+Working with more than 2 algorithms
+----------------------------------------------------------
+----------------------------------------------------------
+Applying ANOVA test
+----------------------------------------------------------
+F-value: 0.055479, p-value: 0.999735196496
+Null hypothesis is accepted; hence, we can't say that there is a significant difference in the performance of the models
+----------------------------------------------------------
+Analysing effect size
+----------------------------------------------------------
+We take the model with the best mean (Resnet-LR, mean: 0.945407) and compare it with the other models: 
+Comparing effect size of Resnet-LR and Densenet-ET: Cohen's d=1.69474209542, Large
+Comparing effect size of Resnet-LR and Googlenet-ET: Cohen's d=0.999292292237, Large
+Comparing effect size of Resnet-LR and Inception-LR: Cohen's d=1.19146854333, Large
+Comparing effect size of Resnet-LR and Overfeat-SVM: Cohen's d=0.91317810888, Large
+Comparing effect size of Resnet-LR and VGG16-LR: Cohen's d=1.47088520266, Large
+Comparing effect size of Resnet-LR and VGG19-LR: Cohen's d=0.839426865854, Large
+Comparing effect size of Resnet-LR and Xception-LR: Cohen's d=0.57240270052, Large
+Eta squared: 0.184862 (Large)

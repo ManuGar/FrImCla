@@ -1,0 +1,63 @@
+results/fungi/kfold-comparison-overfeat.csv
+['KNN' 'RF' 'SVM' 'LR' 'MLP' 'ET']
+==========================================================
+Report
+==========================================================
+**********************************************************
+Mean and std
+**********************************************************
+KNN: 0.858355 (0.040100)
+RF: 0.843320 (0.025428)
+SVM: 0.925641 (0.023155)
+LR: 0.912961 (0.025742)
+MLP: 0.917710 (0.023494)
+ET: 0.895551 (0.025483)
+**********************************************************
+Statistical tests
+**********************************************************
+----------------------------------------------------------
+Checking parametric conditions 
+----------------------------------------------------------
+Checking independence 
+Ok
+Checking normality using Shapiro-Wilk's test for normality, alpha=0.05
+W: 0.960263, p:0.048466
+The null hypothesis (normality) is rejected
+Checking heteroscedasticity using Levene's test, alpha=0.05
+W: 1.126748, p:0.357411
+The null hypothesis (heteroscedasticity) is accepted
+Conditions for a parametric test are not fulfilled, applying a non-parametric test
+----------------------------------------------------------
+Working with more than 2 algorithms
+----------------------------------------------------------
+----------------------------------------------------------
+Applying Friedman test
+----------------------------------------------------------
+F-value: 22.250000, p-value: 3.68137742512e-11
+Null hypothesis is rejected; hence, models have different performance
+Technique      Ranking
+-----------  ---------
+SVM               5.25
+MLP               4.65
+LR                4.25
+ET                3.7
+KNN               1.75
+RF                1.4
+Winner model: SVM
+----------------------------------------------------------
+Applying Holm p-value adjustment procedure and analysing effect size
+----------------------------------------------------------
+Comparison      Zvalue      p-value    adjusted p-value
+------------  --------  -----------  ------------------
+SVM vs RF     4.60163   4.19197e-06         2.09599e-05
+SVM vs KNN    4.1833    2.87308e-05         0.000114923
+SVM vs ET     1.8526    0.0639391           0.191817
+SVM vs LR     1.19523   0.231998            0.463995
+SVM vs MLP    0.717137  0.473289            0.473289
+There is a significant difference between the models: SVM (mean: 0.925641, std: 0.023155) and RF (mean: 0.843320, std: 0.025428) (Cohen's d=3.21148024832, Large)
+There is a significant difference between the models: SVM (mean: 0.925641, std: 0.023155) and KNN (mean: 0.858355, std: 0.040100) (Cohen's d=1.94951485252, Large)
+We can't say that there is a significant difference in the performance of the models: SVM (mean: 0.925641, std: 0.023155) and ET (mean: 0.895551, std: 0.025483) (Cohen's d=1.17247656296, Large)
+We can't say that there is a significant difference in the performance of the models: SVM (mean: 0.925641, std: 0.023155) and LR (mean: 0.912961, std: 0.025742) (Cohen's d=0.491325342196, Medium)
+We can't say that there is a significant difference in the performance of the models: SVM (mean: 0.925641, std: 0.023155) and MLP (mean: 0.917710, std: 0.023494) (Cohen's d=0.322538961786, Medium)
+Eta squared: 0.552463 (Large)
+

@@ -1,0 +1,63 @@
+results/fungi/kfold-comparison-vgg16.csv
+['KNN' 'RF' 'SVM' 'LR' 'MLP' 'ET']
+==========================================================
+Report
+==========================================================
+**********************************************************
+Mean and std
+**********************************************************
+KNN: 0.791920 (0.031699)
+RF: 0.825141 (0.022949)
+SVM: 0.313992 (0.049425)
+LR: 0.917685 (0.018226)
+MLP: 0.898750 (0.028816)
+ET: 0.899494 (0.023606)
+**********************************************************
+Statistical tests
+**********************************************************
+----------------------------------------------------------
+Checking parametric conditions 
+----------------------------------------------------------
+Checking independence 
+Ok
+Checking normality using Shapiro-Wilk's test for normality, alpha=0.05
+W: 0.678947, p:0.000000
+The null hypothesis (normality) is rejected
+Checking heteroscedasticity using Levene's test, alpha=0.05
+W: 2.562192, p:0.037545
+The null hypothesis (heteroscedasticity) is rejected
+Conditions for a parametric test are not fulfilled, applying a non-parametric test
+----------------------------------------------------------
+Working with more than 2 algorithms
+----------------------------------------------------------
+----------------------------------------------------------
+Applying Friedman test
+----------------------------------------------------------
+F-value: 81.778098, p-value: 1.11022302463e-16
+Null hypothesis is rejected; hence, models have different performance
+Technique      Ranking
+-----------  ---------
+LR                5.6
+MLP               4.85
+ET                4.55
+RF                2.8
+KNN               2.2
+SVM               1
+Winner model: LR
+----------------------------------------------------------
+Applying Holm p-value adjustment procedure and analysing effect size
+----------------------------------------------------------
+Comparison      Zvalue      p-value    adjusted p-value
+------------  --------  -----------  ------------------
+LR vs SVM     5.49805   3.84011e-08         1.92005e-07
+LR vs KNN     4.06378   4.82849e-05         0.00019314
+LR vs RF      3.34664   0.000817973         0.00245392
+LR vs ET      1.25499   0.209482            0.418965
+LR vs MLP     0.896421  0.370028            0.418965
+There is a significant difference between the models: LR (mean: 0.917685, std: 0.018226) and SVM (mean: 0.313992, std: 0.049425) (Cohen's d=15.3751425466, Large)
+There is a significant difference between the models: LR (mean: 0.917685, std: 0.018226) and KNN (mean: 0.791920, std: 0.031699) (Cohen's d=4.61453411465, Large)
+There is a significant difference between the models: LR (mean: 0.917685, std: 0.018226) and RF (mean: 0.825141, std: 0.022949) (Cohen's d=4.23682217994, Large)
+We can't say that there is a significant difference in the performance of the models: LR (mean: 0.917685, std: 0.018226) and ET (mean: 0.899494, std: 0.023606) (Cohen's d=0.818365640264, Large)
+We can't say that there is a significant difference in the performance of the models: LR (mean: 0.917685, std: 0.018226) and MLP (mean: 0.898750, std: 0.028816) (Cohen's d=0.745087573908, Large)
+Eta squared: 0.979081 (Large)
+

@@ -1,0 +1,70 @@
+['Densenet-ET' 'Googlenet-SVM' 'Inception-LR' 'Overfeat-SVM' 'Resnet-SVM'
+ 'VGG16-ET' 'VGG19-LR' 'Xception-LR']
+==========================================================
+Report
+==========================================================
+**********************************************************
+Mean and std
+**********************************************************
+Densenet-ET: 0.962432 (0.023768)
+Googlenet-SVM: 0.954451 (0.022672)
+Inception-LR: 0.955251 (0.016114)
+Overfeat-SVM: 0.930489 (0.024590)
+Resnet-SVM: 0.965644 (0.016804)
+VGG16-ET: 0.950463 (0.020520)
+VGG19-LR: 0.946489 (0.023152)
+Xception-LR: 0.952844 (0.023070)
+**********************************************************
+Statistical tests
+**********************************************************
+----------------------------------------------------------
+Checking parametric conditions
+----------------------------------------------------------
+Checking independence
+Ok
+Checking normality using Shapiro-Wilk's test for normality, alpha=0.05
+W: 0.952175, p:0.004601
+The null hypothesis (normality) is rejected
+Checking heteroscedasticity using Levene's test, alpha=0.05
+W: 0.519631, p:0.816907
+The null hypothesis (heteroscedasticity) is accepted
+Conditions for a parametric test are not fulfilled, applying a non-parametric test
+----------------------------------------------------------
+Working with more than 2 algorithms
+----------------------------------------------------------
+----------------------------------------------------------
+Applying Friedman test
+----------------------------------------------------------
+F-value: 6.241935, p-value: 1.42819780666e-05
+Null hypothesis is rejected; hence, models have different performance
+Technique        Ranking
+-------------  ---------
+Resnet-SVM          6.65
+Densenet-ET         6.3
+Googlenet-SVM       4.6
+Inception-LR        4.5
+Xception-LR         4.5
+VGG16-ET            4.05
+VGG19-LR            3.85
+Overfeat-SVM        1.55
+Winner model: Resnet-SVM
+----------------------------------------------------------
+Applying Holm p-value adjustment procedure and analysing effect size
+----------------------------------------------------------
+Comparison                     Zvalue      p-value    adjusted p-value
+---------------------------  --------  -----------  ------------------
+Resnet-SVM vs Overfeat-SVM   4.65564   3.22973e-06         2.26081e-05
+Resnet-SVM vs VGG19-LR       2.55604   0.0105871           0.0635228
+Resnet-SVM vs VGG16-ET       2.37346   0.0176221           0.0881105
+Resnet-SVM vs Xception-LR    1.96267   0.0496842           0.198737
+Resnet-SVM vs Inception-LR   1.96267   0.0496842           0.198737
+Resnet-SVM vs Googlenet-SVM  1.87139   0.0612917           0.198737
+Resnet-SVM vs Densenet-ET    0.319505  0.749344            0.749344
+There is a significant difference between the models: Resnet-SVM (mean: 0.965644, std: 0.016804) and Overfeat-SVM (mean: 0.930489, std: 0.024590) (Cohen's d=1.58363817103, Large)
+We can't say that there is a significant difference in the performance of the models: Resnet-SVM (mean: 0.965644, std: 0.016804) and VGG19-LR (mean: 0.946489, std: 0.023152) (Cohen's d=0.898363610272, Large)
+We can't say that there is a significant difference in the performance of the models: Resnet-SVM (mean: 0.965644, std: 0.016804) and VGG16-ET (mean: 0.950463, std: 0.020520) (Cohen's d=0.767932025263, Large)
+We can't say that there is a significant difference in the performance of the models: Resnet-SVM (mean: 0.965644, std: 0.016804) and Xception-LR (mean: 0.952844, std: 0.023070) (Cohen's d=0.601697075996, Large)
+We can't say that there is a significant difference in the performance of the models: Resnet-SVM (mean: 0.965644, std: 0.016804) and Inception-LR (mean: 0.955251, std: 0.016114) (Cohen's d=0.598953103479, Large)
+We can't say that there is a significant difference in the performance of the models: Resnet-SVM (mean: 0.965644, std: 0.016804) and Googlenet-SVM (mean: 0.954451, std: 0.022672) (Cohen's d=0.53216240298, Large)
+We can't say that there is a significant difference in the performance of the models: Resnet-SVM (mean: 0.965644, std: 0.016804) and Densenet-ET (mean: 0.962432, std: 0.023768) (Cohen's d=0.148079415336, Small)
+Eta squared: 0.178499 (Large)

@@ -1,0 +1,245 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>stac.parametric_tests &mdash; STAC Release Candidate documentation</title>
+    
+    <link rel="stylesheet" href="../../_static/sphinxdoc.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../',
+        VERSION:     'Release Candidate',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../_static/doctools.js"></script>
+    <link rel="top" title="STAC Release Candidate documentation" href="../../index.html" />
+    <link rel="up" title="stac" href="../stac.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li><a href="../../index.html">STAC Release Candidate documentation</a> &raquo;</li>
+          <li><a href="../index.html" >Module code</a> &raquo;</li>
+          <li><a href="../stac.html" accesskey="U">stac</a> &raquo;</li> 
+      </ul>
+    </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <h1>Source code for stac.parametric_tests</h1><div class="highlight"><pre>
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">.. module:: parametric_tests</span>
+<span class="sd">   :synopsis: Parametric Tests</span>
+
+<span class="sd">.. moduleauthor:: Andrew Carter &lt;andrew@invalid.com&gt;</span>
+
+
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="kn">import</span> <span class="nn">itertools</span> <span class="kn">as</span> <span class="nn">it</span>
+<span class="kn">import</span> <span class="nn">scipy</span> <span class="kn">as</span> <span class="nn">sp</span>
+<span class="kn">import</span> <span class="nn">scipy.stats</span> <span class="kn">as</span> <span class="nn">st</span>
+
+<div class="viewcode-block" id="anova_test"><a class="viewcode-back" href="../../stac.parametric_tests.anova_test.html#stac.parametric_tests.anova_test">[docs]</a><span class="k">def</span> <span class="nf">anova_test</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Performs a 1-way ANOVA.</span>
+<span class="sd">        Tests the hypothesis that in a set of k independent samples groups (where k &gt;= 2) at least two of the groups represent populations with different mean values.</span>
+<span class="sd">        </span>
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        sample1, sample2, ... : array_like</span>
+<span class="sd">            The sample measurements for each group.</span>
+<span class="sd">            </span>
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        F-value : float</span>
+<span class="sd">            The computed F-value of the test.</span>
+<span class="sd">        p-value : float</span>
+<span class="sd">            The associated p-value from the F-distribution.</span>
+<span class="sd">        pivots : array_like</span>
+<span class="sd">            The pivotal quantities for each group.</span>
+<span class="sd">            </span>
+<span class="sd">        References</span>
+<span class="sd">        ----------</span>
+<span class="sd">        D.J. Sheskin, Handbook of parametric and nonparametric statistical procedures. crc Press, 2003, Test 21: The Single-Factor Between-Subjects Analysis of Variance</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">k</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">args</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">k</span> <span class="o">&lt;</span> <span class="mi">2</span><span class="p">:</span> <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s">&#39;Less than 2 groups&#39;</span><span class="p">)</span>
+    <span class="n">n</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">args</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="nb">set</span><span class="p">([</span><span class="nb">len</span><span class="p">(</span><span class="n">v</span><span class="p">)</span> <span class="k">for</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">args</span><span class="p">]))</span> <span class="o">!=</span> <span class="mi">1</span><span class="p">:</span> <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s">&#39;Unequal number of samples&#39;</span><span class="p">)</span>
+
+    <span class="c"># Precalcs</span>
+    <span class="n">x_j</span> <span class="o">=</span> <span class="p">[</span><span class="n">sp</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">group</span><span class="p">)</span> <span class="k">for</span> <span class="n">group</span> <span class="ow">in</span> <span class="n">args</span><span class="p">]</span>
+    <span class="n">x_t</span> <span class="o">=</span> <span class="n">sp</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">x_j</span><span class="p">)</span>
+
+    <span class="c"># Variances</span>
+    <span class="n">ss_t</span> <span class="o">=</span> <span class="n">sp</span><span class="o">.</span><span class="n">sum</span><span class="p">([</span><span class="n">v</span><span class="o">**</span><span class="mi">2</span> <span class="k">for</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">group</span> <span class="k">for</span> <span class="n">group</span> <span class="ow">in</span> <span class="n">args</span><span class="p">])</span> <span class="o">-</span> <span class="n">x_t</span><span class="o">**</span><span class="mi">2</span><span class="o">/</span><span class="nb">float</span><span class="p">(</span><span class="n">k</span><span class="o">*</span><span class="n">n</span><span class="p">)</span>
+    <span class="n">ss_bg</span> <span class="o">=</span> <span class="n">sp</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">x_j</span><span class="p">[</span><span class="n">j</span><span class="p">]</span><span class="o">**</span><span class="mi">2</span><span class="o">/</span><span class="nb">float</span><span class="p">(</span><span class="n">n</span><span class="p">)</span> <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">k</span><span class="p">))</span> <span class="o">-</span> <span class="n">x_t</span><span class="o">**</span><span class="mi">2</span><span class="o">/</span><span class="nb">float</span><span class="p">(</span><span class="n">k</span><span class="o">*</span><span class="n">n</span><span class="p">)</span>
+    <span class="n">ss_wg</span> <span class="o">=</span> <span class="n">ss_t</span> <span class="o">-</span> <span class="n">ss_bg</span>
+
+    <span class="c"># Degrees of freedom</span>
+    <span class="n">df_bg</span> <span class="o">=</span> <span class="n">k</span> <span class="o">-</span> <span class="mi">1</span>
+    <span class="n">df_wg</span> <span class="o">=</span> <span class="n">n</span><span class="o">*</span><span class="n">k</span> <span class="o">-</span> <span class="n">k</span>
+
+    <span class="n">F</span> <span class="o">=</span> <span class="p">(</span><span class="n">ss_bg</span><span class="o">/</span><span class="n">df_bg</span><span class="p">)</span><span class="o">/</span><span class="p">(</span><span class="n">ss_wg</span><span class="o">/</span><span class="n">df_wg</span><span class="p">)</span>
+    <span class="n">p_value</span> <span class="o">=</span> <span class="mi">1</span> <span class="o">-</span> <span class="n">st</span><span class="o">.</span><span class="n">f</span><span class="o">.</span><span class="n">cdf</span><span class="p">(</span><span class="n">F</span><span class="p">,</span> <span class="n">df_bg</span><span class="p">,</span> <span class="n">df_wg</span><span class="p">)</span>
+    
+    <span class="c"># Pivots</span>
+    <span class="n">pivots</span> <span class="o">=</span> <span class="p">[</span><span class="n">sp</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">group</span><span class="p">)</span><span class="o">/</span><span class="n">sp</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="mi">2</span><span class="o">*</span><span class="p">(</span><span class="n">ss_wg</span><span class="o">/</span><span class="n">df_wg</span><span class="p">)</span><span class="o">/</span><span class="nb">float</span><span class="p">(</span><span class="n">n</span><span class="p">))</span> <span class="k">for</span> <span class="n">group</span> <span class="ow">in</span> <span class="n">args</span><span class="p">]</span>
+
+    <span class="k">return</span> <span class="n">F</span><span class="p">,</span> <span class="n">p_value</span><span class="p">,</span> <span class="n">pivots</span>
+    </div>
+<div class="viewcode-block" id="anova_within_test"><a class="viewcode-back" href="../../stac.parametric_tests.anova_within_test.html#stac.parametric_tests.anova_within_test">[docs]</a><span class="k">def</span> <span class="nf">anova_within_test</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Performs a 1-way ANOVA within cases.</span>
+<span class="sd">        Tests the hypothesis that in a set of k dependent sample groups (where k &gt;= 2) at least two of the groups represent populations with different mean values.</span>
+<span class="sd">        </span>
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        sample1, sample2, ... : array_like</span>
+<span class="sd">            The sample measurements for each group.</span>
+<span class="sd">            </span>
+<span class="sd">        Returns</span>
+<span class="sd">        ----------</span>
+<span class="sd">        F-value : float</span>
+<span class="sd">            The computed F-value of the test.</span>
+<span class="sd">        p-value : float</span>
+<span class="sd">            The associated p-value from the F-distribution.</span>
+<span class="sd">        pivots : array_like</span>
+<span class="sd">            The pivotal quantities for each group.</span>
+<span class="sd">            </span>
+<span class="sd">        References</span>
+<span class="sd">        ----------</span>
+<span class="sd">        D.J. Sheskin, Handbook of parametric and nonparametric statistical procedures. crc Press, 2003, Test 24: The Single-Factor Within-Subjects Analysis of Variance</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">k</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">args</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">k</span> <span class="o">&lt;</span> <span class="mi">2</span><span class="p">:</span> <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s">&#39;Less than 2 groups&#39;</span><span class="p">)</span>
+    <span class="n">n</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">args</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="nb">set</span><span class="p">([</span><span class="nb">len</span><span class="p">(</span><span class="n">v</span><span class="p">)</span> <span class="k">for</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">args</span><span class="p">]))</span> <span class="o">!=</span> <span class="mi">1</span><span class="p">:</span> <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s">&#39;Unequal number of samples&#39;</span><span class="p">)</span>
+
+    <span class="c"># Precalcs</span>
+    <span class="n">x_j</span> <span class="o">=</span> <span class="p">[</span><span class="n">sp</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">group</span><span class="p">)</span> <span class="k">for</span> <span class="n">group</span> <span class="ow">in</span> <span class="n">args</span><span class="p">]</span>
+    <span class="n">x_t</span> <span class="o">=</span> <span class="n">sp</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">x_j</span><span class="p">)</span>
+    <span class="n">s_i</span> <span class="o">=</span> <span class="p">[</span><span class="n">sp</span><span class="o">.</span><span class="n">sum</span><span class="p">([</span><span class="n">group</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="k">for</span> <span class="n">group</span> <span class="ow">in</span> <span class="n">args</span><span class="p">])</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n</span><span class="p">)]</span>
+
+    <span class="c"># Variances</span>
+    <span class="n">ss_t</span> <span class="o">=</span> <span class="n">sp</span><span class="o">.</span><span class="n">sum</span><span class="p">([</span><span class="n">v</span><span class="o">**</span><span class="mi">2</span> <span class="k">for</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">group</span> <span class="k">for</span> <span class="n">group</span> <span class="ow">in</span> <span class="n">args</span><span class="p">])</span> <span class="o">-</span> <span class="n">x_t</span><span class="o">**</span><span class="mi">2</span><span class="o">/</span><span class="nb">float</span><span class="p">(</span><span class="n">k</span><span class="o">*</span><span class="n">n</span><span class="p">)</span>
+    <span class="n">ss_bg</span> <span class="o">=</span> <span class="n">sp</span><span class="o">.</span><span class="n">sum</span><span class="p">([</span><span class="n">x_j</span><span class="p">[</span><span class="n">j</span><span class="p">]</span><span class="o">**</span><span class="mi">2</span><span class="o">/</span><span class="nb">float</span><span class="p">(</span><span class="n">n</span><span class="p">)</span> <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">k</span><span class="p">)])</span> <span class="o">-</span> <span class="n">x_t</span><span class="o">**</span><span class="mi">2</span><span class="o">/</span><span class="nb">float</span><span class="p">(</span><span class="n">k</span><span class="o">*</span><span class="n">n</span><span class="p">)</span>
+    <span class="n">ss_bs</span> <span class="o">=</span> <span class="n">sp</span><span class="o">.</span><span class="n">sum</span><span class="p">([</span><span class="n">s_i</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">**</span><span class="mi">2</span><span class="o">/</span><span class="nb">float</span><span class="p">(</span><span class="n">k</span><span class="p">)</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n</span><span class="p">)])</span> <span class="o">-</span> <span class="n">x_t</span><span class="o">**</span><span class="mi">2</span><span class="o">/</span><span class="nb">float</span><span class="p">(</span><span class="n">k</span><span class="o">*</span><span class="n">n</span><span class="p">)</span>
+    <span class="n">ss_wg</span> <span class="o">=</span> <span class="n">ss_t</span> <span class="o">-</span> <span class="n">ss_bg</span>
+    <span class="n">ss_res</span> <span class="o">=</span> <span class="n">ss_t</span> <span class="o">-</span> <span class="n">ss_bg</span> <span class="o">-</span> <span class="n">ss_bs</span>
+
+    <span class="c"># Degrees of freedom</span>
+    <span class="n">df_bg</span> <span class="o">=</span> <span class="n">k</span> <span class="o">-</span> <span class="mi">1</span>
+    <span class="n">df_wg</span> <span class="o">=</span> <span class="n">n</span><span class="o">*</span><span class="n">k</span> <span class="o">-</span> <span class="n">k</span>
+    <span class="n">df_res</span> <span class="o">=</span> <span class="p">(</span><span class="n">n</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span><span class="o">*</span><span class="p">(</span><span class="n">k</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span>
+
+    <span class="n">F</span> <span class="o">=</span> <span class="p">(</span><span class="n">ss_bg</span><span class="o">/</span><span class="n">df_bg</span><span class="p">)</span><span class="o">/</span><span class="p">(</span><span class="n">ss_res</span><span class="o">/</span><span class="n">df_res</span><span class="p">)</span>
+    <span class="n">p_value</span> <span class="o">=</span> <span class="mi">1</span> <span class="o">-</span> <span class="n">st</span><span class="o">.</span><span class="n">f</span><span class="o">.</span><span class="n">cdf</span><span class="p">(</span><span class="n">F</span><span class="p">,</span> <span class="n">df_bg</span><span class="p">,</span> <span class="n">df_res</span><span class="p">)</span>
+    
+    <span class="c"># Pivots</span>
+    <span class="n">pivots</span> <span class="o">=</span> <span class="p">[</span><span class="n">sp</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">group</span><span class="p">)</span><span class="o">/</span><span class="n">sp</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="mi">2</span><span class="o">*</span><span class="p">(</span><span class="n">ss_wg</span><span class="o">/</span><span class="n">df_wg</span><span class="p">)</span><span class="o">/</span><span class="nb">float</span><span class="p">(</span><span class="n">n</span><span class="p">))</span> <span class="k">for</span> <span class="n">group</span> <span class="ow">in</span> <span class="n">args</span><span class="p">]</span>
+
+    <span class="k">return</span> <span class="n">F</span><span class="p">,</span> <span class="n">p_value</span><span class="p">,</span> <span class="n">pivots</span>
+</div>
+<div class="viewcode-block" id="bonferroni_test"><a class="viewcode-back" href="../../stac.parametric_tests.bonferroni_test.html#stac.parametric_tests.bonferroni_test">[docs]</a><span class="k">def</span> <span class="nf">bonferroni_test</span><span class="p">(</span><span class="n">pivots</span><span class="p">,</span> <span class="n">n</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Performs a Bonferroni-Dunn post-hoc test using the pivot quantities obtained by an ANOVA test.</span>
+<span class="sd">        </span>
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        pivots : dictionary_like</span>
+<span class="sd">            A dictionary with format &#39;groupname&#39;:&#39;pivotal quantity&#39; </span>
+<span class="sd">        n : int</span>
+<span class="sd">            Number of samples per group</span>
+<span class="sd">            </span>
+<span class="sd">        Returns</span>
+<span class="sd">        ----------</span>
+<span class="sd">        Comparions : array-like</span>
+<span class="sd">            Strings identifier of each comparison with format &#39;group_i vs group_j&#39;</span>
+<span class="sd">        T-values: array-like</span>
+<span class="sd">            The computed T-value statistic for each comparison.</span>
+<span class="sd">        p-values: array-like</span>
+<span class="sd">            The associated p-value from the T-distribution wich depends on the index of the comparison</span>
+<span class="sd">        Adjusted p-values: array-like</span>
+<span class="sd">            The associated adjusted p-values wich can be compared with a significance level</span>
+<span class="sd">            </span>
+<span class="sd">        References</span>
+<span class="sd">        ----------</span>
+<span class="sd">        D.J. Sheskin, Handbook of parametric and nonparametric statistical procedures. crc Press, 2003, Test 21b: The Bonferroni-Dunn test</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">k</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">pivots</span><span class="p">)</span>
+    <span class="n">values</span> <span class="o">=</span> <span class="n">pivots</span><span class="o">.</span><span class="n">values</span><span class="p">()</span>
+    <span class="n">keys</span> <span class="o">=</span> <span class="n">pivots</span><span class="o">.</span><span class="n">keys</span><span class="p">()</span>
+
+    <span class="n">m</span> <span class="o">=</span> <span class="p">(</span><span class="n">k</span><span class="o">*</span><span class="p">(</span><span class="n">k</span><span class="o">-</span><span class="mi">1</span><span class="p">))</span><span class="o">/</span><span class="mf">2.</span>
+
+    <span class="n">versus</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">it</span><span class="o">.</span><span class="n">combinations</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="n">k</span><span class="p">),</span> <span class="mi">2</span><span class="p">))</span>
+
+    <span class="n">comparisons</span> <span class="o">=</span> <span class="p">[</span><span class="n">keys</span><span class="p">[</span><span class="n">vs</span><span class="p">[</span><span class="mi">0</span><span class="p">]]</span> <span class="o">+</span> <span class="s">&quot; vs &quot;</span> <span class="o">+</span> <span class="n">keys</span><span class="p">[</span><span class="n">vs</span><span class="p">[</span><span class="mi">1</span><span class="p">]]</span> <span class="k">for</span> <span class="n">vs</span> <span class="ow">in</span> <span class="n">versus</span><span class="p">]</span>
+    <span class="n">t_values</span> <span class="o">=</span> <span class="p">[</span><span class="nb">abs</span><span class="p">(</span><span class="n">values</span><span class="p">[</span><span class="n">vs</span><span class="p">[</span><span class="mi">0</span><span class="p">]]</span> <span class="o">-</span> <span class="n">values</span><span class="p">[</span><span class="n">vs</span><span class="p">[</span><span class="mi">1</span><span class="p">]])</span> <span class="k">for</span> <span class="n">vs</span> <span class="ow">in</span> <span class="n">versus</span><span class="p">]</span>
+    <span class="n">p_values</span> <span class="o">=</span> <span class="p">[</span><span class="mi">1</span><span class="o">-</span><span class="n">st</span><span class="o">.</span><span class="n">t</span><span class="o">.</span><span class="n">cdf</span><span class="p">(</span><span class="n">t</span><span class="p">,</span> <span class="n">n</span><span class="o">*</span><span class="n">k</span><span class="o">-</span><span class="n">k</span><span class="p">)</span> <span class="k">for</span> <span class="n">t</span> <span class="ow">in</span> <span class="n">t_values</span><span class="p">]</span>
+    <span class="c"># Sort values by p_value so that p_0 &lt; p_1</span>
+    <span class="n">p_values</span><span class="p">,</span> <span class="n">t_values</span><span class="p">,</span> <span class="n">comparisons</span> <span class="o">=</span> <span class="nb">map</span><span class="p">(</span><span class="nb">list</span><span class="p">,</span> <span class="nb">zip</span><span class="p">(</span><span class="o">*</span><span class="nb">sorted</span><span class="p">(</span><span class="nb">zip</span><span class="p">(</span><span class="n">p_values</span><span class="p">,</span> <span class="n">t_values</span><span class="p">,</span> <span class="n">comparisons</span><span class="p">),</span> <span class="n">key</span><span class="o">=</span><span class="k">lambda</span> <span class="n">t</span><span class="p">:</span> <span class="n">t</span><span class="p">[</span><span class="mi">0</span><span class="p">])))</span>
+    <span class="n">adj_p_values</span> <span class="o">=</span> <span class="p">[</span><span class="nb">min</span><span class="p">(</span><span class="n">m</span><span class="o">*</span><span class="n">p_value</span><span class="p">,</span><span class="mi">1</span><span class="p">)</span> <span class="k">for</span> <span class="n">p_value</span> <span class="ow">in</span> <span class="n">p_values</span><span class="p">]</span>
+    
+    <span class="k">return</span> <span class="n">comparisons</span><span class="p">,</span> <span class="n">t_values</span><span class="p">,</span> <span class="n">p_values</span><span class="p">,</span> <span class="n">adj_p_values</span></div>
+</pre></div>
+
+          </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             >index</a></li>
+        <li><a href="../../index.html">STAC Release Candidate documentation</a> &raquo;</li>
+          <li><a href="../index.html" >Module code</a> &raquo;</li>
+          <li><a href="../stac.html" >stac</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2015, Ismael.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.1.
+    </div>
+  </body>
+</html>

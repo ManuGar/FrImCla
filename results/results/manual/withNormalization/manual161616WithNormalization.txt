@@ -1,0 +1,47 @@
+['KNN' 'SVM' 'MLP' 'RF' 'LR' 'ET']
+==========================================================
+Report
+==========================================================
+**********************************************************
+Mean and std
+**********************************************************
+KNN: 0.618521 (0.028912)
+SVM: 0.655232 (0.040229)
+MLP: 0.633670 (0.042001)
+RF: 0.677625 (0.051563)
+LR: 0.506844 (0.028702)
+ET: 0.756648 (0.035055)
+**********************************************************
+Statistical tests
+**********************************************************
+----------------------------------------------------------
+Checking parametric conditions 
+----------------------------------------------------------
+Checking independence 
+Ok
+Checking normality using Shapiro-Wilk's test for normality, alpha=0.05
+W: 0.979020, p:0.388488
+The null hypothesis (normality) is accepted
+Checking heteroscedasticity using Levene's test, alpha=0.05
+W: 1.022797, p:0.413519
+The null hypothesis (heteroscedasticity) is accepted
+Conditions for a parametric test are fulfilled
+----------------------------------------------------------
+Working with more than 2 algorithms
+----------------------------------------------------------
+----------------------------------------------------------
+Applying ANOVA test
+----------------------------------------------------------
+F-value: 0.384411, p-value: 0.857329112515
+Null hypothesis is accepted; hence, we can't say that there is a significant difference in the performance of the models
+----------------------------------------------------------
+Analysing effect size
+----------------------------------------------------------
+We take the model with the best mean (ET, mean: 0.756648) and compare it with the other models: 
+Comparing effect size of ET and KNN: Cohen's d=4.07833941558, Large
+Comparing effect size of ET and SVM: Cohen's d=2.54995232659, Large
+Comparing effect size of ET and MLP: Cohen's d=3.01587803227, Large
+Comparing effect size of ET and RF: Cohen's d=1.70038694155, Large
+Comparing effect size of ET and LR: Cohen's d=7.39738011612, Large
+Eta squared: 0.789412 (Large)
+
