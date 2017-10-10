@@ -3,7 +3,7 @@
   # DATASET SAMPLING CONFIGURATION
   #######
   # For only considering images without control image: /home/joheras/Escritorio/Research/Fungi/FungiImagesOverfeat
-  "dataset_path": "/home/magarcd/Escritorio/ObjectClassificationByTransferLearning/minidatasetDogCat",
+  "dataset_path": "/home/magarcd/Escritorio/ObjectClassificationByTransferLearning/melanoma",
   #joheras/Escritorio/Research/Fungi/FungiImagesWithControl",
   # For only considering images without control image: output/fungi/features.hdf5
   "features_path": "output/catsWithControl/features.hdf5",
@@ -12,10 +12,10 @@
   # STATISTICAL COMPARISON CONFIGURATION
   #######
   # For only considering images without control image: output/fungi/features.csv
-  "features_csv_path": "features.csv",
+  "features_csv_path": "melanoma_Training_Part3_GroundTruth.csv",
   # output/catsWithControl/features.csv
   # For only considering images without control image: results/fungi/kfold-comparison.csv "results/catsWithControl/kfold-comparison.csv",
-  "kfold_comparison": "results/catsWithControl/kfold-comparison.csv",
+  "kfold_comparison": "results/melanoma/kfold-comparison.csv",
 
   #######
   # Batch CONFIGURATION
@@ -26,7 +26,7 @@
   # LABEL ENCODER CONFIGURATION
   #######
   # For only considering images without control image: output/fungi/le.cpickle
-  "label_encoder_path": "output/catsWithControl/le.cpickle",
+  "label_encoder_path": "output/melanoma/le.cpickle",
 
   #######
   # MODEL CONFIGURATION
@@ -41,9 +41,9 @@
   #######
   # CLASSIFIER CONFIGURATION
   #######
-  "classifier_path": "output/catsWithControl/classifier",
+  "classifier_path": "output/melanoma/classifier",
   "training_size": 1,
-  "results_path": "output/catsWithControl/results",
+  "results_path": "output/melanoma/results",
   "modelClassifier" : "SVM"
 
 }

@@ -115,11 +115,11 @@ print("-------------------------------------------------")
 print("Statistical Analysis")
 print("-------------------------------------------------")
 
-listAlgorithms = [clfRF,clfSVC,clfKNN,clfLR,clfMLP,clfET]
-listParams = [param_distRF,param_distSVC,param_distKNN,param_distLR,param_distMLP,param_distET]
-listNames = ["RF", "SVM", "KNN", "LR", "MLP","ET"]
+listAlgorithms = [clfRF,clfSVC,clfKNN,clfLR,clfMLP] #,clfET
+listParams = [param_distRF,param_distSVC,param_distKNN,param_distLR,param_distMLP] #,param_distET
+listNames = ["RF", "SVM", "KNN", "LR", "MLP"] #,"ET"
 
-resultsAccuracy = compare_methods_h5py(featuresPath,labelEncoderPath,listAlgorithms,listParams,listNames,[10,10,10,5,10,10],normalization=False)
+resultsAccuracy = compare_methods_h5py(featuresPath,labelEncoderPath,listAlgorithms,listParams,listNames,[10,10,10,5,10],normalization=False) #,10
 
 dfAccuracy = pd.DataFrame.from_dict(resultsAccuracy,orient='index')
 KFoldComparisionPathAccuracy = conf["kfold_comparison"][0:conf["kfold_comparison"].rfind(".")] + "-"+ conf["model"] +".csv"
