@@ -6,7 +6,7 @@
   "dataset_path": "/home/magarcd/Escritorio/ObjectClassificationByTransferLearning/melanoma",
   #joheras/Escritorio/Research/Fungi/FungiImagesWithControl",
   # For only considering images without control image: output/fungi/features.hdf5
-  "features_path": "output/catsWithControl/features.hdf5",
+  "features_path": "output//features.hdf5",
 
   #######
   # STATISTICAL COMPARISON CONFIGURATION

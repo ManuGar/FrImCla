@@ -10,7 +10,12 @@ from DenseNet import densenet
 from keras.layers import Flatten
 from keras.models import Model
 
-class DenseNet:
+
+class Model:
+    def describe(self, image):
+        pass
+
+class DenseNet(Model):
     def __init__(self):
         modelI = densenet.DenseNet(depth=40, growth_rate=12, bottleneck=True, reduction=0.5)
         modelI.layers.pop()
@@ -26,7 +31,7 @@ class DenseNet:
     def describe(self,image):
         return self.model.predict(image)
 
-class LABModel:
+class LABModel(Model):
     def __init__(self,bins=[8,8,8],channels=[0,1,2],histValues=[0,256,0,256,0,256]):
         self.bins =bins
         self.channels=channels
@@ -39,7 +44,7 @@ class LABModel:
         return histLAB
 
 
-class HSVModel:
+class HSVModel(Model):
     def __init__(self,bins=[8,8,8],channels=[0,1,2],histValues=[0,180,0,256,0,256]):
         self.bins =bins
         self.channels=channels
@@ -52,7 +57,7 @@ class HSVModel:
         return histHSV
 
 
-class Haralick:
+class Haralick(Model):
     def __init__(self):
         pass
 
@@ -61,7 +66,7 @@ class Haralick:
         features = mahotas.features.haralick(gray).mean(axis=0)
         return features
 
-class LBP:
+class LBP(Model):
     def __init__(self):
         pass
 
@@ -70,7 +75,7 @@ class LBP:
         features = mahotas.features.lbp(gray, 3, 24)
         return features
 
-class HOG:
+class HOG(Model):
     def __init__(self):
         pass
 
@@ -81,7 +86,7 @@ class HOG:
         return features
 
 
-class HaarHOG:
+class HaarHOG(Model):
     def __init__(self):
         pass
 
@@ -92,7 +97,7 @@ class HaarHOG:
         featuresHaar = mahotas.features.haralick(gray).mean(axis=0)
         return np.append(featuresHOG,featuresHaar)
 
-class HistogramsSeveralMasksAnnulusLabSegments:
+class HistogramsSeveralMasksAnnulusLabSegments(Model):
 
     def __init__(self,plainImagePath,bags=[8,8,8],channels=[0,1,2],histValues=[0,256,0,256,0,256],p_segments=2):
         self.plainImagePath = plainImagePath

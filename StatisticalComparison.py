@@ -102,14 +102,14 @@ param_distGB = {"max_depth": [3, None],
               "criterion": ["friedman_mse", "mse", "mae"]}
 
 #================================================================================================================
-print("Extra trees")
+#print("Extra trees")
 #================================================================================================================
-clfET = ExtraTreesClassifier(random_state=84,n_estimators=20)
+# clfET = ExtraTreesClassifier(random_state=84,n_estimators=20)
+#
+# param_distET = {'n_estimators': [250, 500, 1000, 1500],
+#                 'min_samples_split': [2, 4, 8]}
 
-param_distET = {'n_estimators': [250, 500, 1000, 1500],
-                'min_samples_split': [2, 4, 8]}
-
-sys.stdout = open(conf["kfold_comparison"][0:conf["kfold_comparison"].rfind("/")+1] + conf["model"] + ".txt", "w")
+#sys.stdout = open(conf["kfold_comparison"][0:conf["kfold_comparison"].rfind("/")+1] + conf["model"] + ".txt", "w")
 
 print("-------------------------------------------------")
 print("Statistical Analysis")
@@ -126,5 +126,5 @@ KFoldComparisionPathAccuracy = conf["kfold_comparison"][0:conf["kfold_comparison
 dfAccuracy.to_csv(KFoldComparisionPathAccuracy)
 
 statisticalAnalysis(KFoldComparisionPathAccuracy)
-sys.stdout = sys.__stdout__
+#sys.stdout = sys.__stdout__
 
