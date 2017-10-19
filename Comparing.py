@@ -113,7 +113,7 @@ def compare_methods_h5py(featuresPath,labelEncoderPath,listAlgorithms,listParame
     
     le = cPickle.loads(open(labelEncoderPath).read())
     labels = np.asarray([le.transform([l.split(":")[0]])[0] for l in labels])
-    kf = KFold(n_splits=10,shuffle=True,random_state=42)
+    kf = KFold(n_splits=10,shuffle=True,random_state=42) #n_splits=10
     resultsAccuracy = {name:[] for name in listAlgorithmNames}
     #resultsAUROC = {name: [] for name in listAlgorithmNames}
     # resultsPrecision = {name: [] for name in listAlgorithmNames}

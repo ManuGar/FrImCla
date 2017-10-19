@@ -10,7 +10,7 @@ from keras.applications.inception_v3 import preprocess_input
 import cv2
 
 def prepare_image(imagePath,model):
-	print imagePath
+	#print imagePath #to display the image on the screen that is working in case the image gives error
 
 	if model in ("inception", "xception", "vgg16","vgg19","resnet","densenet"):
 		fixedSize = (224, 224)
