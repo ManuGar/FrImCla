@@ -16,10 +16,13 @@ class Extractor:
 	def __init__(self,modelText):
 		# store the layer number and initialize the Overfeat transformer
 		#self.layerNum = layerNum
-		self.modelText=modelText
+		self.params =[]
+		self.modelText=modelText[0]
+		if len(modelText)>1:
+			self.params= modelText[1:]
 		print("[INFO] loading {}...".format(modelText))
 		modelFac = modelFactory()
-		self.model = modelFac.getModel(modelText)  #the model choice moved to modelFactory.py
+		self.model = modelFac.getModel(self.modelText, self.params)  #the model choice moved to modelFactory.py
 
 	def reshape(self,res):
 		if(self.modelText=="resnet"):
@@ -34,5 +37,6 @@ class Extractor:
 		if self.modelText in ("googlenet","overfeat"):
 			return self.model.transform(images)
 		else:
+			print self.model.name
 			return [self.model.describe(image) for image in images]
 

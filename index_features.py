@@ -41,14 +41,14 @@ le.fit([p.split("/")[-2] for p in imagePaths])
 # initialize the Overfeat extractor and the Overfeat indexer
 print("[INFO] initializing network...")
 oe = Extractor(conf["model"])
-featuresPath = conf["features_path"][0:conf["features_path"].rfind(".")] + "-"+ conf["model"] +".hdf5"
+featuresPath = conf["features_path"][0:conf["features_path"].rfind(".")] + "-"+ conf["model"][0] +".hdf5"
 oi = Indexer(featuresPath, estNumImages=len(imagePaths))
 print("[INFO] starting feature extraction...")
 
 # loop over the image paths in batches
 for (i, paths) in enumerate(dataset.chunk(imagePaths, conf["batch_size"])):
 	# load the set of images from disk and describe them
-	(labels, images) = dataset.build_batch(paths, conf["model"])
+	(labels, images) = dataset.build_batch(paths, conf["model"][0])
 	features = oe.describe(images)
 
 
@@ -67,7 +67,7 @@ oi.finish()
 
 # dump the label encoder to file
 print("[INFO] dumping labels to file...")
-labelEncoderPath = conf["label_encoder_path"][0:conf["label_encoder_path"].rfind(".")] + "-"+ conf["model"] +".cpickle"
+labelEncoderPath = conf["label_encoder_path"][0:conf["label_encoder_path"].rfind(".")] + "-"+ conf["model"][0] +".cpickle"
 f = open(labelEncoderPath, "w")
 f.write(cPickle.dumps(le))
 f.close()

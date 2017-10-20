@@ -11,9 +11,19 @@ from keras.layers import Flatten
 from keras.models import Model
 
 
-class Model:
-    def describe(self, image):
-        pass
+from keras.applications import ResNet50
+from keras.applications import InceptionV3
+from keras.applications import Xception # TensorFlow ONLY
+from keras.applications import VGG16
+from keras.applications import VGG19
+
+
+
+
+# class Model:
+#     def describe(self,image):
+#         pass
+
 
 class DenseNet(Model):
     def __init__(self):
