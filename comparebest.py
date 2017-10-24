@@ -1,4 +1,4 @@
 from StatisticalAnalysis.statisticalAnalysis import statisticalAnalysis
 
-KFoldComparisionPath = "/home/joheras/pythonprojects/ObjectClassificationByTransferLearning/results/results/deep/withControl/data/kfold-best.csv"
+KFoldComparisionPath = "/home/magarcd/Escritorio/ObjectClassificationByTransferLearning/ObjectClassificationByTransferLearning/results/melanoma/kfold-comparison-resnet.csv"
 statisticalAnalysis(KFoldComparisionPath)

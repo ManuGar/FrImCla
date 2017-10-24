@@ -1,16 +1,10 @@
 # import the necessary packages
 
-from sklearn_theano.feature_extraction.caffe.googlenet import GoogLeNetTransformer
-from sklearn_theano.feature_extraction.overfeat import SMALL_NETWORK_FILTER_SHAPES
-from sklearn_theano.feature_extraction import OverfeatTransformer
-from keras.applications import ResNet50
-from keras.applications import InceptionV3
-from keras.applications import Xception # TensorFlow ONLY
-from keras.applications import VGG16
-from keras.applications import VGG19
+
 import numpy as np
-from shallowmodels.models import LABModel,HSVModel,Haralick,LBP,HOG,HistogramsSeveralMasksAnnulusLabSegments,HaarHOG,DenseNet
 from shallowmodels.modelFactory import modelFactory
+
+from mpi4py import MPI
 
 class Extractor:
 	def __init__(self,modelText):
@@ -37,6 +31,5 @@ class Extractor:
 		if self.modelText in ("googlenet","overfeat"):
 			return self.model.transform(images)
 		else:
-			print self.model.name
+			print (self.model.name)
 			return [self.model.describe(image) for image in images]
-

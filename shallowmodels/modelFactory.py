@@ -34,11 +34,20 @@ class modelFactory():
         if modelText == "lab888":
             return LABModel()
         if modelText == "lab444":
-            return HSVModel(bins=[4, 4, 4])
+            if (len(params)>=3):
+                bin1=params[0]
+                bin2=params[1]
+                bin3=params[2]
+                return HSVModel(bins=[bin1, bin2, bin3])
         if modelText == "hsv888":
             return LABModel()
         if modelText == "hsv444":
-            return HSVModel(bins=[4, 4, 4])
+            if (len(params)>=3):
+                bin1=params[0]
+                bin2=params[1]
+                bin3=params[2]
+                return HSVModel(bins=[bin1, bin2, bin3])
+            #return HSVModel(bins=[4, 4, 4])
         if modelText == "haralick":
             return Haralick()
         if modelText == "lbp":

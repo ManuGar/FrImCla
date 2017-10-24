@@ -3,6 +3,7 @@
 
 # suppress any FutureWarning from Theano
 from __future__ import print_function
+from mpi4py import MPI
 import warnings
 warnings.simplefilter(action="ignore", category=FutureWarning)
 
@@ -17,6 +18,62 @@ import argparse
 import cPickle
 import random
 
+'''
+
+			Crear funcion para poder usar esto en cualquier sitio
+
+'''
+def generate_features(confPath, datasetPath):
+	# shuffle the image paths to ensure randomness -- this will help make our
+	# training and testing split code more efficient
+	random.seed(42)
+	random.shuffle(datasetPath)
+
+	# determine the set of possible class labels from the image dataset assuming
+	# that the images are in {directory}/{filename} structure and create the
+	# label encoder
+	print("[INFO] encoding labels...")
+	le = LabelEncoder()
+	le.fit([p.split("/")[-2] for p in datasetPath])
+
+	models = confPath["model"]
+
+	for (model) in models:
+		# initialize the Overfeat extractor and the Overfeat indexer
+		print("[INFO] initializing network...")
+		oe = Extractor(model)  # conf["model"][0]
+		featuresPath = confPath["features_path"][0:confPath["features_path"].rfind(".")] + "-" + model[
+			0] + ".hdf5"  # conf["model"][0]
+		oi = Indexer(featuresPath, estNumImages=len(datasetPath))
+		print("[INFO] starting feature extraction...")
+
+		# loop over the image paths in batches
+		for (i, paths) in enumerate(dataset.chunk(datasetPath, confPath["batch_size"])):
+			# load the set of images from disk and describe them
+			(labels, images) = dataset.build_batch(paths, model[0])  # conf["model"][0]
+			features = oe.describe(images)
+
+			# loop over each set of (label, vector) pair and add them to the indexer
+			for (label, vector) in zip(labels, features):
+				oi.add(label, vector)
+
+			# check to see if progress should be displayed
+			if i > 0:
+				oi._debug("processed {} images".format((i + 1) * confPath["batch_size"],
+													   msgType="[PROGRESS]"))
+
+		# finish the indexing process
+		oi.finish()
+
+		# dump the label encoder to file
+		print("[INFO] dumping labels to file...")
+		labelEncoderPath = confPath["label_encoder_path"][0:confPath["label_encoder_path"].rfind(".")] + "-" + model[
+			0] + ".cpickle"  # conf["model"][0]
+		f = open(labelEncoderPath, "w")
+		f.write(cPickle.dumps(le))
+		f.close()
+
+
 # construct the argument parser and parse the command line arguments
 ap = argparse.ArgumentParser()
 ap.add_argument("-c", "--conf", required=True, help="path to configuration file")
@@ -25,49 +82,4 @@ args = vars(ap.parse_args())
 # load the configuration and grab all image paths in the dataset
 conf = Conf(args["conf"])
 imagePaths = list(paths.list_images(conf["dataset_path"]))
-
-# shuffle the image paths to ensure randomness -- this will help make our
-# training and testing split code more efficient
-random.seed(42)
-random.shuffle(imagePaths)
-
-# determine the set of possible class labels from the image dataset assuming
-# that the images are in {directory}/{filename} structure and create the
-# label encoder
-print("[INFO] encoding labels...")
-le = LabelEncoder()
-le.fit([p.split("/")[-2] for p in imagePaths])
-
-# initialize the Overfeat extractor and the Overfeat indexer
-print("[INFO] initializing network...")
-oe = Extractor(conf["model"])
-featuresPath = conf["features_path"][0:conf["features_path"].rfind(".")] + "-"+ conf["model"][0] +".hdf5"
-oi = Indexer(featuresPath, estNumImages=len(imagePaths))
-print("[INFO] starting feature extraction...")
-
-# loop over the image paths in batches
-for (i, paths) in enumerate(dataset.chunk(imagePaths, conf["batch_size"])):
-	# load the set of images from disk and describe them
-	(labels, images) = dataset.build_batch(paths, conf["model"][0])
-	features = oe.describe(images)
-
-
-
-	# loop over each set of (label, vector) pair and add them to the indexer
-	for (label, vector) in zip(labels, features):
-		oi.add(label, vector)
-
-	# check to see if progress should be displayed
-	if i > 0:
-		oi._debug("processed {} images".format((i + 1) * conf["batch_size"],
-			msgType="[PROGRESS]"))
-
-# finish the indexing process
-oi.finish()
-
-# dump the label encoder to file
-print("[INFO] dumping labels to file...")
-labelEncoderPath = conf["label_encoder_path"][0:conf["label_encoder_path"].rfind(".")] + "-"+ conf["model"][0] +".cpickle"
-f = open(labelEncoderPath, "w")
-f.write(cPickle.dumps(le))
-f.close()
+generate_features(conf,imagePaths)

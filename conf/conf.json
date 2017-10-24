@@ -30,6 +30,7 @@
 
   #######
   # MODEL CONFIGURATION
+  # You can chose more than one model
   # Possible values for model are: ["vgg16", include_top], ["vgg19", include_top], ["resnet", include_top],
   # ["inception", include_top], ["googlenet"], ["overfeat", [outputLayers]], ["xception", include_top] (only with tensorflow), and ["densenet"]
   # Shallow features: ["lab888"], ["lab444"], ["hsv888"], ["hsv444"], ["haralick"], ["lbp"], ["hog"], ["haarhog"]
@@ -38,17 +39,7 @@
   # annulus_bags_p-segments
   #######
 
-  #######
-  # MODEL CONFIGURATION
-  # Possible values for model are: vgg16_includetop, vgg19_includetop, resnet_includetop, inception_includetop, googlenet, overfeat_[outputLayers],
-  # xception_includetop (only with tensorflow), and densenet
-  #                  vgg19_False, overfeat_[-3]
-  # Shallow features: lab888, lab444, hsv888, hsv444, haralick, lbp, hog, haarhog
-  # Expert features: annulus_4_2, annulus_8_2, annulus_16_2, annulus_4_3, annulus_8_3, annulus_16_3, ...
-  #                  annulus_bags_p-segments
-  #######
-
-  "model" : ["inception","False"],
+  "model" : [["inception","False"],["hsv444",4,4,4]],
 
   #######
   # CLASSIFIER CONFIGURATION

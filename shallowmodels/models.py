@@ -19,12 +19,6 @@ from keras.applications import VGG19
 
 
 
-
-# class Model:
-#     def describe(self,image):
-#         pass
-
-
 class DenseNet(Model):
     def __init__(self):
         modelI = densenet.DenseNet(depth=40, growth_rate=12, bottleneck=True, reduction=0.5)
