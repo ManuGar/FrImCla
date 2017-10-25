@@ -23,7 +23,6 @@ class modelFactory():
 
     def getModel(self,modelText,params):
 
-        #modificar el metodo para que acepte los parametros de los mode
         if modelText in ("inception", "xception", "vgg16", "vgg19", "resnet"):
             Network = MODELS[modelText]
             return Network(include_top=params[0])

@@ -19,6 +19,12 @@ from StatisticalAnalysis.statisticalAnalysis import statisticalAnalysis
 from sklearn.ensemble import ExtraTreesClassifier
 import sys
 
+
+
+
+
+from shallowmodels.classificationModelFactory import classificationModelFactory
+
 def statisticalComparison(conf):
     for model in conf["model"]:
 
@@ -39,78 +45,21 @@ def statisticalComparison(conf):
         dataset = featuresCSVPath
         # df = pd.read_csv(featuresCSVPath)
         # data = df.ix[:, :-1].values
-
-        # ================================================================================================================
-        print("RandomForest")
-        # ================================================================================================================
-        clfRF = RandomForestClassifier(random_state=84, n_estimators=20)
-
-        # specify parameters and distributions to sample from
-        param_distRF = {"max_depth": [3, None],
-                        "max_features": sp_randint(1, 11),
-                        "min_samples_leaf": sp_randint(1, 11),
-                        "bootstrap": [True, False],
-                        "criterion": ["gini", "entropy"]}
-
-        # ================================================================================================================
-        print("SVM")
-        # ================================================================================================================
-
-        clfSVC = SVC(random_state=84)
-        # specify parameters and distributions to sample from
-        param_distSVC = {'C': [1, 10, 100, 1000], 'gamma': [0.001, 0.0001],
-                         'kernel': ['rbf'], 'class_weight': ['balanced', None]}
-
-        # ================================================================================================================
-        print("KNN")
-        # ================================================================================================================
-
-        param_distKNN = {'n_neighbors': sp_randint(3, 30)}
-        clfKNN = KNeighborsClassifier()
-
-        # ================================================================================================================
-        print("Logistic Regression")
-        # ================================================================================================================
-
-        clfLR = LogisticRegression(random_state=84)
-        param_distLR = {'C': [0.1, 0.5, 1, 10, 100, 1000]}
-
-        # ================================================================================================================
-        print("MultiLayer Perceptron")
-        # ================================================================================================================
-        clfMLP = MLPClassifier(random_state=84)
-
-        param_distMLP = {'activation': ['identity', 'logistic', 'tanh', 'relu'], 'solver': ['lbfgs', 'sgd', 'adam'],
-                         'alpha': sp_randint(0.0001, 1), 'learning_rate': ['constant', 'invscaling', 'adaptive'],
-                         'momentum': [0.9, 0.95, 0.99]}
-
-        # ================================================================================================================
-        print("Gradient Boost")
-        # ================================================================================================================
-        clfGB = GradientBoostingClassifier(random_state=84, n_estimators=20)
-
-        # specify parameters and distributions to sample from
-        param_distGB = {"max_depth": [3, None],
-                        "max_features": sp_randint(1, 11),
-                        "min_samples_leaf": sp_randint(1, 11),
-                        "criterion": ["friedman_mse", "mse", "mae"]}
-
-        # ================================================================================================================
-        # print("Extra trees")
-        # ================================================================================================================
-        # clfET = ExtraTreesClassifier(random_state=84,n_estimators=20)
-        #
-        # param_distET = {'n_estimators': [250, 500, 1000, 1500],
-        #                 'min_samples_split': [2, 4, 8]}
-
-        # sys.stdout = open(conf["kfold_comparison"][0:conf["kfold_comparison"].rfind("/")+1] + conf["model"] + ".txt", "w")
+        listAlgorithms = []
+        listParams = []
+        for classificationModel in conf["modelClassifier"]:
+            model = classificationModelFactory.getClassificationModel(classificationModel)
+            cMo = model.getModel()
+            params = model.get_params()
+            listAlgorithms.append(cMo)
+            listParams.append(params)
 
         print("-------------------------------------------------")
         print("Statistical Analysis")
         print("-------------------------------------------------")
 
-        listAlgorithms = [clfRF, clfSVC, clfKNN, clfLR, clfMLP]  # ,clfET
-        listParams = [param_distRF, param_distSVC, param_distKNN, param_distLR, param_distMLP]  # ,param_distET
+        #listAlgorithms = [clfRF, clfSVC, clfKNN, clfLR, clfMLP]  # ,clfET
+        #listParams = [param_distRF, param_distSVC, param_distKNN, param_distLR, param_distMLP]  # ,param_distET
         listNames = ["RF", "SVM", "KNN", "LR", "MLP"]  # ,"ET"
 
         resultsAccuracy = compare_methods_h5py(featuresPath, labelEncoderPath, listAlgorithms, listParams, listNames,

@@ -102,8 +102,6 @@ def compare_methods(dataset,listAlgorithms,listParameters,listAlgorithmNames,lis
     return (resultsAccuracy,resultsPrecision,resultsRecall,resultsFmeasure)
 
 
-
-
 def compare_methods_h5py(featuresPath,labelEncoderPath,listAlgorithms,listParameters,listAlgorithmNames,listNiters,normalization=False):
 
     # Loading dataset
