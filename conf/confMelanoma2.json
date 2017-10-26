@@ -47,6 +47,6 @@
   "classifier_path": "output/melanoma/classifier",
   "training_size": 1,
   "results_path": "output/melanoma/results",
-  "modelClassifier" : "SVM"
+  "modelClassifier" : ["SVM"]
 
 }

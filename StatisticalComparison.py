@@ -4,7 +4,6 @@
 #=======================================================================================================================
 
 
-
 from scipy.stats import randint as sp_randint
 from sklearn.ensemble import RandomForestClassifier, GradientBoostingClassifier
 import pandas as pd
@@ -18,9 +17,6 @@ from utils.conf import Conf
 from StatisticalAnalysis.statisticalAnalysis import statisticalAnalysis
 from sklearn.ensemble import ExtraTreesClassifier
 import sys
-
-
-
 
 
 from shallowmodels.classificationModelFactory import classificationModelFactory
