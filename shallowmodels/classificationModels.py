@@ -43,9 +43,9 @@ class KNN(classifierModel):
     def getParams(self):
         return self.params
 
-class LogisticRegression(classifierModel):
-    def __init__(self, random_state=84,params={'C': [0.1, 0.5, 1, 10, 100, 1000]}):
-        self.model = LogisticRegression(random_state=random_state)
+class LogRegression(classifierModel):
+    def __init__(self, rdm_state=84,params={'C': [0.1, 0.5, 1, 10, 100, 1000]}):
+        self.model = LogisticRegression(random_state=rdm_state)
         self.params = params
     def getModel(self):
         return self.model

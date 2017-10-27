@@ -29,7 +29,7 @@ def SSTotal(accuracies):
 def eta_sqrd(accuracies):
     return SSbetween(accuracies)/SSTotal(accuracies)
 
-def multipleAlgorithmsNonParametric(algorithms,accuracies,alpha=0.05):
+def multipleAlgorithmsNonParametric(algorithms,accuracies,file,alpha=0.05):
     algorithmsDataset = {x: y for (x, y) in zip(algorithms, accuracies)}
     if len(algorithms) < 5:
         print("----------------------------------------------------------")
@@ -460,7 +460,7 @@ def statisticalAnalysis(dataset,alpha=0.05):
             file.write("Working with more than 2 algorithms\n")
             print("----------------------------------------------------------")
             file.write("----------------------------------------------------------\n")
-            multipleAlgorithmsNonParametric(algorithms, accuracies,alpha)
+            multipleAlgorithmsNonParametric(algorithms,accuracies,file,alpha)
 
 def compare_method(tuple):
     iteration, train_index,test_index,data,labels, clf, params, name,metric = tuple

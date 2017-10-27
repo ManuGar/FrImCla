@@ -36,13 +36,13 @@ def generate_features(confPath, datasetPath):
 	le = LabelEncoder()
 	le.fit([p.split("/")[-2] for p in datasetPath])
 
-	models = confPath["model"]
+	featureExtractors = confPath["featureExtractors"]
 
-	for (model) in models:
+	for (fE) in featureExtractors:
 		# initialize the Overfeat extractor and the Overfeat indexer
 		print("[INFO] initializing network...")
-		oe = Extractor(model)  # conf["model"][0]
-		featuresPath = confPath["features_path"][0:confPath["features_path"].rfind(".")] + "-" + model[
+		oe = Extractor(fE)  # conf["model"][0]
+		featuresPath = confPath["features_path"][0:confPath["features_path"].rfind(".")] + "-" + fE[
 			0] + ".hdf5"  # conf["model"][0]
 		oi = Indexer(featuresPath, estNumImages=len(datasetPath))
 		print("[INFO] starting feature extraction...")
@@ -50,7 +50,7 @@ def generate_features(confPath, datasetPath):
 		# loop over the image paths in batches
 		for (i, paths) in enumerate(dataset.chunk(datasetPath, confPath["batch_size"])):
 			# load the set of images from disk and describe them
-			(labels, images) = dataset.build_batch(paths, model[0])  # conf["model"][0]
+			(labels, images) = dataset.build_batch(paths, fE[0])  # conf["model"][0]
 			features = oe.describe(images)
 
 			# loop over each set of (label, vector) pair and add them to the indexer
@@ -67,7 +67,7 @@ def generate_features(confPath, datasetPath):
 
 		# dump the label encoder to file
 		print("[INFO] dumping labels to file...")
-		labelEncoderPath = confPath["label_encoder_path"][0:confPath["label_encoder_path"].rfind(".")] + "-" + model[
+		labelEncoderPath = confPath["label_encoder_path"][0:confPath["label_encoder_path"].rfind(".")] + "-" + fE[
 			0] + ".cpickle"  # conf["model"][0]
 		f = open(labelEncoderPath, "w")
 		f.write(cPickle.dumps(le))

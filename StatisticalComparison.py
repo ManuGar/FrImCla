@@ -22,7 +22,7 @@ import sys
 from shallowmodels.classificationModelFactory import classificationModelFactory
 
 def statisticalComparison(conf):
-    for model in conf["model"]:
+    for model in conf["featureExtractors"]:
 
         print(model)
         featuresPath = conf["features_path"][0:conf["features_path"].rfind(".")] + "-" + model[0] + ".hdf5" #conf["model"]
@@ -41,14 +41,18 @@ def statisticalComparison(conf):
         dataset = featuresCSVPath
         # df = pd.read_csv(featuresCSVPath)
         # data = df.ix[:, :-1].values
+        factory =classificationModelFactory()
         listAlgorithms = []
         listParams = []
-        for classificationModel in conf["modelClassifier"]:
-            model = classificationModelFactory.getClassificationModel(classificationModel)
-            cMo = model.getModel()
-            params = model.get_params()
+        for classificationModel in conf["modelClassifiers"]:
+            print classificationModel
+            modelClas = factory.getClassificationModel(classificationModel)
+            cMo = modelClas.getModel()
+            params = modelClas.getParams()
             listAlgorithms.append(cMo)
             listParams.append(params)
+
+        listNames = conf["modelClassifiers"]
 
         print("-------------------------------------------------")
         print("Statistical Analysis")
@@ -56,10 +60,11 @@ def statisticalComparison(conf):
 
         #listAlgorithms = [clfRF, clfSVC, clfKNN, clfLR, clfMLP]  # ,clfET
         #listParams = [param_distRF, param_distSVC, param_distKNN, param_distLR, param_distMLP]  # ,param_distET
-        listNames = ["RF", "SVM", "KNN", "LR", "MLP"]  # ,"ET"
+        #listNames = ["RF", "SVM", "KNN", "LR", "MLP"]  # ,"ET"
+        #Niteraciones de las clases [10, 10, 10, 5, 10]
 
         resultsAccuracy = compare_methods_h5py(featuresPath, labelEncoderPath, listAlgorithms, listParams, listNames,
-                                               [10, 10, 10, 5, 10], normalization=False)  # ,10
+                                               [10, 10, 5], normalization=False)  # ,10
 
         dfAccuracy = pd.DataFrame.from_dict(resultsAccuracy, orient='index')
         KFoldComparisionPathAccuracy = conf["kfold_comparison"][0:conf["kfold_comparison"].rfind(".")] + "-" + \
