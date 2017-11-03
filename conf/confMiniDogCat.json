@@ -6,16 +6,19 @@
   "dataset_path": "/home/magarcd/Escritorio/ObjectClassificationByTransferLearning/ObjectClassificationByTransferLearning/minidatasetDogCat",
   #joheras/Escritorio/Research/Fungi/FungiImagesWithControl",
   # For only considering images without control image: output/fungi/features.hdf5
-  "features_path": "output/miniDatasetcatsWithControl/features.hdf5",
+
+  #For the output and results of the program
+  "output_path": "output",
+
+
+
+  # "features_path": "output/miniDatasetcatsWithControl/features.hdf5",
 
   #######
   # STATISTICAL COMPARISON CONFIGURATION
   #######
-  # For only considering images without control image: output/fungi/features.csv
-  "features_csv_path": "featuresMiniDogCat.csv",
-  # output/catsWithControl/features.csv
   # For only considering images without control image: results/fungi/kfold-comparison.csv "results/catsWithControl/kfold-comparison.csv",
-  "kfold_comparison": "results/miniDatasetcatsWithControl/kfold-comparison.csv",
+  # "kfold_comparison": "results/minidatasetDogCat/kfold-comparison.csv",
 
   #######
   # Batch CONFIGURATION
@@ -26,7 +29,7 @@
   # LABEL ENCODER CONFIGURATION
   #######
   # For only considering images without control image: output/fungi/le.cpickle
-  "label_encoder_path": "output/miniDatasetcatsWithControl/le.cpickle",
+  # "label_encoder_path": "output/minidatasetDogCat/le.cpickle",
 
   #######
   # MODEL CONFIGURATION
@@ -44,9 +47,9 @@
   #######
   # CLASSIFIER CONFIGURATION
   #######
-  "classifier_path": "output/miniDatasetcatsWithControl/classifier",
+  "classifier_path": "output/minidatasetDogCat/classifier",
   "training_size": 1,
-  "results_path": "output/miniDatasetcatsWithControl/results",
+  # "results_path": "output/minidatasetDogCat/results",
   "modelClassifiers" : ["SVM","KNN","LogisticRegression"]
 
 }

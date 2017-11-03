@@ -390,7 +390,7 @@ def statisticalAnalysis(dataset,alpha=0.05):
     index=dataset.rfind("/")
     path=dataset[:index]
     model= dataset[index+1:dataset.rfind(".")]
-    file = open(path+"/StatisticalComparison"+model+".txt","w")
+    file = open(path+"/StatisticalComparison"+model[model.rfind("_"):]+".txt","w")
     df = pd.read_csv(dataset)
     algorithms = df.ix[0:,0].values
     if (len(algorithms)<2):

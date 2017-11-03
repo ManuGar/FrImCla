@@ -1,5 +1,5 @@
 # USAGE
-# python index_features.py --conf conf/flowers17.json
+# python fullAnalysis.py --conf conf/flowers17.json
 
 # suppress any FutureWarning from Theano
 from __future__ import print_function

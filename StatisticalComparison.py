@@ -17,6 +17,7 @@ from utils.conf import Conf
 from StatisticalAnalysis.statisticalAnalysis import statisticalAnalysis
 from sklearn.ensemble import ExtraTreesClassifier
 import sys
+import os
 
 
 from shallowmodels.classificationModelFactory import classificationModelFactory
@@ -25,20 +26,18 @@ def statisticalComparison(conf):
     for model in conf["featureExtractors"]:
 
         print(model)
-        featuresPath = conf["features_path"][0:conf["features_path"].rfind(".")] + "-" + model[0] + ".hdf5" #conf["model"]
+        featuresPath = conf["output_path"]+ conf["dataset_path"][conf["dataset_path"].rfind("/"):] + "/models/features-" + model[
+			0] + ".hdf5"
         # db = h5py.File(featuresPath)
         # labels = db["image_ids"]
-        labelEncoderPath = conf["label_encoder_path"][0:conf["label_encoder_path"].rfind(".")] + "-" + \
-                           model[0] + ".cpickle" #conf["model"]
+        labelEncoderPath = featuresPath[:featuresPath.rfind("/")]+ "/le-" + model[0] + ".cpickle"
+
+        #conf["label_encoder_path"][0:conf["label_encoder_path"].rfind(".")] + "-" + model[0] + ".cpickle"
         # le = cPickle.loads(open(labelEncoderPath).read())
         # labels = [le.transform([l.split(":")[0]])[0] for l in labels]
         # df1 = pd.DataFrame([np.append(x,y) for (x,y) in zip(db["features"],labels)])
-        featuresCSVPath = conf["features_csv_path"][0:conf["features_csv_path"].rfind(".")] + "-" + \
-                          model[0] + ".csv" #conf["model"]
 
-        # df1.to_csv(featuresCSVPath)
-        # Loading dataset
-        dataset = featuresCSVPath
+
         # df = pd.read_csv(featuresCSVPath)
         # data = df.ix[:, :-1].values
         factory =classificationModelFactory()
@@ -67,10 +66,13 @@ def statisticalComparison(conf):
                                                [10, 10, 5], normalization=False)  # ,10
 
         dfAccuracy = pd.DataFrame.from_dict(resultsAccuracy, orient='index')
-        KFoldComparisionPathAccuracy = conf["kfold_comparison"][0:conf["kfold_comparison"].rfind(".")] + "-" + \
-                                       model[0] + ".csv"
+        KFoldComparisionPathAccuracy =conf["output_path"]+ conf["dataset_path"][conf["dataset_path"].rfind("/"):] + "/results/kfold-comparison_"+model[0] + ".csv"
+        #KFoldComparisionPathAccuracy=conf["kfold_comparison"][0:conf["kfold_comparison"].rfind(".")] + "-" + model[0] + ".csv"
+        if (not os.path.exists(KFoldComparisionPathAccuracy[:KFoldComparisionPathAccuracy.rfind("/")])):
+            os.mkdir(KFoldComparisionPathAccuracy[:KFoldComparisionPathAccuracy.rfind("/")])
+        #"kfold_comparison": "results/minidatasetDogCat/kfold-comparison.csv"
+        #"dataset_path": "/home/magarcd/Escritorio/ObjectClassificationByTransferLearning/ObjectClassificationByTransferLearning/minidatasetDogCat"
         dfAccuracy.to_csv(KFoldComparisionPathAccuracy)
-
         statisticalAnalysis(KFoldComparisionPathAccuracy)
         # sys.stdout = sys.__stdout__
 

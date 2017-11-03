@@ -115,7 +115,7 @@ print("[INFO] best hyperparameters: {}".format(model.best_params_))
 
 # dump classifier to file
 print("[INFO] dumping classifier...")
-f = open(conf["classifier_path"] + conf["modelClassifier"] + ".cpickle", "w")
+f = open(conf["classifier_path"] + conf["modelClassifiers"] + ".cpickle", "w")
 f.write(cPickle.dumps(model))
 f.close()
 

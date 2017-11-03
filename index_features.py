@@ -17,12 +17,9 @@ from imutils import paths
 import argparse
 import cPickle
 import random
+import os
 
-'''
 
-			Crear funcion para poder usar esto en cualquier sitio
-
-'''
 def generate_features(confPath, datasetPath):
 	# shuffle the image paths to ensure randomness -- this will help make our
 	# training and testing split code more efficient
@@ -41,16 +38,22 @@ def generate_features(confPath, datasetPath):
 	for (fE) in featureExtractors:
 		# initialize the Overfeat extractor and the Overfeat indexer
 		print("[INFO] initializing network...")
-		oe = Extractor(fE)  # conf["model"][0]
+		oe = Extractor(fE)
+		'''
 		featuresPath = confPath["features_path"][0:confPath["features_path"].rfind(".")] + "-" + fE[
-			0] + ".hdf5"  # conf["model"][0]
+			0] + ".hdf5"
+		'''
+		featuresPath = confPath["output_path"]+ confPath["dataset_path"][confPath["dataset_path"].rfind("/"):] + "/models/features-" + fE[
+			0] + ".hdf5"
+		if (not os.path.exists(featuresPath[:featuresPath.rfind("/")])):
+			os.mkdir(featuresPath[:featuresPath.rfind("/")])
 		oi = Indexer(featuresPath, estNumImages=len(datasetPath))
 		print("[INFO] starting feature extraction...")
 
 		# loop over the image paths in batches
 		for (i, paths) in enumerate(dataset.chunk(datasetPath, confPath["batch_size"])):
 			# load the set of images from disk and describe them
-			(labels, images) = dataset.build_batch(paths, fE[0])  # conf["model"][0]
+			(labels, images) = dataset.build_batch(paths, fE[0])
 			features = oe.describe(images)
 
 			# loop over each set of (label, vector) pair and add them to the indexer
@@ -67,8 +70,9 @@ def generate_features(confPath, datasetPath):
 
 		# dump the label encoder to file
 		print("[INFO] dumping labels to file...")
-		labelEncoderPath = confPath["label_encoder_path"][0:confPath["label_encoder_path"].rfind(".")] + "-" + fE[
-			0] + ".cpickle"  # conf["model"][0]
+		labelEncoderPath = featuresPath[:featuresPath.rfind("/")]+ "/le-" + fE[0] + ".cpickle"
+
+		#confPath["label_encoder_path"][0:confPath["label_encoder_path"].rfind(".")] + "-" + fE[0] + ".cpickle"
 		f = open(labelEncoderPath, "w")
 		f.write(cPickle.dumps(le))
 		f.close()
