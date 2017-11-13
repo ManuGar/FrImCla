@@ -41,11 +41,14 @@ split = int(db["image_ids"].shape[0] * conf["training_size"])
 trainLabels = [le.transform([l.split(":")[0]])[0] for l in trainLabels]
 testLabels = [le.transform([l.split(":")[0]])[0] for l in testLabels]
 
-
-
 # define the grid of parameters to explore, then start the grid search where
 # we evaluate a Linear SVM for each value of C
 print("[INFO] tuning hyperparameters...")
+
+
+#file = open(“testfile.text”, “r”)
+
+
 if conf["modelClassifier"] == "RandomForest":
 	param_grid = {"max_depth": [3, None],
 			  "max_features": [1, 3, 10],
@@ -53,7 +56,7 @@ if conf["modelClassifier"] == "RandomForest":
 			  "bootstrap": [True, False],
 			  "criterion": ["gini", "entropy"]}
 	model = GridSearchCV(RandomForestClassifier(n_estimators=20), param_grid, cv=10)
-elif conf["model"] == "LogisticRegression":
+elif conf["modelClassifier"] == "LogisticRegression":
 	params = {"C": [0.1, 1.0, 10.0, 100.0, 1000.0, 10000.0]}
 	model = GridSearchCV(LogisticRegression(), params, cv=10)
 elif conf["modelClassifier"] == "GradientBoost":
@@ -75,43 +78,6 @@ elif conf["modelClassifier"] == "MLP":
 
 model.fit(trainData, trainLabels)
 print("[INFO] best hyperparameters: {}".format(model.best_params_))
-
-# # open the results file for writing and initialize the total number of accurate
-# # rank-1 and rank-5 predictions
-# print("[INFO] evaluating...")
-# f = open(conf["results_path"] + conf["modelClassifier"] + ".txt", "w")
-# rank1 = 0
-# rank5 = 0
-#
-# # loop over the testing data
-# for (label, features) in zip(testLabels, testData):
-# 	# predict the probability of each class label and grab the top-5 labels
-# 	# (based on probabiltiy)
-# 	preds = model.predict_proba(np.atleast_2d(features))[0]
-# 	preds = np.argsort(preds)[::-1][:5]
-#
-# 	# if the correct label if the first entry in the predicted labels list,
-# 	# increment the number of correct rank-1 predictions
-# 	if label == preds[0]:
-# 		rank1 += 1
-#
-# 	# if the correct label is in the top-5 predicted labels, then increment
-# 	# the number of correct rank-5 predictions
-# 	if label in preds:
-# 		rank5 += 1
-#
-# # convert the accuracies to percents and write them to file
-# rank1 = (rank1 / float(len(testLabels))) * 100
-# rank5 = (rank5 / float(len(testLabels))) * 100
-# f.write("rank-1: {:.2f}%\n".format(rank1))
-# f.write("rank-5: {:.2f}%\n\n".format(rank5))
-#
-# # write the classification report to file and close the output file
-# predictions = model.predict(testData)
-# f.write("{}\n".format(classification_report(testLabels, predictions,
-# 	target_names=le.classes_)))
-# f.write("Accuracy: {:.2f}%\n".format(accuracy_score(testLabels,predictions)))
-# f.close()
 
 # dump classifier to file
 print("[INFO] dumping classifier...")

@@ -45,8 +45,9 @@ def generate_features(confPath, datasetPath):
 		'''
 		featuresPath = confPath["output_path"]+ confPath["dataset_path"][confPath["dataset_path"].rfind("/"):] + "/models/features-" + fE[
 			0] + ".hdf5"
-		if (not os.path.exists(featuresPath[:featuresPath.rfind("/")])):
-			os.mkdir(featuresPath[:featuresPath.rfind("/")])
+		directory = featuresPath[:featuresPath.rfind("/")]
+		if (not os.path.exists(directory)):
+			os.makedirs(directory)
 		oi = Indexer(featuresPath, estNumImages=len(datasetPath))
 		print("[INFO] starting feature extraction...")
 

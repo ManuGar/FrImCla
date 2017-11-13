@@ -10,15 +10,9 @@
   #For the output and results of the program
   "output_path": "output",
 
-
-
-  # "features_path": "output/miniDatasetcatsWithControl/features.hdf5",
-
   #######
   # STATISTICAL COMPARISON CONFIGURATION
   #######
-  # For only considering images without control image: results/fungi/kfold-comparison.csv "results/catsWithControl/kfold-comparison.csv",
-  # "kfold_comparison": "results/minidatasetDogCat/kfold-comparison.csv",
 
   #######
   # Batch CONFIGURATION
@@ -29,7 +23,6 @@
   # LABEL ENCODER CONFIGURATION
   #######
   # For only considering images without control image: output/fungi/le.cpickle
-  # "label_encoder_path": "output/minidatasetDogCat/le.cpickle",
 
   #######
   # MODEL CONFIGURATION
@@ -47,9 +40,8 @@
   #######
   # CLASSIFIER CONFIGURATION
   #######
-  "classifier_path": "output/minidatasetDogCat/classifier",
+  # "classifier_path": "output/minidatasetDogCat/classifier",
   "training_size": 1,
-  # "results_path": "output/minidatasetDogCat/results",
   "modelClassifiers" : ["SVM","KNN","LogisticRegression"]
 
 }

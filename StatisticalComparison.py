@@ -3,14 +3,7 @@
 # the other files.
 #=======================================================================================================================
 
-
-from scipy.stats import randint as sp_randint
-from sklearn.ensemble import RandomForestClassifier, GradientBoostingClassifier
 import pandas as pd
-from sklearn.neural_network import MLPClassifier
-from sklearn.linear_model import LogisticRegression
-from sklearn.svm import SVC
-from sklearn.neighbors import KNeighborsClassifier
 from Comparing import compare_methods_h5py
 import argparse
 from utils.conf import Conf
@@ -26,6 +19,7 @@ def statisticalComparison(conf):
     for model in conf["featureExtractors"]:
 
         print(model)
+
         featuresPath = conf["output_path"]+ conf["dataset_path"][conf["dataset_path"].rfind("/"):] + "/models/features-" + model[
 			0] + ".hdf5"
         # db = h5py.File(featuresPath)
@@ -43,13 +37,25 @@ def statisticalComparison(conf):
         factory =classificationModelFactory()
         listAlgorithms = []
         listParams = []
+        listNiter = []
+
+        filePathAux = conf["output_path"]+ conf["dataset_path"][conf["dataset_path"].rfind("/"):] + "/results/kfold-comparison_bestClassifiers.csv"
+        filePath = conf["output_path"]+ conf["dataset_path"][conf["dataset_path"].rfind("/"):] + "/results/StatisticalComparison_" + model[0] + ".txt"
+        if (not os.path.isfile(filePathAux)):
+            fileResults = open(filePathAux, "a")
+            fileResults.write(",0,1,2,3,4,5,6,7,8,9\n")
+        else:
+            fileResults = open(filePathAux, "a")
+
         for classificationModel in conf["modelClassifiers"]:
             print classificationModel
             modelClas = factory.getClassificationModel(classificationModel)
             cMo = modelClas.getModel()
             params = modelClas.getParams()
+            niter = modelClas.getNIterations()
             listAlgorithms.append(cMo)
             listParams.append(params)
+            listNiter.append(niter)
 
         listNames = conf["modelClassifiers"]
 
@@ -63,7 +69,7 @@ def statisticalComparison(conf):
         #Niteraciones de las clases [10, 10, 10, 5, 10]
 
         resultsAccuracy = compare_methods_h5py(featuresPath, labelEncoderPath, listAlgorithms, listParams, listNames,
-                                               [10, 10, 5], normalization=False)  # ,10
+                                               listNiter, normalization=False)  # ,10
 
         dfAccuracy = pd.DataFrame.from_dict(resultsAccuracy, orient='index')
         KFoldComparisionPathAccuracy =conf["output_path"]+ conf["dataset_path"][conf["dataset_path"].rfind("/"):] + "/results/kfold-comparison_"+model[0] + ".csv"
@@ -73,7 +79,15 @@ def statisticalComparison(conf):
         #"kfold_comparison": "results/minidatasetDogCat/kfold-comparison.csv"
         #"dataset_path": "/home/magarcd/Escritorio/ObjectClassificationByTransferLearning/ObjectClassificationByTransferLearning/minidatasetDogCat"
         dfAccuracy.to_csv(KFoldComparisionPathAccuracy)
-        statisticalAnalysis(KFoldComparisionPathAccuracy)
+        path = KFoldComparisionPathAccuracy[:KFoldComparisionPathAccuracy.rfind("/")]
+
+
+        statisticalAnalysis(KFoldComparisionPathAccuracy,filePath, fileResults)
+    fileResults.close()
+    filePath2 = path + "/StatisticalComparison_bestClassifiers.txt"
+    fileResults2 = open(path + "/" + "bestExtractorClassifier" + ".csv", "a")
+    statisticalAnalysis(path + "/" + "kfold-comparison_bestClassifiers.csv", filePath2, fileResults2)
+    fileResults2.close()
         # sys.stdout = sys.__stdout__
 
 ap = argparse.ArgumentParser()

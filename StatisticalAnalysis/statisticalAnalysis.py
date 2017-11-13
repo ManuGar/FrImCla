@@ -2,6 +2,7 @@ import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
 import operator
+
 from scipy.stats import shapiro,levene,ttest_ind,wilcoxon
 from multiprocessing import Pool
 from multiprocessing.pool import ThreadPool
@@ -29,7 +30,7 @@ def SSTotal(accuracies):
 def eta_sqrd(accuracies):
     return SSbetween(accuracies)/SSTotal(accuracies)
 
-def multipleAlgorithmsNonParametric(algorithms,accuracies,file,alpha=0.05):
+def multipleAlgorithmsNonParametric(algorithms,accuracies, file, fileResults,alpha=0.05):
     algorithmsDataset = {x: y for (x, y) in zip(algorithms, accuracies)}
     if len(algorithms) < 5:
         print("----------------------------------------------------------")
@@ -96,6 +97,12 @@ def multipleAlgorithmsNonParametric(algorithms,accuracies,file,alpha=0.05):
                 c[c.rfind(" ") + 1:],
                 np.mean(algorithmsDataset[c[c.rfind(" ") + 1:]]),
                 np.std(algorithmsDataset[c[c.rfind(" ") + 1:]]),cohend,effectsize))
+
+                fileResults.write(winner)
+                for ele in algorithmsDataset[winner]:
+                    fileResults.write("," + str(ele))
+                fileResults.write("\n")
+
             else:
                 print("There is a significant difference between the models: %s (mean: %f, std: %f) and %s (mean: %f, std: %f) (Cohen's d=%s, %s)" % (
                     winner, np.mean(algorithmsDataset[winner]),
@@ -109,6 +116,11 @@ def multipleAlgorithmsNonParametric(algorithms,accuracies,file,alpha=0.05):
                 c[c.rfind(" ") + 1:],
                 np.mean(algorithmsDataset[c[c.rfind(" ") + 1:]]),
                 np.std(algorithmsDataset[c[c.rfind(" ") + 1:]]),cohend,effectsize))
+
+                fileResults.write(winner)
+                for ele in algorithmsDataset[winner]:
+                    fileResults.write("," + str(ele))
+
     else:
         print("Null hypothesis is accepted; hence, we can't say that there is a significant difference in the performance of the models")
         file.write("Null hypothesis is accepted; hence, we can't say that there is a significant difference in the performance of the models\n")
@@ -125,6 +137,21 @@ def multipleAlgorithmsNonParametric(algorithms,accuracies,file,alpha=0.05):
         algorithms[means.tolist().index(maximum)], maximum))
         file.write("We take the model with the best mean (%s, mean: %f) and compare it with the other models: \n" % (
         algorithms[means.tolist().index(maximum)], maximum))
+
+        filePath = file.name
+        featureExtractor = filePath[filePath.rfind("_")+1:filePath.rfind(("."))]
+        classifier = (algorithms[means.tolist().index(maximum)])
+         #f = fileResults   confPath["classifier_path"] + conf["modelClassifiers"]             +filePath[filePath.rfind("_"):filePath.rfind(("."))]
+        fStatistical = open(filePath[:filePath.rfind("/")] + "/kfold-comparison_"+ featureExtractor + ".csv", "r")
+        fStatistical.readline()
+        for line in fStatistical:
+            line = line.split(",")
+            if (line[0] == classifier):
+                fileResults.write(featureExtractor + "_" + line[0])
+                for it in line[1:]:
+                    fileResults.write("," + it)
+        fStatistical.close()
+
         for i in range(0,len(algorithms)):
             if i != means.tolist().index(maximum):
                 cohend = abs(cohen_d(algorithmsDataset[algorithms[means.tolist().index(maximum)]], algorithmsDataset[algorithms[i]]))
@@ -148,7 +175,7 @@ def multipleAlgorithmsNonParametric(algorithms,accuracies,file,alpha=0.05):
     file.write("Eta squared: %f (%s) \n" % (eta,effectsize))
 
 
-def multipleAlgorithmsParametric(algorithms,accuracies,file,alpha=0.05):
+def multipleAlgorithmsParametric(algorithms,accuracies, file, fileResults,alpha=0.05):
     algorithmsDataset = {x: y for (x, y) in zip(algorithms, accuracies)}
     print("----------------------------------------------------------")
     file.write("----------------------------------------------------------\n")
@@ -201,6 +228,16 @@ def multipleAlgorithmsParametric(algorithms,accuracies,file,alpha=0.05):
                 np.mean(algorithmsDataset[c[c.rfind(" ") + 1:]]),
                 np.std(algorithmsDataset[c[c.rfind(" ") + 1:]]),cohend,effectsize))
                 #print("There are not significant differences between: %s and %s (Cohen's d=%s, %s)" % (c[0:c.find(" ")],c[c.rfind(" ") + 1:],cohend,effectsize))
+
+                if(np.mean(algorithmsDataset[c[0:c.find(" ")]])>np.mean(algorithmsDataset[c[c.rfind(" ") + 1:]])):
+                    fileResults.write(c[0:c.find(" ")])
+                    for ele in algorithmsDataset[c[0:c.find(" ")]]:
+                        fileResults.write(","+str(ele))
+                else:
+                    fileResults.write(c[c.rfind(" ") + 1:])
+                    for ele in algorithmsDataset[c[c.rfind(" ") + 1:]]:
+                        fileResults.write("," + str(ele))
+
             else:
                 print(
                 "There is a significant difference between the models: %s (mean: %f, std: %f) and %s (mean: %f, std: %f) (Cohen's d=%s, %s)" % (
@@ -219,6 +256,16 @@ def multipleAlgorithmsParametric(algorithms,accuracies,file,alpha=0.05):
                 c[c.rfind(" ") + 1:],
                 np.mean(algorithmsDataset[c[c.rfind(" ") + 1:]]),
                 np.std(algorithmsDataset[c[c.rfind(" ") + 1:]]),cohend,effectsize))
+
+                if (np.mean(algorithmsDataset[c[0:c.find(" ")]]) > np.mean(algorithmsDataset[c[c.rfind(" ") + 1:]])):
+                    fileResults.write(c[0:c.find(" ")])
+                    for ele in algorithmsDataset[c[0:c.find(" ")]]:
+                        fileResults.write("," + str(ele))
+                else:
+                    fileResults.write(c[c.rfind(" ") + 1:])
+                    for ele in algorithmsDataset[c[c.rfind(" ") + 1:]]:
+                        fileResults.write("," + str(ele))
+
     else:
         print("Null hypothesis is accepted; hence, we can't say that there is a significant difference in the performance of the models")
         file.write("Null hypothesis is accepted; hence, we can't say that there is a significant difference in the performance of the models\n")
@@ -232,6 +279,22 @@ def multipleAlgorithmsParametric(algorithms,accuracies,file,alpha=0.05):
         maximum = max(means)
         print("We take the model with the best mean (%s, mean: %f) and compare it with the other models: " % (algorithms[means.tolist().index(maximum)],maximum))
         file.write("We take the model with the best mean (%s, mean: %f) and compare it with the other models: \n" % (algorithms[means.tolist().index(maximum)],maximum))
+
+        filePath = file.name
+        featureExtractor = filePath[filePath.rfind("_") + 1:filePath.rfind(("."))]
+        classifier = (algorithms[means.tolist().index(maximum)])
+        #f = fileResults  # confPath["classifier_path"] + conf["modelClassifiers"]             +filePath[filePath.rfind("_"):filePath.rfind(("."))]
+        fStatistical = open(filePath[:filePath.rfind("/")] + "/kfold-comparison_" + featureExtractor + ".csv", "r")
+        fStatistical.readline()
+        for line in fStatistical:
+            line = line.split(",")
+            if (line[0] == classifier):
+                fileResults.write(featureExtractor + "_" + line[0])
+                for it in line[1:]:
+                    fileResults.write("," + it)
+        fStatistical.close()
+
+
         for i in range(0,len(algorithms)):
             if i != means.tolist().index(maximum):
                 cohend = abs(cohen_d(algorithmsDataset[algorithms[means.tolist().index(maximum)]], algorithmsDataset[algorithms[i]]))
@@ -257,7 +320,7 @@ def multipleAlgorithmsParametric(algorithms,accuracies,file,alpha=0.05):
 
 
 
-def twoAlgorithmsParametric(algorithms,accuracies,alpha,file):
+def twoAlgorithmsParametric(algorithms,accuracies,alpha,file, fileResults):
     (t,prob)=ttest_ind(accuracies[0], accuracies[1])
     print("Students' t: t=%f, p=%f" % (t,prob))
     file.student("Students' t: t=%f, p=%f \n" % (t,prob))
@@ -266,11 +329,30 @@ def twoAlgorithmsParametric(algorithms,accuracies,alpha,file):
             algorithms[0], algorithms[1]))
         file.write("Null hypothesis is accepted; hence, we can't say that there is a significant difference in the performance of the models: %s and %s \n" % (
             algorithms[0], algorithms[1]))
+
+        if(np.mean(accuracies[0])>np.mean(accuracies[1])):
+            fileResults.write(algorithms[0])
+            for ele in accuracies[0]:
+                fileResults.write("," + str(ele))
+        else:
+            fileResults.write(algorithms[1])
+            for ele in accuracies[1]:
+                fileResults.write("," + str(ele))
     else:
         print("Null hypothesis is rejected; hence, there are significant differences between: %s (mean: %f, std: %f) and %s (mean: %f, std: %f)" % (
             algorithms[0], np.mean(accuracies[0]),np.std(accuracies[0]),algorithms[1], np.mean(accuracies[1]),np.std(accuracies[1])))
         file.write("Null hypothesis is rejected; hence, there are significant differences between: %s (mean: %f, std: %f) and %s (mean: %f, std: %f \n)" % (
             algorithms[0], np.mean(accuracies[0]),np.std(accuracies[0]),algorithms[1], np.mean(accuracies[1]),np.std(accuracies[1])))
+        if (np.mean(accuracies[0]) > np.mean(accuracies[1])):
+            fileResults.write(algorithms[0])
+            for ele in accuracies[0]:
+                fileResults.write("," + str(ele))
+        else:
+            fileResults.write(algorithms[1])
+            for ele in accuracies[1]:
+                fileResults.write("," + str(ele))
+
+
     print("----------------------------------------------------------")
     file.write("----------------------------------------------------------\n")
     print("Analysing effect size")
@@ -289,7 +371,7 @@ def twoAlgorithmsParametric(algorithms,accuracies,alpha,file):
         file.write("Cohen's d=%s, %s \n" % (cohend, effectsize))
 
 
-def twoAlgorithmsNonParametric(algorithms,accuracies,alpha,file):
+def twoAlgorithmsNonParametric(algorithms,accuracies,alpha,file, fileResults):
     (t,prob)=wilcoxon(accuracies[0], accuracies[1])
     print("Wilconxon: t=%f, p=%f" % (t,prob))
     file.write("Wilconxon: t=%f, p=%f \n" % (t,prob))
@@ -300,11 +382,32 @@ def twoAlgorithmsNonParametric(algorithms,accuracies,alpha,file):
         file.write(
         "Null hypothesis is accepted; hence, we can't say that there is a significant difference in the performance of the models: %s and %s \n" % (
             algorithms[0], algorithms[1]))
+
+        if (np.mean(accuracies[0]) > np.mean(accuracies[1])):
+            fileResults.write(algorithms[0])
+            for ele in accuracies[0]:
+                fileResults.write("," + str(ele))
+        else:
+            fileResults.write(algorithms[1])
+            for ele in accuracies[1]:
+                fileResults.write("," + str(ele))
+
     else:
         print("Null hypothesis is rejected; hence, there are significant differences between: %s (mean: %f, std: %f) and %s (mean: %f, std: %f)" % (
             algorithms[0], np.mean(accuracies[0]),np.std(accuracies[0]),algorithms[1], np.mean(accuracies[1]),np.std(accuracies[1])))
+
         file.write("Null hypothesis is rejected; hence, there are significant differences between: %s (mean: %f, std: %f) and %s (mean: %f, std: %f) \n" % (
             algorithms[0], np.mean(accuracies[0]),np.std(accuracies[0]),algorithms[1], np.mean(accuracies[1]),np.std(accuracies[1])))
+
+        if(np.mean(accuracies[0])>np.mean(accuracies[1])):
+            fileResults.write(algorithms[0])
+            for ele in accuracies[0]:
+                fileResults.write("," + str(ele))
+        else:
+            fileResults.write(algorithms[1])
+            for ele in accuracies[1]:
+                fileResults.write("," + str(ele))
+
     cohend = abs(cohen_d(accuracies[0], accuracies[1]))
     print("----------------------------------------------------------")
     file.write("----------------------------------------------------------\n")
@@ -322,10 +425,6 @@ def twoAlgorithmsNonParametric(algorithms,accuracies,alpha,file):
     if (prob <= alpha):
         print("Cohen's d=%s, %s" % (cohend, effectsize))
         file.write("Cohen's d=%s, %s \n" % (cohend, effectsize))
-
-
-
-
 
 def meanStdReportAndPlot(algorithms,accuracies,dataset,file):
     print("**********************************************************")
@@ -383,14 +482,13 @@ def checkParametricConditions(accuracies,alpha, file):
     parametric = independence and normality and heteroscedasticity
     return parametric
 
-
 # This is the main method employed to compare a dataset where the cross validation
 # process has been already carried out.
-def statisticalAnalysis(dataset,alpha=0.05):
-    index=dataset.rfind("/")
-    path=dataset[:index]
-    model= dataset[index+1:dataset.rfind(".")]
-    file = open(path+"/StatisticalComparison"+model[model.rfind("_"):]+".txt","w")
+def statisticalAnalysis(dataset, file, fileResults ,alpha=0.05):
+    #index=dataset.rfind("/")
+    #path=dataset[:index]
+    #model= dataset[index+1:dataset.rfind(".")]
+    file = open(file,"w")  #path+"/StatisticalComparison"+model[model.rfind("_"):]+".txt"
     df = pd.read_csv(dataset)
     algorithms = df.ix[0:,0].values
     if (len(algorithms)<2):
@@ -433,7 +531,7 @@ def statisticalAnalysis(dataset,alpha=0.05):
             file.write("Working with 2 algorithms\n")
             print("----------------------------------------------------------")
             file.write("----------------------------------------------------------\n")
-            twoAlgorithmsParametric(algorithms,accuracies,alpha,file)
+            twoAlgorithmsParametric(algorithms,accuracies,alpha,file, fileResults)
         else:
             print("----------------------------------------------------------")
             file.write("----------------------------------------------------------\n")
@@ -441,7 +539,7 @@ def statisticalAnalysis(dataset,alpha=0.05):
             file.write("Working with more than 2 algorithms\n")
             print("----------------------------------------------------------")
             file.write("----------------------------------------------------------\n")
-            multipleAlgorithmsParametric(algorithms,accuracies,file,alpha)
+            multipleAlgorithmsParametric(algorithms,accuracies,file, fileResults,alpha)
     else:
         print("Conditions for a parametric test are not fulfilled, applying a non-parametric test")
         file.write("Conditions for a parametric test are not fulfilled, applying a non-parametric test\n")
@@ -452,7 +550,7 @@ def statisticalAnalysis(dataset,alpha=0.05):
             file.write("Working with 2 algorithms\n")
             print("----------------------------------------------------------")
             file.write("----------------------------------------------------------\n")
-            twoAlgorithmsNonParametric(algorithms, accuracies,alpha,file)
+            twoAlgorithmsNonParametric(algorithms, accuracies,alpha,file, fileResults)
         else:
             print("----------------------------------------------------------")
             file.write("----------------------------------------------------------\n")
@@ -460,7 +558,8 @@ def statisticalAnalysis(dataset,alpha=0.05):
             file.write("Working with more than 2 algorithms\n")
             print("----------------------------------------------------------")
             file.write("----------------------------------------------------------\n")
-            multipleAlgorithmsNonParametric(algorithms,accuracies,file,alpha)
+            multipleAlgorithmsNonParametric(algorithms,accuracies,file, fileResults, alpha)
+    file.close()
 
 def compare_method(tuple):
     iteration, train_index,test_index,data,labels, clf, params, name,metric = tuple

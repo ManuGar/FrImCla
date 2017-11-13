@@ -111,19 +111,8 @@ def compare_methods_h5py(featuresPath,labelEncoderPath,listAlgorithms,listParame
     
     le = cPickle.loads(open(labelEncoderPath).read())
     labels = np.asarray([le.transform([l.split(":")[0]])[0] for l in labels])
-    kf = KFold(n_splits=10,shuffle=True,random_state=42) #n_splits=10
+    kf = KFold(n_splits=10,shuffle=False,random_state=42) #n_splits=10
     resultsAccuracy = {name:[] for name in listAlgorithmNames}
-    #resultsAUROC = {name: [] for name in listAlgorithmNames}
-    # resultsPrecision = {name: [] for name in listAlgorithmNames}
-    # resultsRecall = {name: [] for name in listAlgorithmNames}
-    # resultsFmeasure = {name: [] for name in listAlgorithmNames}
-    # p = Pool(10)
-    # tuple = [(i,(train_index,test_index),data,labels,listAlgorithms,listParameters,listAlgorithmNames,listNiters,normalization) for i,(train_index,test_index) in enumerate(kf.split(data))]
-    # comparison = p.map(compare_method, tuple)
-    #
-    # for i,result in comparison:
-    #     for name in listAlgorithmNames:
-    #         results[name].append(result[name])
 
     for i,(train_index,test_index) in enumerate(kf.split(data)):
         print "Iteration " + str(i)
@@ -150,16 +139,6 @@ def compare_methods_h5py(featuresPath,labelEncoderPath,listAlgorithms,listParame
             model.fit(trainData, trainLabels)
             predictions = model.predict(testData)
             resultsAccuracy[name].append(accuracy_score(testLabels, predictions))
-            #resultsAUROC[name].append(roc_auc_score(testLabels, predictions))
-            # resultsPrecision[name].append(precision_score(testLabels, predictions))
-            # resultsRecall[name].append(recall_score(testLabels, predictions))
-            # resultsFmeasure[name].append(f1_score(testLabels, predictions))
-        # tuple = [(clf, params, name, n_iter, trainData, trainLabels, testData, testLabels) for clf, params, name, n_iter
-        #          in zip(listAlgorithms, listParameters, listAlgorithmNames, listNiters)]
-        # p = Pool(len(listAlgorithms))
-        # comparison = p.map(apply_algorithm, tuple)
-        # for (name, comp) in comparison:
-        #     results[name].append(comp)
 
     return resultsAccuracy
 
