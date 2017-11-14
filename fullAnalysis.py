@@ -5,6 +5,9 @@
 from __future__ import print_function
 from mpi4py import MPI
 import warnings
+
+
+
 warnings.simplefilter(action="ignore", category=FutureWarning)
 # import the necessary packages
 from utils.conf import Conf
@@ -26,4 +29,6 @@ conf = Conf(args["conf"])
 imagePaths = list(paths.list_images(conf["dataset_path"]))
 generate_features(conf,imagePaths)
 statisticalComparison(conf)
+import train.train
+train(conf)
 

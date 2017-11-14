@@ -14,7 +14,7 @@ class classificationModelFactory():
             return cM.SVM()
         if modelText == "LogisticRegression":
             return cM.LogRegression()
-        if modelText == "MultiLayerPerceptron":
+        if modelText == "MLP":
             return cM.MultiLayerPerceptron()
         if modelText == "GradientBoost":
             return  cM.GradientBoost()

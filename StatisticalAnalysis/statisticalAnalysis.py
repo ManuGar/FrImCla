@@ -50,6 +50,10 @@ def multipleAlgorithmsNonParametric(algorithms,accuracies, file, fileResults,alp
         (Fvalue, pvalue, rankings, pivots) = friedman_test(*accuracies)
     print("F-value: %f, p-value: %s" % (Fvalue, pvalue))
     file.write("F-value: %f, p-value: %s \n" % (Fvalue, pvalue))
+
+    filePath = file.name
+    featureExtractor = filePath[filePath.rfind("_") + 1:filePath.rfind(("."))]
+
     if (pvalue < alpha):
         print("Null hypothesis is rejected; hence, models have different performance")
         file.write("Null hypothesis is rejected; hence, models have different performance \n")
@@ -74,6 +78,10 @@ def multipleAlgorithmsNonParametric(algorithms,accuracies, file, fileResults,alp
 
         print(tabulate(res, headers=['Comparison', 'Zvalue', 'p-value', 'adjusted p-value']))
         file.write(tabulate(res, headers=['Comparison', 'Zvalue', 'p-value', 'adjusted p-value'])+ "\n")
+        fileResults.write(featureExtractor + "_" + winner)
+        for ele in algorithmsDataset[winner]:
+            fileResults.write("," + str(ele))
+        fileResults.write("\n")
         for (c, p) in zip(comparions, adjustedpvalues):
             cohend = abs(cohen_d(algorithmsDataset[winner], algorithmsDataset[c[c.rfind(" ") + 1:]]))
             if (cohend <= 0.2):
@@ -98,10 +106,8 @@ def multipleAlgorithmsNonParametric(algorithms,accuracies, file, fileResults,alp
                 np.mean(algorithmsDataset[c[c.rfind(" ") + 1:]]),
                 np.std(algorithmsDataset[c[c.rfind(" ") + 1:]]),cohend,effectsize))
 
-                fileResults.write(winner)
-                for ele in algorithmsDataset[winner]:
-                    fileResults.write("," + str(ele))
-                fileResults.write("\n")
+
+
 
             else:
                 print("There is a significant difference between the models: %s (mean: %f, std: %f) and %s (mean: %f, std: %f) (Cohen's d=%s, %s)" % (
@@ -116,10 +122,6 @@ def multipleAlgorithmsNonParametric(algorithms,accuracies, file, fileResults,alp
                 c[c.rfind(" ") + 1:],
                 np.mean(algorithmsDataset[c[c.rfind(" ") + 1:]]),
                 np.std(algorithmsDataset[c[c.rfind(" ") + 1:]]),cohend,effectsize))
-
-                fileResults.write(winner)
-                for ele in algorithmsDataset[winner]:
-                    fileResults.write("," + str(ele))
 
     else:
         print("Null hypothesis is accepted; hence, we can't say that there is a significant difference in the performance of the models")
@@ -138,10 +140,10 @@ def multipleAlgorithmsNonParametric(algorithms,accuracies, file, fileResults,alp
         file.write("We take the model with the best mean (%s, mean: %f) and compare it with the other models: \n" % (
         algorithms[means.tolist().index(maximum)], maximum))
 
-        filePath = file.name
-        featureExtractor = filePath[filePath.rfind("_")+1:filePath.rfind(("."))]
         classifier = (algorithms[means.tolist().index(maximum)])
          #f = fileResults   confPath["classifier_path"] + conf["modelClassifiers"]             +filePath[filePath.rfind("_"):filePath.rfind(("."))]
+
+
         fStatistical = open(filePath[:filePath.rfind("/")] + "/kfold-comparison_"+ featureExtractor + ".csv", "r")
         fStatistical.readline()
         for line in fStatistical:
