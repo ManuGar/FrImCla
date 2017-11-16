@@ -16,7 +16,7 @@ import argparse
 
 from index_features import generate_features
 from StatisticalComparison import statisticalComparison
-
+from train import train
 
 
 # construct the argument parser and parse the command line arguments
@@ -29,6 +29,5 @@ conf = Conf(args["conf"])
 imagePaths = list(paths.list_images(conf["dataset_path"]))
 generate_features(conf,imagePaths)
 statisticalComparison(conf)
-import train.train
 train(conf)
 

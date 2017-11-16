@@ -77,17 +77,21 @@ def train(conf):
 	print("[INFO] best hyperparameters: {}".format(model.best_params_))
 	# dump classifier to file
 	print("[INFO] dumping classifier...")
-	f = open(conf["output_path"] + datasetName + "/classifier" + classifier + ".cpickle", "w")
+	f = open(conf["output_path"] + datasetName + "/classifier_" + extractor + "_" + classifier + ".cpickle", "w")
 	f.write(cPickle.dumps(model))
 
 	f.close()
 	# close the database
 	db.close()
 
-# construct the argument parser and parse the command line arguments
-ap = argparse.ArgumentParser()
-ap.add_argument("-c", "--conf", required=True, help="path to configuration file")
-args = vars(ap.parse_args())
-# load the configuration and label encoder
-conf = Conf(args["conf"])
-train(conf)
+def __main__():
+	# construct the argument parser and parse the command line arguments
+	ap = argparse.ArgumentParser()
+	ap.add_argument("-c", "--conf", required=True, help="path to configuration file")
+	args = vars(ap.parse_args())
+	# load the configuration and label encoder
+	conf = Conf(args["conf"])
+	train(conf)
+
+if __name__ == "__main__":
+    __main__()

@@ -78,13 +78,16 @@ def generate_features(confPath, datasetPath):
 		f.write(cPickle.dumps(le))
 		f.close()
 
+def __main__():
+	# construct the argument parser and parse the command line arguments
+	ap = argparse.ArgumentParser()
+	ap.add_argument("-c", "--conf", required=True, help="path to configuration file")
+	args = vars(ap.parse_args())
 
-# construct the argument parser and parse the command line arguments
-ap = argparse.ArgumentParser()
-ap.add_argument("-c", "--conf", required=True, help="path to configuration file")
-args = vars(ap.parse_args())
+	# load the configuration and grab all image paths in the dataset
+	conf = Conf(args["conf"])
+	imagePaths = list(paths.list_images(conf["dataset_path"]))
+	generate_features(conf,imagePaths)
 
-# load the configuration and grab all image paths in the dataset
-conf = Conf(args["conf"])
-imagePaths = list(paths.list_images(conf["dataset_path"]))
-generate_features(conf,imagePaths)
+if __name__ == "__main__":
+    __main__()

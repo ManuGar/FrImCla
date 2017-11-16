@@ -42,6 +42,7 @@ def statisticalComparison(conf):
         filePathAux = conf["output_path"]+ conf["dataset_path"][conf["dataset_path"].rfind("/"):] + "/results/kfold-comparison_bestClassifiers.csv"
         filePath = conf["output_path"]+ conf["dataset_path"][conf["dataset_path"].rfind("/"):] + "/results/StatisticalComparison_" + model[0] + ".txt"
         if (not os.path.isfile(filePathAux)):
+            os.makedirs(filePathAux[:filePathAux.rfind("/")])
             fileResults = open(filePathAux, "a")
             fileResults.write(",0,1,2,3,4,5,6,7,8,9\n")
         else:
@@ -90,8 +91,12 @@ def statisticalComparison(conf):
     fileResults2.close()
         # sys.stdout = sys.__stdout__
 
-ap = argparse.ArgumentParser()
-ap.add_argument("-c", "--conf", required=True, help="path to configuration file")
-args = vars(ap.parse_args())
-conf = Conf(args["conf"])
-statisticalComparison(conf)
+def __main__():
+    ap = argparse.ArgumentParser()
+    ap.add_argument("-c", "--conf", required=True, help="path to configuration file")
+    args = vars(ap.parse_args())
+    conf = Conf(args["conf"])
+    statisticalComparison(conf)
+
+if __name__ == "__main__":
+    __main__()
