@@ -8,14 +8,19 @@
 
 1. Open the conf.json file and edit the variable dataset_path
    to indicate the path where the images are stored. Such a
-   folder must have a subfolder for each class.
-2. In the conf.json file modify the variable model to select
-   the model that you want to execute.
+   folder must have a subfolder for each class. You also have to indicate
+   in output_path where the program's output will be saved.
+2. In the conf.json file modify the variable featureExtractors to select
+   the feature extractors and its params that you want to execute.
 3. Extract the features of the dataset using the following
    command:
    python index_features.py -c conf/conf.json
+   New methods can be added in the models.py file.
+   Currently the methods that are available are inception, xception, vgg16, vgg19,
+   resnet, googlenet, overfeat,lab888, lab444, hsv888, hsv444, haralick, lbp, hog,
+   haarhog, densenet and annulus.
 4. Perform the statistical analysis comparing different methods.
-   New methods can be added in the StatisticalComparison.py file.
+   New methods can be added in the classificationModels.py file.
    Currently the methods that are available are RandomForest, SVM, KNN, LR, MLP and
    Gradient Boost.
    To perform the analysis use the command:

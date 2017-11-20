@@ -493,11 +493,15 @@ def statisticalAnalysis(dataset, file, fileResults ,alpha=0.05):
     file = open(file,"w")  #path+"/StatisticalComparison"+model[model.rfind("_"):]+".txt"
     df = pd.read_csv(dataset)
     algorithms = df.ix[0:,0].values
+    accuracies = df.ix[0:, 1:].values
     if (len(algorithms)<2):
         print("It is neccessary to compare at least two algorithms")
         file.write("It is neccessary to compare at least two algorithms\n")
+        fileResults.write(algorithms[0])
+        for ele in accuracies[0]:
+            fileResults.write("," + str(ele))
         return
-    accuracies = df.ix[0:,1:].values
+
     print(dataset)
     file.write(dataset)
     print(algorithms)

@@ -31,7 +31,6 @@ def statisticalComparison(conf):
         # labels = [le.transform([l.split(":")[0]])[0] for l in labels]
         # df1 = pd.DataFrame([np.append(x,y) for (x,y) in zip(db["features"],labels)])
 
-
         # df = pd.read_csv(featuresCSVPath)
         # data = df.ix[:, :-1].values
         factory =classificationModelFactory()

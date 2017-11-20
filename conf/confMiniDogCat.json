@@ -34,8 +34,8 @@
   #                  ["annulus",bags,p-segments]
   # annulus_bags_p-segments
   #######
-
-  "featureExtractors" : [["inception","False"],["vgg19", "False"]],
+  #,["vgg19", "False"]
+  "featureExtractors" : [["inception","False"]],
 
   #######
   # CLASSIFIER CONFIGURATION

@@ -18,6 +18,8 @@ import cPickle
 import h5py
 from scipy.stats import randint as sp_randint
 
+import shallowmodels.classificationModelFactory as cmf
+
 
 def train(conf):
 	datasetName = conf["dataset_path"][conf["dataset_path"].rfind("/"):]
@@ -47,6 +49,10 @@ def train(conf):
 	print("[INFO] tuning hyperparameters...")
 	#file = open("testfile.text", "r")
 
+
+	# factory = cmf.classificationModelFactory()
+	# model = factory.getClassificationModel(classifier)
+	# model.setParams(param_grid)
 	if  classifier== "RandomForest":  #conf["modelClassifier"]
 		param_grid = {"max_depth": [3, None],
 				  "max_features": [1, 3, 10],

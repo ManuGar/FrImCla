@@ -32,7 +32,6 @@ extractorClassifier = line.split(",")[0]
 extractor, classifier = extractorClassifier.split("_")
 labelEncoderPath = conf["output_path"]+ datasetName + "/models/le-" + extractor + ".cpickle"
 
-
 #labelEncoderPath =conf["label_encoder_path"][0:conf["label_encoder_path"].rfind(".")] + "-"+ conf["model"] +".cpickle"
 le = cPickle.loads(open(labelEncoderPath).read())
 cPickleFile = conf["output_path"] + datasetName + "/classifier_" + extractor + "_" + classifier + ".cpickle"
@@ -40,10 +39,12 @@ model = cPickle.loads(open(cPickleFile).read())
 #open(conf["classifier_path"]+ conf["modelClassifier"] + ".cpickle").read()
 
 imagePath = args["image"]
-oe = Extractor(extractor) #conf["model"]
+for featureExtractor in conf["featureExtractors"]:
+    if extractor == featureExtractor[0]:
+        oe=Extractor(featureExtractor)
+        break
 
 (labels, images) = dataset.build_batch([imagePath], extractor) #conf["model"]
-
 
 '''
 Creo que esto lo hace para varias imagenes nosotros solo vamos a tener una imagen por lo que habra que modificarlo
