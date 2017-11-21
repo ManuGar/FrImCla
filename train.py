@@ -55,7 +55,8 @@ def train(conf):
 	# model.setParams(param_grid)
 	if  classifier== "RandomForest":  #conf["modelClassifier"]
 		param_grid = {"max_depth": [3, None],
-				  "max_features": [1, 3, 10],
+				  "max_features":
+					  [1, 3, 10],
 				  "min_samples_leaf": [1, 3, 10],
 				  "bootstrap": [True, False],
 				  "criterion": ["gini", "entropy"]}
@@ -72,7 +73,8 @@ def train(conf):
 		param_grid = {'n_neighbors': range(5, 30,2)}
 		model =  GridSearchCV(KNeighborsClassifier(), param_grid, cv=10)
 	elif classifier == "SVM": #conf["modelClassifier"]
-		param_grid = {'C': [1, 10, 100, 1000], 'kernel': ['linear']},  {'C': [1, 10, 100, 1000], 'gamma': [0.001, 0.0001], 'kernel': ['rbf']}
+		param_grid = {'C': [1, 10, 100, 1000], 'kernel': ['linear']},\
+					 {'C': [1, 10, 100, 1000], 'gamma': [0.001, 0.0001], 'kernel': ['rbf']}
 		model =  GridSearchCV(SVC(probability=True), param_grid, cv=10)
 	elif classifier == "MLP": #conf["modelClassifier"]
 		param_grid = {'activation':['identity', 'logistic', 'tanh', 'relu'], 'solver':['lbfgs','sgd','adam'],

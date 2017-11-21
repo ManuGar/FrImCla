@@ -46,10 +46,6 @@ for featureExtractor in conf["featureExtractors"]:
 
 (labels, images) = dataset.build_batch([imagePath], extractor) #conf["model"]
 
-'''
-Creo que esto lo hace para varias imagenes nosotros solo vamos a tener una imagen por lo que habra que modificarlo
-para que lo haga con una sola imagen y no de problemas. Creo que falla por esa razon.
-'''
 features = oe.describe(images)
 for (label, vector) in zip(labels, features):
     prediction = model.predict(np.atleast_2d(vector))[0]

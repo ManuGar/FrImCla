@@ -4,25 +4,14 @@
   #######
   # For only considering images without control image: /home/joheras/Escritorio/Research/Fungi/FungiImagesOverfeat
   "dataset_path": "/home/magarcd/Escritorio/ObjectClassificationByTransferLearning/ObjectClassificationByTransferLearning/minidatasetDogCat",
-  #joheras/Escritorio/Research/Fungi/FungiImagesWithControl",
-  # For only considering images without control image: output/fungi/features.hdf5
 
   #For the output and results of the program
   "output_path": "output",
 
   #######
-  # STATISTICAL COMPARISON CONFIGURATION
-  #######
-
-  #######
   # Batch CONFIGURATION
   #######
   "batch_size": 32,
-
-  #######
-  # LABEL ENCODER CONFIGURATION
-  #######
-  # For only considering images without control image: output/fungi/le.cpickle
 
   #######
   # MODEL CONFIGURATION
@@ -32,16 +21,15 @@
   # Shallow features: ["lab888"], ["lab444",4,4,4], ["hsv888"], ["hsv444",4,4,4], ["haralick"], ["lbp"], ["hog"], ["haarhog"]
   # Expert features: ["annulus",4,2], ["annulus",8,2], ["annulus",16,2], ["annulus",4,3], ["annulus",8,3], ["annulus",16,3], ...
   #                  ["annulus",bags,p-segments]
-  # annulus_bags_p-segments
   #######
-  #,["vgg19", "False"]
-  "featureExtractors" : [["inception","False"]],
+  "featureExtractors" : [["inception","False"],["vgg19", "False"]],
 
   #######
   # CLASSIFIER CONFIGURATION
   #######
-  # "classifier_path": "output/minidatasetDogCat/classifier",
+  # You can chose more than one classifier model
+  # Possible values for classifier model are: RandomForest, SVM, KNN, LR, MLP and
+  # Gradient Boost
   "training_size": 1,
   "modelClassifiers" : ["SVM","KNN","LogisticRegression"]
-
 }
