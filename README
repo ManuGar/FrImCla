@@ -61,7 +61,7 @@ new images.
 
 
 *************************************************************************************
-* Adding new models and feature extractors
+* Adding new classifier models and feature extractors
 *************************************************************************************
 
 To add a new feature extractor we have to create a new class in models.py. This class

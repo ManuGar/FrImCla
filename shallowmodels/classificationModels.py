@@ -19,10 +19,10 @@ class classifierModel:
 
 class RandomForest(classifierModel):
     def __init__(self, random_state=84, n_estimators=20,params = {"max_depth": [3, None],
-                "max_features": sp_randint(1, 11),
-                "min_samples_leaf": sp_randint(1, 11),
-                "bootstrap": [True, False],
-                "criterion": ["gini", "entropy"]}, niterations=10):
+				  "max_features": [1, 3, 10],
+				  "min_samples_leaf": [1, 3, 10],
+				  "bootstrap": [True, False],
+				  "criterion": ["gini", "entropy"]}, niterations=10):
         self.model = RandomForestClassifier(random_state=random_state,n_estimators=n_estimators)
         self.params = params
         self.niterations = niterations
@@ -43,8 +43,8 @@ class RandomForest(classifierModel):
         self.niterations = nIterations
 
 class SVM(classifierModel):
-    def __init__(self, random_state=84, params={'C': [1, 10, 100, 1000], 'gamma': [0.001, 0.0001],
-                 'kernel': ['rbf'], 'class_weight': ['balanced', None]}, niterations=10):
+    def __init__(self, random_state=84, params={'C': [1, 10, 100, 1000], 'gamma': [0.001, 0.0001], 'kernel': ['rbf', 'linear']},
+                 niterations=10):
         self.model = SVC(random_state=random_state)
         self.params = params
         self.niterations= niterations
@@ -65,7 +65,7 @@ class SVM(classifierModel):
         self.niterations = nIterations
 
 class KNN(classifierModel):
-    def __init__(self,params={'n_neighbors': sp_randint(3, 30)}, niterations=10):
+    def __init__(self,params={'n_neighbors': range(5, 30,2)}, niterations=10):
         self.model = KNeighborsClassifier()
         self.params = params
         self.niteraciones = niterations
@@ -86,7 +86,8 @@ class KNN(classifierModel):
         self.niterations = nIterations
 
 class LogRegression(classifierModel):
-    def __init__(self, rdm_state=84,params={'C': [0.1, 0.5, 1, 10, 100, 1000]}, niterations=5):
+    def __init__(self, rdm_state=84,params={"C": [0.1, 1.0, 10.0, 100.0, 1000.0, 10000.0]},
+                 niterations=5):
         self.model = LogisticRegression(random_state=rdm_state)
         self.params = params
         self.niterations = niterations
@@ -107,9 +108,10 @@ class LogRegression(classifierModel):
         self.niterations = nIterations
 
 class MultiLayerPerceptron(classifierModel):
-    def __init__(self, random_state=84,params={'activation': ['identity', 'logistic', 'tanh', 'relu'], 'solver': ['lbfgs', 'sgd', 'adam'],
-                 'alpha': sp_randint(0.0001, 1), 'learning_rate': ['constant', 'invscaling', 'adaptive'],
-                 'momentum': [0.9, 0.95, 0.99]}, niterations=10):
+    def __init__(self, random_state=84,params={'activation':['identity', 'logistic', 'tanh', 'relu'],
+                'solver':['lbfgs','sgd','adam'], 'alpha': sp_randint(0.0001, 1),
+                'learning_rate':['constant','invscaling','adaptive'],'momentum':[0.9,0.95,0.99]},
+                 niterations=10):
         self.model = MLPClassifier(random_state=random_state)
         self.params = params
         self.niterations = niterations
@@ -132,9 +134,9 @@ class MultiLayerPerceptron(classifierModel):
 class GradientBoost(classifierModel):
     def __init__(self, random_state=84, n_estimators=20,
                  params={"max_depth": [3, None],
-                "max_features": sp_randint(1, 11),
-                "min_samples_leaf": sp_randint(1, 11),
-                "criterion": ["friedman_mse", "mse", "mae"]}, niterations=10):
+				  "max_features": [1, 3, 10],
+				  "min_samples_leaf": [1, 3, 10]},
+                 niterations=10):
         self.model = GradientBoostingClassifier(random_state=random_state,n_estimators=n_estimators)
         self.params = params
         self.niterations = niterations
