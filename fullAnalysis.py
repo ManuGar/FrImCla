@@ -19,6 +19,9 @@ from StatisticalComparison import statisticalComparison
 from train import train
 
 
+import time
+
+
 # construct the argument parser and parse the command line arguments
 ap = argparse.ArgumentParser()
 ap.add_argument("-c", "--conf", required=True, help="path to configuration file")
@@ -26,8 +29,12 @@ args = vars(ap.parse_args())
 
 # load the configuration and grab all image paths in the dataset
 conf = Conf(args["conf"])
+start = time.time()
+
 imagePaths = list(paths.list_images(conf["dataset_path"]))
 generate_features(conf,imagePaths)
 statisticalComparison(conf)
 train(conf)
+end = time.time()
+print(end - start)
 

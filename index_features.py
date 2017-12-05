@@ -39,10 +39,7 @@ def generate_features(confPath, datasetPath):
 		# initialize the Overfeat extractor and the Overfeat indexer
 		print("[INFO] initializing network...")
 		oe = Extractor(fE)
-		'''
-		featuresPath = confPath["features_path"][0:confPath["features_path"].rfind(".")] + "-" + fE[
-			0] + ".hdf5"
-		'''
+
 		featuresPath = confPath["output_path"]+ confPath["dataset_path"][confPath["dataset_path"].rfind("/"):] + "/models/features-" + fE[
 			0] + ".hdf5"
 		directory = featuresPath[:featuresPath.rfind("/")]

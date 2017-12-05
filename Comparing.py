@@ -15,6 +15,11 @@ import cPickle
 from multiprocessing import Pool
 from multiprocessing.pool import ThreadPool
 
+
+
+from sklearn.externals.joblib import Parallel, delayed
+
+
 def apply_algorithm(tuple):
     clf, params, name, n_iter,trainData, trainLabels,testData,testLabels = tuple
     print(name)
@@ -102,13 +107,26 @@ def compare_methods(dataset,listAlgorithms,listParameters,listAlgorithmNames,lis
     return (resultsAccuracy,resultsPrecision,resultsRecall,resultsFmeasure)
 
 
+def prueba(clf, params, name, n_iter, trainData, testData, trainLabels, testLabels):
+    print(name)
+    if params is None:
+        model = clf
+    else:
+        model = RandomizedSearchCV(clf, param_distributions=params, n_iter=n_iter)
+
+    trainData = np.nan_to_num(trainData)
+    testData = np.nan_to_num(testData)
+    model.fit(trainData, trainLabels)
+    predictions = model.predict(testData)
+    return (name, accuracy_score(testLabels, predictions))
+
 def compare_methods_h5py(featuresPath,labelEncoderPath,listAlgorithms,listParameters,listAlgorithmNames,listNiters,normalization=False):
 
     # Loading dataset
     db = h5py.File(featuresPath)
     labels = db["image_ids"]
     data = db["features"][()]
-    
+
     le = cPickle.loads(open(labelEncoderPath).read())
     labels = np.asarray([le.transform([l.split(":")[0]])[0] for l in labels])
     kf = KFold(n_splits=10,shuffle=False,random_state=42) #n_splits=10
@@ -127,18 +145,13 @@ def compare_methods_h5py(featuresPath,labelEncoderPath,listAlgorithms,listParame
             testData = np.asarray(testData).astype("float32")
             testData -= np.mean(testData, axis=0)
             testData /= np.std(testData, axis=0)
-        for clf, params, name, n_iter in zip(listAlgorithms, listParameters, listAlgorithmNames, listNiters):
-            print(name)
-            if params is None:
-                model = clf
-            else:
-                model = RandomizedSearchCV(clf, param_distributions=params, n_iter=n_iter)
 
-            trainData = np.nan_to_num(trainData)
-            testData = np.nan_to_num(testData)
-            model.fit(trainData, trainLabels)
-            predictions = model.predict(testData)
-            resultsAccuracy[name].append(accuracy_score(testLabels, predictions))
+        output = Parallel(n_jobs=3)(delayed(prueba)(clf, params, name, n_iter,trainData, testData, trainLabels, testLabels)
+                           for clf, params, name, n_iter in
+                           zip(listAlgorithms, listParameters, listAlgorithmNames, listNiters))
+        #for clf, params, name, n_iter in zip(listAlgorithms, listParameters, listAlgorithmNames, listNiters):
+        for name, accuracy in output:
+            resultsAccuracy[name].append(accuracy)
 
     return resultsAccuracy
 
