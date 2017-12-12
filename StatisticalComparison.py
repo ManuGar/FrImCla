@@ -15,7 +15,7 @@ import os
 
 from shallowmodels.classificationModelFactory import classificationModelFactory
 
-def statisticalComparison(conf):
+def statisticalComparison(conf, verbose =False):
     for model in conf["featureExtractors"]:
 
         print(model)
@@ -82,11 +82,11 @@ def statisticalComparison(conf):
         path = KFoldComparisionPathAccuracy[:KFoldComparisionPathAccuracy.rfind("/")]
 
 
-        statisticalAnalysis(KFoldComparisionPathAccuracy,filePath, fileResults)
+        statisticalAnalysis(KFoldComparisionPathAccuracy,filePath, fileResults,verbose)
     fileResults.close()
     filePath2 = path + "/StatisticalComparison_bestClassifiers.txt"
     fileResults2 = open(path + "/" + "bestExtractorClassifier" + ".csv", "a")
-    statisticalAnalysis(path + "/" + "kfold-comparison_bestClassifiers.csv", filePath2, fileResults2)
+    statisticalAnalysis(path + "/" + "kfold-comparison_bestClassifiers.csv", filePath2, fileResults2, verbose)
     fileResults2.close()
         # sys.stdout = sys.__stdout__
 

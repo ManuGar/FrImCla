@@ -22,7 +22,7 @@
   # Expert features: ["annulus",4,2], ["annulus",8,2], ["annulus",16,2], ["annulus",4,3], ["annulus",8,3], ["annulus",16,3], ...
   #                  ["annulus",bags,p-segments]
   #######
-  "featureExtractors" : [["inception","False"],["vgg19", "False"]],
+  "featureExtractors" : [["hog"]],
 
   #######
   # CLASSIFIER CONFIGURATION

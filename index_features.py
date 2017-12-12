@@ -40,8 +40,8 @@ def generate_features(confPath, datasetPath):
 		print("[INFO] initializing network...")
 		oe = Extractor(fE)
 
-		featuresPath = confPath["output_path"]+ confPath["dataset_path"][confPath["dataset_path"].rfind("/"):] + "/models/features-" + fE[
-			0] + ".hdf5"
+		featuresPath = confPath["output_path"]+ confPath["dataset_path"][confPath["dataset_path"].rfind("/"):] + \
+					   "/models/features-" + fE[0] + ".hdf5"
 		directory = featuresPath[:featuresPath.rfind("/")]
 		if (not os.path.exists(directory)):
 			os.makedirs(directory)

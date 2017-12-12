@@ -6,7 +6,7 @@ from __future__ import print_function
 from mpi4py import MPI
 import warnings
 
-
+import time
 
 warnings.simplefilter(action="ignore", category=FutureWarning)
 # import the necessary packages
@@ -19,7 +19,6 @@ from StatisticalComparison import statisticalComparison
 from train import train
 
 
-import time
 
 
 # construct the argument parser and parse the command line arguments
@@ -29,12 +28,14 @@ args = vars(ap.parse_args())
 
 # load the configuration and grab all image paths in the dataset
 conf = Conf(args["conf"])
+verbose = False
 start = time.time()
-
 imagePaths = list(paths.list_images(conf["dataset_path"]))
 generate_features(conf,imagePaths)
-statisticalComparison(conf)
+statisticalComparison(conf, verbose)
 train(conf)
 end = time.time()
+print("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA")
 print(end - start)
+
 

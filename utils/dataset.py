@@ -9,6 +9,8 @@ from keras.applications import imagenet_utils
 from keras.applications.inception_v3 import preprocess_input
 import cv2
 
+import shallowmodels.modelFactory as mf
+
 def prepare_image(imagePath,model):
 	#print imagePath #to display the image on the screen that is working in case the image gives error
 
@@ -44,6 +46,7 @@ def build_batch(paths,model):
 	# load the images from disk, prepare them for extraction, and convert
 	# the list to a NumPy array
 	images = [prepare_image(p,model) for p in paths]
+
 	if model in ("inception", "xception", "vgg16","vgg19","resnet","inception", "xception","densenet"):
 		images = np.array(images, dtype="float")
 

@@ -15,6 +15,7 @@ import cPickle
 from multiprocessing import Pool
 from multiprocessing.pool import ThreadPool
 
+import time
 
 
 from sklearn.externals.joblib import Parallel, delayed
@@ -131,6 +132,7 @@ def compare_methods_h5py(featuresPath,labelEncoderPath,listAlgorithms,listParame
     labels = np.asarray([le.transform([l.split(":")[0]])[0] for l in labels])
     kf = KFold(n_splits=10,shuffle=False,random_state=42) #n_splits=10
     resultsAccuracy = {name:[] for name in listAlgorithmNames}
+    #start = time.time()
 
     for i,(train_index,test_index) in enumerate(kf.split(data)):
         print "Iteration " + str(i)
@@ -146,13 +148,16 @@ def compare_methods_h5py(featuresPath,labelEncoderPath,listAlgorithms,listParame
             testData -= np.mean(testData, axis=0)
             testData /= np.std(testData, axis=0)
 
-        output = Parallel(n_jobs=3)(delayed(prueba)(clf, params, name, n_iter,trainData, testData, trainLabels, testLabels)
+        output = Parallel(n_jobs=-1)(delayed(prueba)(clf, params, name, n_iter, trainData, testData, trainLabels, testLabels)
                            for clf, params, name, n_iter in
                            zip(listAlgorithms, listParameters, listAlgorithmNames, listNiters))
+
         #for clf, params, name, n_iter in zip(listAlgorithms, listParameters, listAlgorithmNames, listNiters):
         for name, accuracy in output:
             resultsAccuracy[name].append(accuracy)
-
+    #end = time.time()
+    #print("SSSSSSSSSSSSSSSS")
+    #print(end - start)
     return resultsAccuracy
 
 
