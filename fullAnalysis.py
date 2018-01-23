@@ -3,7 +3,6 @@
 
 # suppress any FutureWarning from Theano
 from __future__ import print_function
-from mpi4py import MPI
 import warnings
 
 import time
@@ -18,7 +17,7 @@ from index_features import generate_features
 from StatisticalComparison import statisticalComparison
 from train import train
 
-
+from sklearn.externals.joblib import Parallel, delayed
 
 
 # construct the argument parser and parse the command line arguments
@@ -31,11 +30,12 @@ conf = Conf(args["conf"])
 verbose = False
 start = time.time()
 imagePaths = list(paths.list_images(conf["dataset_path"]))
-generate_features(conf,imagePaths)
+prueba = list(paths.list_images("/home/magarcd/Escritorio/ObjectClassificationByTransferLearning/ObjectClassificationByTransferLearning/minidatasetDogCat2"))
+
+generate_features(conf,imagePaths, verbose)
+end = time.time()
 statisticalComparison(conf, verbose)
 train(conf)
-end = time.time()
+
 print("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA")
 print(end - start)
-
-

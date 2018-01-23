@@ -41,37 +41,23 @@ class modelFactory():
         if modelText in ("inception", "xception", "vgg16", "vgg19", "resnet"):
             Network = MODELS[modelText]
             return Network(include_top=params[0])
-        if modelText == "googlenet":
+        if modelText in ( "googlenet","lab888","hsv888","haralick","lbp","hog","haarhog","densenet"):
             return MODELS[modelText]()
         if modelText == "overfeat":
             return MODELS[modelText](output_layers=params[0]) #[-3]
-        if modelText == "lab888":
-            return MODELS[modelText]()
         if modelText == "lab444":
             if (len(params)>=3):
                 bin1=params[0]
                 bin2=params[1]
                 bin3=params[2]
                 return MODELS[modelText](bins=[bin1, bin2, bin3])
-        if modelText == "hsv888":
-            return MODELS[modelText]()
         if modelText == "hsv444":
             if (len(params)>=3):
                 bin1=params[0]
                 bin2=params[1]
                 bin3=params[2]
                 return MODELS[modelText](bins=[bin1, bin2, bin3])
-            #return HSVModel(bins=[4, 4, 4])
-        if modelText == "haralick":
-            return MODELS[modelText]()
-        if modelText == "lbp":
-            return MODELS[modelText]()
-        if modelText == "hog":
-            return MODELS[modelText]()
-        if modelText == "haarhog":
-            return MODELS[modelText]()
-        if modelText == "densenet":
-            return MODELS[modelText]()
+
         if "annulus" in modelText:
             if (len(params)>=3):
                 bags=params[0]
@@ -83,4 +69,3 @@ class modelFactory():
                 bags=[bags, bags, bags],
                 p_segments=p_segments,
                 plainImagePath=plainImgPath ) #"/home/joheras/Escritorio/Research/Fungi/FungiImages/plain.jpg",
-

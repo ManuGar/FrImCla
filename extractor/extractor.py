@@ -31,5 +31,5 @@ class Extractor:
 		if self.modelText in ("googlenet","overfeat"):
 			return self.model.transform(images)
 		else:
-			print (self.modelText) #self.model.name
+			#print (self.modelText) #self.model.name
 			return [self.model.describe(image) for image in images]

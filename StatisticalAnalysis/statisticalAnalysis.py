@@ -4,7 +4,6 @@ import matplotlib.pyplot as plt
 import operator
 
 from scipy.stats import shapiro,levene,ttest_ind,wilcoxon
-from multiprocessing import Pool
 from multiprocessing.pool import ThreadPool
 
 from stac.nonparametric_tests import quade_test,holm_test,friedman_test
@@ -509,7 +508,8 @@ def statisticalAnalysis(dataset, file, fileResults ,alpha=0.05, verbose=False):
     algorithms = df.ix[0:,0].values
     accuracies = df.ix[0:, 1:].values
     if (len(algorithms)<2):
-        print("It is neccessary to compare at least two algorithms")
+        if verbose:
+            print("It is neccessary to compare at least two algorithms")
         file.write("It is neccessary to compare at least two algorithms\n")
         fileResults.write(algorithms[0])
         for ele in accuracies[0]:

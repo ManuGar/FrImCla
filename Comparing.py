@@ -12,12 +12,6 @@ from sklearn.metrics import f1_score
 from sklearn.model_selection import KFold
 import h5py
 import cPickle
-from multiprocessing import Pool
-from multiprocessing.pool import ThreadPool
-
-import time
-
-
 from sklearn.externals.joblib import Parallel, delayed
 
 
@@ -51,7 +45,7 @@ def compare_method(tuple):
 
 
 
-def compare_methods(dataset,listAlgorithms,listParameters,listAlgorithmNames,listNiters,normalization=False):
+def compare_methods(dataset,listAlgorithms,listParameters,listAlgorithmNames,listNiters,normalization=False, verbose=False):
 
     # Loading dataset
     df = pd.read_csv(dataset)
@@ -72,7 +66,8 @@ def compare_methods(dataset,listAlgorithms,listParameters,listAlgorithmNames,lis
 
 
     for i,(train_index,test_index) in enumerate(kf.split(data)):
-        print "Iteration " + str(i+1) + "/10"
+        if verbose:
+            print "Iteration " + str(i+1) + "/10"
 
         trainData , testData = data[train_index],data[test_index]
         trainLabels, testLabels = labels[train_index], labels[test_index]
@@ -92,7 +87,8 @@ def compare_methods(dataset,listAlgorithms,listParameters,listAlgorithmNames,lis
         #     results[name].append(comp)
         #
         for clf,params,name,n_iter in zip(listAlgorithms,listParameters,listAlgorithmNames,listNiters):
-            print(name)
+            if verbose:
+                print(name)
             if params is None:
                 model = clf
             else:
@@ -108,8 +104,9 @@ def compare_methods(dataset,listAlgorithms,listParameters,listAlgorithmNames,lis
     return (resultsAccuracy,resultsPrecision,resultsRecall,resultsFmeasure)
 
 
-def prueba(clf, params, name, n_iter, trainData, testData, trainLabels, testLabels):
-    print(name)
+def accuracyPrediction(clf, params, name, n_iter, trainData, testData, trainLabels, testLabels, verbose=False):
+    if verbose:
+        print(name)
     if params is None:
         model = clf
     else:
@@ -121,7 +118,8 @@ def prueba(clf, params, name, n_iter, trainData, testData, trainLabels, testLabe
     predictions = model.predict(testData)
     return (name, accuracy_score(testLabels, predictions))
 
-def compare_methods_h5py(featuresPath,labelEncoderPath,listAlgorithms,listParameters,listAlgorithmNames,listNiters,normalization=False):
+def compare_methods_h5py(featuresPath,labelEncoderPath,listAlgorithms,listParameters,listAlgorithmNames,
+                         listNiters, verbose=False, normalization=False):
 
     # Loading dataset
     db = h5py.File(featuresPath)
@@ -132,10 +130,10 @@ def compare_methods_h5py(featuresPath,labelEncoderPath,listAlgorithms,listParame
     labels = np.asarray([le.transform([l.split(":")[0]])[0] for l in labels])
     kf = KFold(n_splits=10,shuffle=False,random_state=42) #n_splits=10
     resultsAccuracy = {name:[] for name in listAlgorithmNames}
-    #start = time.time()
 
     for i,(train_index,test_index) in enumerate(kf.split(data)):
-        print "Iteration " + str(i)
+        if verbose:
+            print "Iteration " + str(i)
         trainData , testData = data[train_index],data[test_index]
         trainLabels, testLabels = labels[train_index], labels[test_index]
 
@@ -148,16 +146,13 @@ def compare_methods_h5py(featuresPath,labelEncoderPath,listAlgorithms,listParame
             testData -= np.mean(testData, axis=0)
             testData /= np.std(testData, axis=0)
 
-        output = Parallel(n_jobs=-1)(delayed(prueba)(clf, params, name, n_iter, trainData, testData, trainLabels, testLabels)
+        output = Parallel(n_jobs=-1)(delayed(accuracyPrediction)(clf, params, name, n_iter, trainData, testData, trainLabels, testLabels, verbose)
                            for clf, params, name, n_iter in
                            zip(listAlgorithms, listParameters, listAlgorithmNames, listNiters))
 
         #for clf, params, name, n_iter in zip(listAlgorithms, listParameters, listAlgorithmNames, listNiters):
         for name, accuracy in output:
             resultsAccuracy[name].append(accuracy)
-    #end = time.time()
-    #print("SSSSSSSSSSSSSSSS")
-    #print(end - start)
     return resultsAccuracy
 
 
