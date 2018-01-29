@@ -50,7 +50,6 @@ def build_batch(paths,model):
 	if model in ("inception", "xception", "vgg16","vgg19","resnet","inception", "xception","densenet"):
 		images = np.array(images, dtype="float")
 
-
 	# extract the labels from the image paths
 	labels = [":".join(p.split("/")[-2:]) for p in paths]
 

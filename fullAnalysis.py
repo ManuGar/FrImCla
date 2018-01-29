@@ -17,8 +17,6 @@ from index_features import generate_features
 from StatisticalComparison import statisticalComparison
 from train import train
 
-from sklearn.externals.joblib import Parallel, delayed
-
 
 # construct the argument parser and parse the command line arguments
 ap = argparse.ArgumentParser()
@@ -28,14 +26,12 @@ args = vars(ap.parse_args())
 # load the configuration and grab all image paths in the dataset
 conf = Conf(args["conf"])
 verbose = False
-start = time.time()
+# start = time.time()
 imagePaths = list(paths.list_images(conf["dataset_path"]))
-prueba = list(paths.list_images("/home/magarcd/Escritorio/ObjectClassificationByTransferLearning/ObjectClassificationByTransferLearning/minidatasetDogCat2"))
 
 generate_features(conf,imagePaths, verbose)
-end = time.time()
+# end = time.time()
 statisticalComparison(conf, verbose)
 train(conf)
 
-print("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA")
-print(end - start)
+#print(end - start)
