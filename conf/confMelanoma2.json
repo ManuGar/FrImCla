@@ -24,7 +24,7 @@
   # Expert features: ["annulus",4,2], ["annulus",8,2], ["annulus",16,2], ["annulus",4,3], ["annulus",8,3], ["annulus",16,3], ...
   #                  ["annulus",bags,p-segments]
   #######
-  "featureExtractors" : [["hog"], ["hsv444",4,4,4] ],
+  "featureExtractors" : [["hog"],["densenet"], ["hsv888"], ["hsv444",4,4,4] ],
 
   #######
   # CLASSIFIER CONFIGURATION

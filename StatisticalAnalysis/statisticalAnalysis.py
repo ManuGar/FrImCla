@@ -169,7 +169,7 @@ def multipleAlgorithmsNonParametric(algorithms,accuracies, file, fileResults, mo
     file.write("Eta squared: %f (%s) \n" % (eta,effectsize))
 
 
-def multipleAlgorithmsParametric(algorithms,accuracies, file, fileResults, model,alpha=0.05, verbose=False):
+def multipleAlgorithmsParametric(algorithms,accuracies, file, fileResults,alpha=0.05, verbose=False):
     algorithmsDataset = {x: y for (x, y) in zip(algorithms, accuracies)}
     (Fvalue, pvalue, pivots) = anova_test(*accuracies)
     if verbose:
@@ -295,7 +295,7 @@ def multipleAlgorithmsParametric(algorithms,accuracies, file, fileResults, model
         for line in fStatistical:
             line = line.split(",")
             if (line[0] == classifier):
-                fileResults.write(featureExtractor + "_" + line[0])
+                fileResults.write(line[0])
                 for it in line[1:]:
                     fileResults.write("," + it)
                 fileResults.write("\n")
@@ -511,9 +511,7 @@ def checkParametricConditions(accuracies,alpha, file, verbose=False):
 # This is the main method employed to compare a dataset where the cross validation
 # process has been already carried out.
 def statisticalAnalysis(dataset, file, fileResults ,alpha=0.05, verbose=False):
-    index=dataset.rfind("_")
     #path=dataset[:index]
-    model= dataset[index+1:dataset.rfind(".")]
     file = open(file,"w")  #path+"/StatisticalComparison"+model[model.rfind("_"):]+".txt"
     df = pd.read_csv(dataset)
     algorithms = df.ix[0:,0].values
