@@ -9,8 +9,6 @@ from keras.applications import imagenet_utils
 from keras.applications.inception_v3 import preprocess_input
 import cv2
 
-import shallowmodels.modelFactory as mf
-
 def prepare_image(imagePath,model):
 	#print imagePath #to display the image on the screen that is working in case the image gives error
 

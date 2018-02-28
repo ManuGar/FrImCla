@@ -3,7 +3,7 @@
 
 # suppress any FutureWarning from Theano
 from __future__ import print_function
-from mpi4py import MPI
+# from mpi4py import MPI
 import warnings
 warnings.simplefilter(action="ignore", category=FutureWarning)
 
@@ -19,7 +19,6 @@ import cPickle
 import random
 import os
 from sklearn.externals.joblib import Parallel, delayed
-
 
 def extractFeatures(fE, batchSize, datasetPath, outputPath, datasetP, le, verbose):
 	# initialize the Overfeat extractor and the Overfeat indexer
@@ -48,8 +47,7 @@ def extractFeatures(fE, batchSize, datasetPath, outputPath, datasetP, le, verbos
 
 		# check to see if progress should be displayed
 		if i > 0 and verbose:
-			oi._debug("processed {} images".format((i + 1) * batchSize,
-												   msgType="[PROGRESS]"))
+			oi._debug("processed {} images".format((i + 1) * batchSize, msgType="[PROGRESS]"))
 
 	# finish the indexing process
 	oi.finish()
@@ -83,8 +81,10 @@ def generate_features(confPath, datasetPath, verbose):
 	datasetP = confPath["dataset_path"]
 	batchSize = confPath["batch_size"]
 
-	Parallel(n_jobs=-1)(delayed(extractFeatures)(fE, batchSize, datasetPath, outputPath,datasetP, le, verbose) for fE in featureExtractors)
-	#for (fE) in featureExtractors:
+
+	# Parallel(n_jobs=-1)(delayed(extractFeatures)(fE, batchSize, datasetPath, outputPath,datasetP, le, verbose) for fE in featureExtractors)
+	for (fE) in featureExtractors:
+		extractFeatures(fE,batchSize,datasetPath, outputPath, datasetP, le, verbose)
 
 
 def __main__():

@@ -16,6 +16,9 @@ import os
 from shallowmodels.classificationModelFactory import classificationModelFactory
 
 def statisticalComparison(conf, verbose =False):
+    filePathAux = conf["output_path"] + conf["dataset_path"][conf["dataset_path"].rfind("/"):] \
+                  + "/results/kfold-comparison_bestClassifiers.csv"
+
     for model in conf["featureExtractors"]:
 
         if verbose:
@@ -39,7 +42,6 @@ def statisticalComparison(conf, verbose =False):
         listParams = []
         listNiter = []
 
-        filePathAux = conf["output_path"]+ conf["dataset_path"][conf["dataset_path"].rfind("/"):] + "/results/kfold-comparison_bestClassifiers.csv"
         filePath = conf["output_path"]+ conf["dataset_path"][conf["dataset_path"].rfind("/"):] + "/results/StatisticalComparison_" + model[0] + ".txt"
 
 
@@ -53,7 +55,6 @@ def statisticalComparison(conf, verbose =False):
             listAlgorithms.append(cMo)
             listParams.append(params)
             listNiter.append(niter)
-
 
         if (not os.path.isfile(filePathAux)):
             os.makedirs(filePathAux[:filePathAux.rfind("/")])
@@ -76,7 +77,7 @@ def statisticalComparison(conf, verbose =False):
         #listNames = ["RF", "SVM", "KNN", "LR", "MLP"]  # ,"ET"
         #Niteraciones de las clases [10, 10, 10, 5, 10]
 
-        resultsAccuracy = compare_methods_h5py(featuresPath, labelEncoderPath, listAlgorithms, listParams, listNames,
+        resultsAccuracy = compare_methods_h5py(model, featuresPath, labelEncoderPath, listAlgorithms, listParams, listNames,
                                                listNiter, verbose, normalization=False)  # ,10
 
         dfAccuracy = pd.DataFrame.from_dict(resultsAccuracy, orient='index')

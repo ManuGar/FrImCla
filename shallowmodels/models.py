@@ -37,9 +37,17 @@ class LABModel(Model):
 
     def describe(self,image):
         checkLAB = cv2.cvtColor(image, cv2.COLOR_RGB2LAB)
+        dst = np.zeros(shape=(5, 2))
+
         histLAB = cv2.calcHist([checkLAB], self.channels, None, self.bins, self.histValues)
-        histLAB = cv2.normalize(histLAB).flatten()
+        histLAB = cv2.normalize(histLAB, dst).flatten()
         return histLAB
+
+    # def describe(self, image):
+    #     checkLAB = cv2.cvtColor(image, cv2.COLOR_RGB2LAB)
+    #     histLAB = cv2.calcHist([checkLAB], self.channels, None, self.bins, self.histValues)
+    #     histLAB = cv2.normalize(histLAB).flatten()
+    #     return histLAB
 
 
 class HSVModel(Model):
@@ -50,10 +58,15 @@ class HSVModel(Model):
 
     def describe(self,image):
         checkHSV = cv2.cvtColor(image, cv2.COLOR_RGB2HSV)
+        dst = np.zeros(shape=(5, 2))
         histHSV = cv2.calcHist([checkHSV], self.channels, None, self.bins, self.histValues)
-        histHSV = cv2.normalize(histHSV).flatten()
+        histHSV = cv2.normalize(histHSV, dst).flatten()
         return histHSV
-
+    # def describe(self,image):
+    #     checkHSV = cv2.cvtColor(image, cv2.COLOR_RGB2HSV)
+    #     histHSV = cv2.calcHist([checkHSV], self.channels, None, self.bins, self.histValues)
+    #     histHSV = cv2.normalize(histHSV).flatten()
+    #     return histHSV
 
 class Haralick(Model):
     def __init__(self):

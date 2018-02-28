@@ -26,12 +26,23 @@ args = vars(ap.parse_args())
 # load the configuration and grab all image paths in the dataset
 conf = Conf(args["conf"])
 verbose = False
-# start = time.time()
+start = time.time()
 imagePaths = list(paths.list_images(conf["dataset_path"]))
+# prueba = list(paths.list_images("/home/magarcd/Escritorio/ObjectClassificationByTransferLearning/ObjectClassificationByTransferLearning/minidatasetDogCat2"))
 
 generate_features(conf,imagePaths, verbose)
-# end = time.time()
+end = time.time()
 statisticalComparison(conf, verbose)
 train(conf)
 
-#print(end - start)
+print("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA")
+
+'''
+Link de descarga de los pesos de overfeat:
+#https://dwijaybane.wordpress.com/2017/07/24/installing-overfeat-cnn-based-feature-extractor-and-classifier-on-ubuntu-16-04/
+
+
+http://cilvr.cs.nyu.edu/lib/exe/fetch.php?media=overfeat:overfeat-v04-2.tgz
+
+'''
+print(end - start)

@@ -118,7 +118,7 @@ def accuracyPrediction(clf, params, name, n_iter, trainData, testData, trainLabe
     predictions = model.predict(testData)
     return (name, accuracy_score(testLabels, predictions))
 
-def compare_methods_h5py(featuresPath,labelEncoderPath,listAlgorithms,listParameters,listAlgorithmNames,
+def compare_methods_h5py(model, featuresPath,labelEncoderPath,listAlgorithms,listParameters,listAlgorithmNames,
                          listNiters, verbose=False, normalization=False):
 
     # Loading dataset
@@ -129,7 +129,7 @@ def compare_methods_h5py(featuresPath,labelEncoderPath,listAlgorithms,listParame
     le = cPickle.loads(open(labelEncoderPath).read())
     labels = np.asarray([le.transform([l.split(":")[0]])[0] for l in labels])
     kf = KFold(n_splits=10,shuffle=False,random_state=42) #n_splits=10
-    resultsAccuracy = {name:[] for name in listAlgorithmNames}
+    resultsAccuracy = {model[0]+ "_" +name:[] for name in listAlgorithmNames}
 
     for i,(train_index,test_index) in enumerate(kf.split(data)):
         if verbose:
@@ -152,7 +152,7 @@ def compare_methods_h5py(featuresPath,labelEncoderPath,listAlgorithms,listParame
 
         #for clf, params, name, n_iter in zip(listAlgorithms, listParameters, listAlgorithmNames, listNiters):
         for name, accuracy in output:
-            resultsAccuracy[name].append(accuracy)
+            resultsAccuracy[model[0]+ "_" + name].append(accuracy)
     return resultsAccuracy
 
 

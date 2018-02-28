@@ -29,7 +29,7 @@ def SSTotal(accuracies):
 def eta_sqrd(accuracies):
     return SSbetween(accuracies)/SSTotal(accuracies)
 
-def multipleAlgorithmsNonParametric(algorithms,accuracies, file, fileResults,alpha=0.05, verbose=False):
+def multipleAlgorithmsNonParametric(algorithms,accuracies, file, fileResults, model, alpha=0.05, verbose=False):
     algorithmsDataset = {x: y for (x, y) in zip(algorithms, accuracies)}
     if len(algorithms) < 5:
         if verbose:
@@ -54,8 +54,6 @@ def multipleAlgorithmsNonParametric(algorithms,accuracies, file, fileResults,alp
     file.write("F-value: %f, p-value: %s \n" % (Fvalue, pvalue))
 
     filePath = file.name
-    featureExtractor = filePath[filePath.rfind("_") + 1:filePath.rfind(("."))]
-
     if (pvalue < alpha):
         r = {x: y for (x, y) in zip(algorithms, rankings)}
         sorted_ranking = sorted(r.items(), key=operator.itemgetter(1))
@@ -80,7 +78,7 @@ def multipleAlgorithmsNonParametric(algorithms,accuracies, file, fileResults,alp
         file.write("Applying Holm p-value adjustment procedure and analysing effect size\n")
         file.write("----------------------------------------------------------\n")
         file.write(tabulate(res, headers=['Comparison', 'Zvalue', 'p-value', 'adjusted p-value'])+ "\n")
-        fileResults.write(featureExtractor + "_" + winner)
+        fileResults.write(model + "_" + winner)
 
         for ele in algorithmsDataset[winner]:
             fileResults.write("," + str(ele))
@@ -136,14 +134,15 @@ def multipleAlgorithmsNonParametric(algorithms,accuracies, file, fileResults,alp
         classifier = (algorithms[means.tolist().index(maximum)])
          #f = fileResults   confPath["classifier_path"] + conf["modelClassifiers"]             +filePath[filePath.rfind("_"):filePath.rfind(("."))]
 
-        fStatistical = open(filePath[:filePath.rfind("/")] + "/kfold-comparison_"+ featureExtractor + ".csv", "r")
+        fStatistical = open(filePath[:filePath.rfind("/")] + "/kfold-comparison_"+ model + ".csv", "r")
         fStatistical.readline()
         for line in fStatistical:
             line = line.split(",")
             if (line[0] == classifier):
-                fileResults.write(featureExtractor + "_" + line[0])
+                fileResults.write(model + "_" + line[0])
                 for it in line[1:]:
                     fileResults.write("," + it)
+                fileResults.write("\n")
         fStatistical.close()
 
         for i in range(0,len(algorithms)):
@@ -170,7 +169,7 @@ def multipleAlgorithmsNonParametric(algorithms,accuracies, file, fileResults,alp
     file.write("Eta squared: %f (%s) \n" % (eta,effectsize))
 
 
-def multipleAlgorithmsParametric(algorithms,accuracies, file, fileResults,alpha=0.05, verbose=False):
+def multipleAlgorithmsParametric(algorithms,accuracies, file, fileResults, model,alpha=0.05, verbose=False):
     algorithmsDataset = {x: y for (x, y) in zip(algorithms, accuracies)}
     (Fvalue, pvalue, pivots) = anova_test(*accuracies)
     if verbose:
@@ -233,10 +232,12 @@ def multipleAlgorithmsParametric(algorithms,accuracies, file, fileResults,alpha=
                     fileResults.write(c[0:c.find(" ")])
                     for ele in algorithmsDataset[c[0:c.find(" ")]]:
                         fileResults.write(","+str(ele))
+                    fileResults.write("\n")
                 else:
                     fileResults.write(c[c.rfind(" ") + 1:])
                     for ele in algorithmsDataset[c[c.rfind(" ") + 1:]]:
                         fileResults.write("," + str(ele))
+                    fileResults.write("\n")
 
             else:
                 if verbose:
@@ -262,10 +263,12 @@ def multipleAlgorithmsParametric(algorithms,accuracies, file, fileResults,alpha=
                     fileResults.write(c[0:c.find(" ")])
                     for ele in algorithmsDataset[c[0:c.find(" ")]]:
                         fileResults.write("," + str(ele))
+                    fileResults.write("\n")
                 else:
                     fileResults.write(c[c.rfind(" ") + 1:])
                     for ele in algorithmsDataset[c[c.rfind(" ") + 1:]]:
                         fileResults.write("," + str(ele))
+                    fileResults.write("\n")
 
     else:
         means = np.mean(accuracies, axis=1)
@@ -295,6 +298,7 @@ def multipleAlgorithmsParametric(algorithms,accuracies, file, fileResults,alpha=
                 fileResults.write(featureExtractor + "_" + line[0])
                 for it in line[1:]:
                     fileResults.write("," + it)
+                fileResults.write("\n")
         fStatistical.close()
 
         for i in range(0,len(algorithms)):
@@ -337,10 +341,12 @@ def twoAlgorithmsParametric(algorithms,accuracies,alpha,file, fileResults, verbo
             fileResults.write(algorithms[0])
             for ele in accuracies[0]:
                 fileResults.write("," + str(ele))
+            fileResults.write("\n")
         else:
             fileResults.write(algorithms[1])
             for ele in accuracies[1]:
                 fileResults.write("," + str(ele))
+            fileResults.write("\n")
     else:
         if verbose:
             print("Null hypothesis is rejected; hence, there are significant differences between: %s (mean: %f, std: %f) and %s (mean: %f, std: %f)" % (
@@ -351,11 +357,12 @@ def twoAlgorithmsParametric(algorithms,accuracies,alpha,file, fileResults, verbo
             fileResults.write(algorithms[0])
             for ele in accuracies[0]:
                 fileResults.write("," + str(ele))
+            fileResults.write("\n")
         else:
             fileResults.write(algorithms[1])
             for ele in accuracies[1]:
                 fileResults.write("," + str(ele))
-
+            fileResults.write("\n")
     if verbose:
         print("----------------------------------------------------------")
         print("Analysing effect size")
@@ -393,10 +400,12 @@ def twoAlgorithmsNonParametric(algorithms,accuracies,alpha,file, fileResults, ve
             fileResults.write(algorithms[0])
             for ele in accuracies[0]:
                 fileResults.write("," + str(ele))
+            fileResults.write("\n")
         else:
             fileResults.write(algorithms[1])
             for ele in accuracies[1]:
                 fileResults.write("," + str(ele))
+            fileResults.write("\n")
 
     else:
         if verbose:
@@ -407,13 +416,15 @@ def twoAlgorithmsNonParametric(algorithms,accuracies,alpha,file, fileResults, ve
             algorithms[0], np.mean(accuracies[0]),np.std(accuracies[0]),algorithms[1], np.mean(accuracies[1]),np.std(accuracies[1])))
 
         if(np.mean(accuracies[0])>np.mean(accuracies[1])):
-            fileResults.write(algorithms[0])
+            fileResults.write( algorithms[0])
             for ele in accuracies[0]:
                 fileResults.write("," + str(ele))
+            fileResults.write("\n")
         else:
             fileResults.write(algorithms[1])
             for ele in accuracies[1]:
                 fileResults.write("," + str(ele))
+            fileResults.write("\n")
 
     cohend = abs(cohen_d(accuracies[0], accuracies[1]))
     if verbose:
@@ -500,9 +511,9 @@ def checkParametricConditions(accuracies,alpha, file, verbose=False):
 # This is the main method employed to compare a dataset where the cross validation
 # process has been already carried out.
 def statisticalAnalysis(dataset, file, fileResults ,alpha=0.05, verbose=False):
-    #index=dataset.rfind("/")
+    index=dataset.rfind("_")
     #path=dataset[:index]
-    #model= dataset[index+1:dataset.rfind(".")]
+    model= dataset[index+1:dataset.rfind(".")]
     file = open(file,"w")  #path+"/StatisticalComparison"+model[model.rfind("_"):]+".txt"
     df = pd.read_csv(dataset)
     algorithms = df.ix[0:,0].values
@@ -514,6 +525,7 @@ def statisticalAnalysis(dataset, file, fileResults ,alpha=0.05, verbose=False):
         fileResults.write(algorithms[0])
         for ele in accuracies[0]:
             fileResults.write("," + str(ele))
+        fileResults.write("\n")
         return
 
     if verbose:
@@ -566,7 +578,7 @@ def statisticalAnalysis(dataset, file, fileResults ,alpha=0.05, verbose=False):
             file.write("----------------------------------------------------------\n")
             file.write("Working with more than 2 algorithms\n")
             file.write("----------------------------------------------------------\n")
-            multipleAlgorithmsParametric(algorithms,accuracies,file, fileResults,alpha, verbose)
+            multipleAlgorithmsParametric(algorithms,accuracies,file, fileResults, alpha, verbose)
     else:
         if verbose:
             print("Conditions for a parametric test are not fulfilled, applying a non-parametric test")

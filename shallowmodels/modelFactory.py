@@ -34,35 +34,43 @@ class modelFactory():
         pass
 
     def getModel(self,modelText,params):
-        """
-        Propuesta de cambio:
-            poner todos los modelos que no tienen parametros juntos para quitar if y que sea un metodo mas limpio
-        """
         if modelText in ("inception", "xception", "vgg16", "vgg19", "resnet"):
-            Network = MODELS[modelText]
-            return Network(include_top=params[0])
-        if modelText in ( "googlenet","lab888","hsv888","haralick","lbp","hog","haarhog","densenet"):
+            if(len(params)==1):
+                Network = MODELS[modelText]
+                return Network(include_top=params[0])
+            else:
+                raise ValueError('The number of parameters is not correct')
+        if modelText in ("googlenet", "lab888", "hsv888", "haralick", "lbp", "hog", "haarhog", "densenet"):
             return MODELS[modelText]()
         if modelText == "overfeat":
-            return MODELS[modelText](output_layers=params[0]) #[-3]
+            if len(params)==1:
+                return MODELS[modelText](output_layers=params[0]) #[-3]
+
+            else:
+                raise ValueError('The number of parameters is not correct')
         if modelText == "lab444":
-            if (len(params)>=3):
+            if (len(params)==3):
                 bin1=params[0]
                 bin2=params[1]
                 bin3=params[2]
                 return MODELS[modelText](bins=[bin1, bin2, bin3])
+            else:
+                raise ValueError('The number of parameters is not correct')
         if modelText == "hsv444":
-            if (len(params)>=3):
+            if (len(params)==3):
                 bin1=params[0]
                 bin2=params[1]
                 bin3=params[2]
                 return MODELS[modelText](bins=[bin1, bin2, bin3])
+            else:
+                raise ValueError('The number of parameters is not correct')
 
         if "annulus" in modelText:
-            if (len(params)>=3):
+            if (len(params)==3):
                 bags=params[0]
                 p_segments =params[1]
                 plainImgPath=params[2]
+            else: raise ValueError('The number of parameters is not correct')
             #bags = int(modelText[modelText.find('_') + 1:modelText.rfind('_')])
             #p_segments = int(modelText[modelText.rfind('_') + 1])
             return MODELS[modelText](

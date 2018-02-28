@@ -1,10 +1,7 @@
 # import the necessary packages
-
-
 import numpy as np
 from shallowmodels.modelFactory import modelFactory
 
-from mpi4py import MPI
 
 class Extractor:
 	def __init__(self,modelText):
@@ -20,10 +17,11 @@ class Extractor:
 
 	def reshape(self,res):
 		if(self.modelText=="resnet"):
-			return np.reshape(res,2048)
+			return np.reshape(res,1000)
+		# return np.reshape(res, 2048)
+
 		else:
 			return res.flatten()
-
 
 	def describe(self, images):
 		if self.modelText in ("inception", "xception", "vgg16", "vgg19", "resnet"):

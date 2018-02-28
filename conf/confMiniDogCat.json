@@ -19,6 +19,8 @@
   # Possible values for model are: ["vgg16", include_top], ["vgg19", include_top], ["resnet", include_top],
   # ["inception", include_top], ["googlenet"], ["overfeat", [outputLayers]], ["xception", include_top] (only with tensorflow), and ["densenet"]
   # Shallow features: ["lab888"], ["lab444",4,4,4], ["hsv888"], ["hsv444",4,4,4], ["haralick"], ["lbp"], ["hog"], ["haarhog"]
+
+
   # Expert features: ["annulus",4,2], ["annulus",8,2], ["annulus",16,2], ["annulus",4,3], ["annulus",8,3], ["annulus",16,3], ...
   #                  ["annulus",bags,p-segments]
   #######
