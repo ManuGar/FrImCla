@@ -13,7 +13,7 @@ from utils.conf import Conf
 from imutils import paths
 import argparse
 
-from index_features import generate_features
+from index_features import generateFeatures
 from StatisticalComparison import statisticalComparison
 from train import train
 
@@ -27,22 +27,13 @@ args = vars(ap.parse_args())
 conf = Conf(args["conf"])
 verbose = False
 start = time.time()
-imagePaths = list(paths.list_images(conf["dataset_path"]))
-# prueba = list(paths.list_images("/home/magarcd/Escritorio/ObjectClassificationByTransferLearning/ObjectClassificationByTransferLearning/minidatasetDogCat2"))
+# imagePaths = list(paths.list_images(conf["dataset_path"]))
+# generateFeatures(conf,imagePaths, verbose)
+# statisticalComparison(conf, verbose)
+generateFeatures(conf["output_path"], conf["batch_size"], conf["dataset_path"], conf["feature_extractors"], verbose)
+statisticalComparison(conf["output_path"], conf["dataset_path"], conf["feature_extractors"], conf["model_classifiers"], verbose)
 
-generate_features(conf,imagePaths, verbose)
 end = time.time()
-statisticalComparison(conf, verbose)
-train(conf)
+train(conf["output_path"], conf["dataset_path"], conf["training_size"])
 
-print("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA")
-
-'''
-Link de descarga de los pesos de overfeat:
-#https://dwijaybane.wordpress.com/2017/07/24/installing-overfeat-cnn-based-feature-extractor-and-classifier-on-ubuntu-16-04/
-
-
-http://cilvr.cs.nyu.edu/lib/exe/fetch.php?media=overfeat:overfeat-v04-2.tgz
-
-'''
-print(end - start)
+print("It has taken " + str(end - start) + " seg to run" )

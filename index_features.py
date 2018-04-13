@@ -20,27 +20,25 @@ import random
 import os
 from sklearn.externals.joblib import Parallel, delayed
 
-def extractFeatures(fE, batchSize, datasetPath, outputPath, datasetP, le, verbose):
+def extractFeatures(fE, batchSize, imagePaths, outputPath, datasetPath, le, verbose):
 	# initialize the Overfeat extractor and the Overfeat indexer
 	if verbose:
 		print("[INFO] initializing network...")
 	oe = Extractor(fE)
-
-	featuresPath = outputPath + datasetP[datasetP.rfind("/"):] + \
+	featuresPath = outputPath + datasetPath[datasetPath.rfind("/"):] + \
 				   "/models/features-" + fE[0] + ".hdf5"
 	directory = featuresPath[:featuresPath.rfind("/")]
 	if (not os.path.exists(directory)):
 		os.makedirs(directory)
-	oi = Indexer(featuresPath, estNumImages=len(datasetPath))
+	oi = Indexer(featuresPath, estNumImages=len(imagePaths))
 	if verbose:
 		print("[INFO] starting feature extraction...")
 
 	# loop over the image paths in batches
-	for (i, paths) in enumerate(dataset.chunk(datasetPath, batchSize)):
+	for (i, paths) in enumerate(dataset.chunk(imagePaths, batchSize)):
 		# load the set of images from disk and describe them
 		(labels, images) = dataset.build_batch(paths, fE[0])
 		features = oe.describe(images)
-
 		# loop over each set of (label, vector) pair and add them to the indexer
 		for (label, vector) in zip(labels, features):
 			oi.add(label, vector)
@@ -51,7 +49,6 @@ def extractFeatures(fE, batchSize, datasetPath, outputPath, datasetP, le, verbos
 
 	# finish the indexing process
 	oi.finish()
-
 	# dump the label encoder to file
 	if verbose:
 		print("[INFO] dumping labels to file...")
@@ -62,11 +59,12 @@ def extractFeatures(fE, batchSize, datasetPath, outputPath, datasetP, le, verbos
 	f.write(cPickle.dumps(le))
 	f.close()
 
-def generate_features(confPath, datasetPath, verbose):
+def generateFeatures(outputPath, batchSize, datasetPath, featureExtractors, verbose):
 	# shuffle the image paths to ensure randomness -- this will help make our
 	# training and testing split code more efficient
+	imagePaths = list(paths.list_images(datasetPath))
 	random.seed(42)
-	random.shuffle(datasetPath)
+	random.shuffle(imagePaths)
 
 	# determine the set of possible class labels from the image dataset assuming
 	# that the images are in {directory}/{filename} structure and create the
@@ -74,17 +72,12 @@ def generate_features(confPath, datasetPath, verbose):
 	if verbose:
 		print("[INFO] encoding labels...")
 	le = LabelEncoder()
-	le.fit([p.split("/")[-2] for p in datasetPath])
-
-	featureExtractors = confPath["featureExtractors"]
-	outputPath = confPath["output_path"]
-	datasetP = confPath["dataset_path"]
-	batchSize = confPath["batch_size"]
+	le.fit([p.split("/")[-2] for p in imagePaths])
 
 
 	# Parallel(n_jobs=-1)(delayed(extractFeatures)(fE, batchSize, datasetPath, outputPath,datasetP, le, verbose) for fE in featureExtractors)
 	for (fE) in featureExtractors:
-		extractFeatures(fE,batchSize,datasetPath, outputPath, datasetP, le, verbose)
+		extractFeatures(fE,batchSize, imagePaths, outputPath, datasetPath, le, verbose)
 
 
 def __main__():
@@ -96,7 +89,7 @@ def __main__():
 	# load the configuration and grab all image paths in the dataset
 	conf = Conf(args["conf"])
 	imagePaths = list(paths.list_images(conf["dataset_path"]))
-	generate_features(conf,imagePaths)
+	generateFeatures(conf,imagePaths,"False")
 
 if __name__ == "__main__":
     __main__()

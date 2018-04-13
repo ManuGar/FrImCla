@@ -8,12 +8,10 @@ from sklearn.metrics import precision_score
 from sklearn.metrics import recall_score
 from sklearn.metrics import f1_score
 
-
 from sklearn.model_selection import KFold
 import h5py
 import cPickle
 from sklearn.externals.joblib import Parallel, delayed
-
 
 def apply_algorithm(tuple):
     clf, params, name, n_iter,trainData, trainLabels,testData,testLabels = tuple
@@ -25,7 +23,6 @@ def apply_algorithm(tuple):
     model.fit(trainData, trainLabels)
     predictions = model.predict(testData)
     return (name,accuracy_score(testLabels, predictions))
-
 
 def compare_method(tuple):
     i, (train_index, test_index),data,labels,listAlgorithms,listParameters,listAlgorithmNames,listNiters,normalization = tuple
@@ -42,8 +39,6 @@ def compare_method(tuple):
         results[name].append(comp)
     print("Finished iteration " + str(i))
     return (i,results)
-
-
 
 def compare_methods(dataset,listAlgorithms,listParameters,listAlgorithmNames,listNiters,normalization=False, verbose=False):
 
@@ -63,7 +58,6 @@ def compare_methods(dataset,listAlgorithms,listParameters,listAlgorithmNames,lis
     # for i,result in comparison:
     #     for name in listAlgorithmNames:
     #         results[name].append(result[name])
-
 
     for i,(train_index,test_index) in enumerate(kf.split(data)):
         if verbose:
@@ -154,5 +148,3 @@ def compare_methods_h5py(model, featuresPath,labelEncoderPath,listAlgorithms,lis
         for name, accuracy in output:
             resultsAccuracy[model[0]+ "_" + name].append(accuracy)
     return resultsAccuracy
-
-

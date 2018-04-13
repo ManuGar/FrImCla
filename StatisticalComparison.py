@@ -15,20 +15,19 @@ import os
 
 from shallowmodels.classificationModelFactory import classificationModelFactory
 
-def statisticalComparison(conf, verbose =False):
-    filePathAux = conf["output_path"] + conf["dataset_path"][conf["dataset_path"].rfind("/"):] \
-                  + "/results/kfold-comparison_bestClassifiers.csv"
+def statisticalComparison(outputPath, datasetPath, featureExtractors, modelClassifiers, verbose= False):
+    pathAux = outputPath + datasetPath[datasetPath.rfind("/"):]
+    filePathAux = pathAux + "/results/kfold-comparison_bestClassifiers.csv"
 
-    for model in conf["featureExtractors"]:
+    for model in featureExtractors:
 
         if verbose:
             print(model)
 
-        featuresPath = conf["output_path"]+ conf["dataset_path"][conf["dataset_path"].rfind("/"):] + "/models/features-" + model[
-			0] + ".hdf5"
+        featuresPath = pathAux + "/models/features-" + model[0] + ".hdf5"
         # db = h5py.File(featuresPath)
         # labels = db["image_ids"]
-        labelEncoderPath = featuresPath[:featuresPath.rfind("/")]+ "/le-" + model[0] + ".cpickle"
+        labelEncoderPath = pathAux + "/models/le-" + model[0] + ".cpickle"
 
         #conf["label_encoder_path"][0:conf["label_encoder_path"].rfind(".")] + "-" + model[0] + ".cpickle"
         # le = cPickle.loads(open(labelEncoderPath).read())
@@ -41,11 +40,9 @@ def statisticalComparison(conf, verbose =False):
         listAlgorithms = []
         listParams = []
         listNiter = []
+        filePath = pathAux + "/results/StatisticalComparison_" + model[0] + ".txt"
 
-        filePath = conf["output_path"]+ conf["dataset_path"][conf["dataset_path"].rfind("/"):] + "/results/StatisticalComparison_" + model[0] + ".txt"
-
-
-        for classificationModel in conf["modelClassifiers"]:
+        for classificationModel in modelClassifiers:
             if verbose:
                 print classificationModel
             modelClas = factory.getClassificationModel(classificationModel)
@@ -56,17 +53,25 @@ def statisticalComparison(conf, verbose =False):
             listParams.append(params)
             listNiter.append(niter)
 
-        if (not os.path.isfile(filePathAux)):
+        if os.path.exists(pathAux + "/results"):
+            if not os.path.isfile(filePathAux):
+                fileResults = open(filePathAux, "a")
+                for j in range(listNiter[0]):
+                    fileResults.write("," + str(j))
+
+                fileResults.write("\n")
+            else:
+                fileResults = open(filePathAux, "a")
+
+        else:
             os.makedirs(filePathAux[:filePathAux.rfind("/")])
             fileResults = open(filePathAux, "a")
             for j in range(listNiter[0]):
                 fileResults.write(","+str(j))
 
             fileResults.write("\n")
-        else:
-            fileResults = open(filePathAux, "a")
 
-        listNames = conf["modelClassifiers"]
+        listNames = modelClassifiers
         if verbose:
             print("-------------------------------------------------")
             print("Statistical Analysis")
@@ -81,20 +86,16 @@ def statisticalComparison(conf, verbose =False):
                                                listNiter, verbose, normalization=False)  # ,10
 
         dfAccuracy = pd.DataFrame.from_dict(resultsAccuracy, orient='index')
-        KFoldComparisionPathAccuracy =conf["output_path"]+ conf["dataset_path"][conf["dataset_path"].rfind("/"):] + "/results/kfold-comparison_"+model[0] + ".csv"
+        KFoldComparisionPathAccuracy = pathAux + "/results/kfold-comparison_"+model[0] + ".csv"
         #KFoldComparisionPathAccuracy=conf["kfold_comparison"][0:conf["kfold_comparison"].rfind(".")] + "-" + model[0] + ".csv"
         if (not os.path.exists(KFoldComparisionPathAccuracy[:KFoldComparisionPathAccuracy.rfind("/")])):
             os.mkdir(KFoldComparisionPathAccuracy[:KFoldComparisionPathAccuracy.rfind("/")])
-        #"kfold_comparison": "results/minidatasetDogCat/kfold-comparison.csv"
-        #"dataset_path": "/home/magarcd/Escritorio/ObjectClassificationByTransferLearning/ObjectClassificationByTransferLearning/minidatasetDogCat"
         dfAccuracy.to_csv(KFoldComparisionPathAccuracy)
-        path = KFoldComparisionPathAccuracy[:KFoldComparisionPathAccuracy.rfind("/")]
-
         statisticalAnalysis(KFoldComparisionPathAccuracy,filePath, fileResults,verbose)
     fileResults.close()
-    filePath2 = path + "/StatisticalComparison_bestClassifiers.txt"
-    fileResults2 = open(path + "/" + "bestExtractorClassifier" + ".csv", "a")
-    statisticalAnalysis(path + "/" + "kfold-comparison_bestClassifiers.csv", filePath2, fileResults2, verbose)
+    filePath2 = pathAux + "/results/StatisticalComparison_bestClassifiers.txt"
+    fileResults2 = open(pathAux + "/results/bestExtractorClassifier" + ".csv", "a")
+    statisticalAnalysis(pathAux + "/results/kfold-comparison_bestClassifiers.csv", filePath2, fileResults2, verbose)
     fileResults2.close()
         # sys.stdout = sys.__stdout__
 
