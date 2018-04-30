@@ -8,15 +8,15 @@ class classificationModelFactory():
     def getClassificationModel(self,modelText):
         if modelText == "RandomForest":
             return cM.RandomForest()
-        if modelText == "SVM":
+        elif modelText == "SVM":
             return cM.SVM()
-        if modelText == "KNN":
+        elif modelText == "KNN":
             return cM.SVM()
-        if modelText == "LogisticRegression":
+        elif modelText == "LogisticRegression":
             return cM.LogRegression()
-        if modelText == "MLP":
+        elif modelText == "MLP":
             return cM.MultiLayerPerceptron()
-        if modelText == "GradientBoost":
+        elif modelText == "GradientBoost":
             return  cM.GradientBoost()
-        if modelText == "ExtraTrees":
+        elif modelText == "ExtraTrees":
             return  cM.ExtraTrees()

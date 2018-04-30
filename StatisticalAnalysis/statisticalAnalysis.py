@@ -516,6 +516,8 @@ def statisticalAnalysis(dataset, file, fileResults ,alpha=0.05, verbose=False):
     df = pd.read_csv(dataset)
     algorithms = df.ix[0:,0].values
     accuracies = df.ix[0:, 1:].values
+
+    del df
     if (len(algorithms)<2):
         if verbose:
             print("It is neccessary to compare at least two algorithms")

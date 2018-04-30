@@ -7,6 +7,9 @@ import warnings
 
 import time
 
+
+from guppy import hpy
+
 warnings.simplefilter(action="ignore", category=FutureWarning)
 # import the necessary packages
 from utils.conf import Conf
@@ -31,7 +34,8 @@ start = time.time()
 # generateFeatures(conf,imagePaths, verbose)
 # statisticalComparison(conf, verbose)
 generateFeatures(conf["output_path"], conf["batch_size"], conf["dataset_path"], conf["feature_extractors"], verbose)
-statisticalComparison(conf["output_path"], conf["dataset_path"], conf["feature_extractors"], conf["model_classifiers"], verbose)
+
+statisticalComparison(conf["output_path"], conf["dataset_path"], conf["feature_extractors"], conf["model_classifiers"], conf["measure"], verbose)
 
 end = time.time()
 train(conf["output_path"], conf["dataset_path"], conf["training_size"])

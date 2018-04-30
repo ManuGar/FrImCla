@@ -206,5 +206,3 @@ class HistogramsSeveralMasksAnnulusLabSegments(Model):
 
         percentage = [p[0] for p in percentageNew]
         return (percentage)
-
-

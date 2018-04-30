@@ -20,7 +20,11 @@ import random
 import os
 from sklearn.externals.joblib import Parallel, delayed
 
-def extractFeatures(fE, batchSize, imagePaths, outputPath, datasetPath, le, verbose):
+from guppy import hpy
+hp = hpy()
+
+
+def extractFeatures(fE, batchSize, imagePaths, outputPath, datasetPath, le, verbose = False):
 	# initialize the Overfeat extractor and the Overfeat indexer
 	if verbose:
 		print("[INFO] initializing network...")
@@ -43,6 +47,7 @@ def extractFeatures(fE, batchSize, imagePaths, outputPath, datasetPath, le, verb
 		for (label, vector) in zip(labels, features):
 			oi.add(label, vector)
 
+
 		# check to see if progress should be displayed
 		if i > 0 and verbose:
 			oi._debug("processed {} images".format((i + 1) * batchSize, msgType="[PROGRESS]"))
@@ -58,8 +63,12 @@ def extractFeatures(fE, batchSize, imagePaths, outputPath, datasetPath, le, verb
 	f = open(labelEncoderPath, "w")
 	f.write(cPickle.dumps(le))
 	f.close()
+	del oe, oi, features, labels, images, imagePaths, f
 
-def generateFeatures(outputPath, batchSize, datasetPath, featureExtractors, verbose):
+def generateFeatures(outputPath, batchSize, datasetPath, featureExtractors, verbose=False):
+	# hp.setrelheap()
+
+
 	# shuffle the image paths to ensure randomness -- this will help make our
 	# training and testing split code more efficient
 	imagePaths = list(paths.list_images(datasetPath))
@@ -78,18 +87,29 @@ def generateFeatures(outputPath, batchSize, datasetPath, featureExtractors, verb
 	# Parallel(n_jobs=-1)(delayed(extractFeatures)(fE, batchSize, datasetPath, outputPath,datasetP, le, verbose) for fE in featureExtractors)
 	for (fE) in featureExtractors:
 		extractFeatures(fE,batchSize, imagePaths, outputPath, datasetPath, le, verbose)
+	# h = hp.heap()
+	# print(h)
 
+	del le, imagePaths
 
 def __main__():
 	# construct the argument parser and parse the command line arguments
 	ap = argparse.ArgumentParser()
-	ap.add_argument("-c", "--conf", required=True, help="path to configuration file")
+	ap.add_argument("-o", "--outputPath", required=True, help="path to output path")
+	ap.add_argument("-d", "--datasetPath", required=True, help="path to the dataset where the images are")
+	ap.add_argument("-f", "--featureExtractors", required=True, help="a list of the feature extractors that will be used")
+	ap.add_argument("-b", "--batchSize", required=True, help="the size of the batch that will be splitted the dataset")
+
 	args = vars(ap.parse_args())
+	outputPath = Conf(args["outputPath"])
+	datasetPath = Conf(args["datasetPath"])
+	featureExtractors = Conf(args["featureExtractors"])
+	batchSize = Conf(args["batchSize"])
 
 	# load the configuration and grab all image paths in the dataset
-	conf = Conf(args["conf"])
-	imagePaths = list(paths.list_images(conf["dataset_path"]))
-	generateFeatures(conf,imagePaths,"False")
+	# generateFeatures(conf,imagePaths,"False")
+	generateFeatures(outputPath, batchSize, datasetPath, featureExtractors, False)
+
 
 if __name__ == "__main__":
     __main__()

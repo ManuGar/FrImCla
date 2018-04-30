@@ -15,7 +15,7 @@
 
   #######
   # MODEL CONFIGURATION
-  # You can chose more than one model
+  # You can choose more than one model
   # Possible values for model are: ["vgg16", include_top], ["vgg19", include_top], ["resnet", include_top],
   # ["inception", include_top], ["googlenet"], ["overfeat", [outputLayers]], ["xception", include_top] (only with tensorflow),
   # and ["densenet"]
@@ -28,16 +28,24 @@
   "feature_extractors" : [["densenet"]],
 
   #funcionan: ["vgg16","False"], ["vgg19","False"], ["resnet","False"], ["inception","False"], ["googlenet"],["overfeat",[-3]], ["xception","False"], ["densenet"], ["lab888"],
-  # ["lab444",4,4,4], ["hsv888"], ["hsv444",4,4,4], ["haralick"]
+  # ["lab444",4,4,4], ["hsv888"], ["hsv444",4,4,4], ["haralick"], ["hog"]
 
   #Debería funcionar pero solo funciona en el dataset de juguete ["hog"]
 
   #######
   # CLASSIFIER CONFIGURATION
   #######
-  # You can chose more than one classifier model
+  # You can choose more than one classifier model
   # Possible values for classifier model are: RandomForest, SVM, KNN, LogisticRegression, MLP and
   # GradientBoost
   "training_size": 1,
-  "model_classifiers" : [ "MLP","SVM","KNN", "LogisticRegression", "RandomForest"]
+  "model_classifiers" : [ "MLP","SVM","KNN", "LogisticRegression", "RandomForest"],
+
+  #######
+  # MEASURE CONFIGURATION
+  #######
+  # You can choose one measure
+  # Possible values for measures are: f1, accuracy, recall, precision, auroc
+  "measure" : "accuracy"
+
 }

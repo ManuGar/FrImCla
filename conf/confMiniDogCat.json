@@ -6,7 +6,7 @@
   "dataset_path": "/home/magarcd/Escritorio/ObjectClassificationByTransferLearning/ObjectClassificationByTransferLearning/minidatasetDogCat",
 
   #For the output and results of the program
-  "output_path": "output",
+  "output_path": "output/dog",
 
   #######
   # Batch CONFIGURATION
@@ -24,8 +24,10 @@
   # Expert features: ["annulus",4,2], ["annulus",8,2], ["annulus",16,2], ["annulus",4,3], ["annulus",8,3], ["annulus",16,3], ...
   #                  ["annulus",bags,p-segments]
   #######
-  "feature_extractors" : [["vgg16","False"], ["vgg19","False"], ["resnet","False"], ["inception","False"], ["googlenet"],["overfeat",[-3]], ["xception","False"], ["densenet"], ["lab888"],
-["lab444",4,4,4], ["hsv888"], ["hsv444",4,4,4], ["haralick"]],
+  "feature_extractors" : [["inception", "False"]],
+
+//  , ["vgg19","False"], ["resnet","False"], ["inception","False"], ["googlenet"],["overfeat",[-3]], ["xception","False"], ["densenet"], ["lab888"],
+//  ["lab444",4,4,4], ["hsv888"], ["hsv444",4,4,4], ["haralick"]
 
   #######
   # CLASSIFIER CONFIGURATION
@@ -34,5 +36,13 @@
   # Possible values for classifier model are: RandomForest, SVM, KNN, LR, MLP and
   # Gradient Boost
   "training_size": 1,
-  "model_classifiers" : [ "MLP","SVM","KNN", "LogisticRegression", "RandomForest"]
+  "model_classifiers" : [ "MLP","SVM","KNN", "LogisticRegression", "RandomForest"],
+
+
+  #######
+  # MEASURE CONFIGURATION
+  #######
+  # You can choose one measure
+  # Possible values for measures are: accuracy, recall, precision, auroc, f1
+  "measure" : "f1"
 }

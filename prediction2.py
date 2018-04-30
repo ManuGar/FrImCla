@@ -33,7 +33,7 @@ print("[INFO] loading model...")
 conf = Conf(args["conf"])
 labelEncoderPath = conf["label_encoder_path"][0:conf["label_encoder_path"].rfind(".")] + "-"+ conf["model"] +".cpickle"
 le = cPickle.loads(open(labelEncoderPath).read())
-model = cPickle.loads(open(conf["classifier_path"]+ conf["modelClassifier"] + ".cpickle").read())
+model = cPickle.loads(open(conf["classifier_path"]+ conf["model_classifier"] + ".cpickle").read())
 
 imagePath = args["image"]
 oe = Extractor(conf["model"])
@@ -44,7 +44,6 @@ if(args["control"]=="True"):
     (labels, images) = dataset.build_batch(["temp.jpg"], conf["model"])
 else:
     (labels, images) = dataset.build_batch([imagePath], conf["model"])
-
 
 
 features = oe.describe(images)

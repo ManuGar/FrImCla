@@ -40,15 +40,15 @@ class modelFactory():
                 return Network(include_top=params[0])
             else:
                 raise ValueError('The number of parameters is not correct')
-        if modelText in ("googlenet", "lab888", "hsv888", "haralick", "lbp", "hog", "haarhog", "densenet"):
+        elif modelText in ("googlenet", "lab888", "hsv888", "haralick", "lbp", "hog", "haarhog", "densenet"):
             return MODELS[modelText]()
-        if modelText == "overfeat":
+        elif modelText == "overfeat":
             if len(params)==1:
                 return MODELS[modelText](output_layers=params[0]) #[-3]
 
             else:
                 raise ValueError('The number of parameters is not correct')
-        if modelText == "lab444":
+        elif modelText == "lab444":
             if (len(params)==3):
                 bin1=params[0]
                 bin2=params[1]
@@ -56,7 +56,7 @@ class modelFactory():
                 return MODELS[modelText](bins=[bin1, bin2, bin3])
             else:
                 raise ValueError('The number of parameters is not correct')
-        if modelText == "hsv444":
+        elif modelText == "hsv444":
             if (len(params)==3):
                 bin1=params[0]
                 bin2=params[1]
@@ -65,7 +65,7 @@ class modelFactory():
             else:
                 raise ValueError('The number of parameters is not correct')
 
-        if "annulus" in modelText:
+        elif "annulus" in modelText:
             if (len(params)==3):
                 bags=params[0]
                 p_segments =params[1]

@@ -98,7 +98,7 @@ def compare_methods(dataset,listAlgorithms,listParameters,listAlgorithmNames,lis
     return (resultsAccuracy,resultsPrecision,resultsRecall,resultsFmeasure)
 
 
-def accuracyPrediction(clf, params, name, n_iter, trainData, testData, trainLabels, testLabels, verbose=False):
+def accuracyPrediction(clf, params, name, n_iter, trainData, testData, trainLabels, testLabels, measure = "accuracy", verbose=False):
     if verbose:
         print(name)
     if params is None:
@@ -110,18 +110,22 @@ def accuracyPrediction(clf, params, name, n_iter, trainData, testData, trainLabe
     testData = np.nan_to_num(testData)
     model.fit(trainData, trainLabels)
     predictions = model.predict(testData)
-    return (name, accuracy_score(testLabels, predictions))
+    # return (name, accuracy_score(testLabels, predictions))
+    return (name, measure_score(testLabels,predictions, measure))
+
 
 def compare_methods_h5py(model, featuresPath,labelEncoderPath,listAlgorithms,listParameters,listAlgorithmNames,
-                         listNiters, verbose=False, normalization=False):
+                         listNiters, measure, verbose=False, normalization=False):
 
     # Loading dataset
     db = h5py.File(featuresPath)
     labels = db["image_ids"]
     data = db["features"][()]
-
-    le = cPickle.loads(open(labelEncoderPath).read())
+    fileAux = open(labelEncoderPath)
+    le = cPickle.loads(fileAux.read())
+    fileAux.close()
     labels = np.asarray([le.transform([l.split(":")[0]])[0] for l in labels])
+    del le
     kf = KFold(n_splits=10,shuffle=False,random_state=42) #n_splits=10
     resultsAccuracy = {model[0]+ "_" +name:[] for name in listAlgorithmNames}
 
@@ -140,11 +144,27 @@ def compare_methods_h5py(model, featuresPath,labelEncoderPath,listAlgorithms,lis
             testData -= np.mean(testData, axis=0)
             testData /= np.std(testData, axis=0)
 
-        output = Parallel(n_jobs=-1)(delayed(accuracyPrediction)(clf, params, name, n_iter, trainData, testData, trainLabels, testLabels, verbose)
+        output = Parallel(n_jobs=-1)(delayed(accuracyPrediction)(clf, params, name, n_iter, trainData, testData, trainLabels, testLabels, measure,verbose)
                            for clf, params, name, n_iter in
                            zip(listAlgorithms, listParameters, listAlgorithmNames, listNiters))
 
         #for clf, params, name, n_iter in zip(listAlgorithms, listParameters, listAlgorithmNames, listNiters):
         for name, accuracy in output:
             resultsAccuracy[model[0]+ "_" + name].append(accuracy)
+        del output
     return resultsAccuracy
+
+
+def measure_score(testLabels, predictions, measure_name = "accuracy"):
+    if measure_name == "accuracy":
+        return accuracy_score(testLabels, predictions)
+    elif measure_name == "f1":
+        return f1_score(testLabels, predictions)
+    elif measure_name == "recall":
+        return recall_score(testLabels, predictions)
+    elif measure_name == "precision":
+        return precision_score(testLabels, predictions)
+    elif measure_name == "auroc":
+        return roc_auc_score(testLabels, predictions)
+    else:
+        pass

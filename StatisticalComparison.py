@@ -15,7 +15,7 @@ import os
 
 from shallowmodels.classificationModelFactory import classificationModelFactory
 
-def statisticalComparison(outputPath, datasetPath, featureExtractors, modelClassifiers, verbose= False):
+def statisticalComparison(outputPath, datasetPath, featureExtractors, modelClassifiers, measure, verbose= False):
     pathAux = outputPath + datasetPath[datasetPath.rfind("/"):]
     filePathAux = pathAux + "/results/kfold-comparison_bestClassifiers.csv"
 
@@ -83,7 +83,7 @@ def statisticalComparison(outputPath, datasetPath, featureExtractors, modelClass
         #Niteraciones de las clases [10, 10, 10, 5, 10]
 
         resultsAccuracy = compare_methods_h5py(model, featuresPath, labelEncoderPath, listAlgorithms, listParams, listNames,
-                                               listNiter, verbose, normalization=False)  # ,10
+                                               listNiter,measure , verbose, normalization=False)  # ,10
 
         dfAccuracy = pd.DataFrame.from_dict(resultsAccuracy, orient='index')
         KFoldComparisionPathAccuracy = pathAux + "/results/kfold-comparison_"+model[0] + ".csv"
@@ -97,14 +97,27 @@ def statisticalComparison(outputPath, datasetPath, featureExtractors, modelClass
     fileResults2 = open(pathAux + "/results/bestExtractorClassifier" + ".csv", "a")
     statisticalAnalysis(pathAux + "/results/kfold-comparison_bestClassifiers.csv", filePath2, fileResults2, verbose)
     fileResults2.close()
+    del resultsAccuracy, dfAccuracy
         # sys.stdout = sys.__stdout__
 
 def __main__():
     ap = argparse.ArgumentParser()
-    ap.add_argument("-c", "--conf", required=True, help="path to configuration file")
+    ap.add_argument("-o", "--outputPath", required=True, help="path to output path")
+    ap.add_argument("-d", "--datasetPath", required=True, help="path to the dataset where the images are")
+    ap.add_argument("-f", "--featureExtractors", required=True, help="a list of the feature extractors that will be used")
+    ap.add_argument("-m", "--modelClassifiers", required=True, help="a list of the classifierModels that will be used")
+
+
     args = vars(ap.parse_args())
-    conf = Conf(args["conf"])
-    statisticalComparison(conf)
+    outputPath = Conf(args["outputPath"])
+    datasetPath = Conf(args["datasetPath"])
+    featureExtractors = Conf(args["featureExtractors"])
+    modelClassifiers = Conf(args["modelClassifiers"])
+    measure = Conf(args["measure"])
+
+
+    # statisticalComparison(conf)
+    statisticalComparison(outputPath, datasetPath, featureExtractors, modelClassifiers, measure, False)
 
 if __name__ == "__main__":
     __main__()
