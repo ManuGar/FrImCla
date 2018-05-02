@@ -6,7 +6,7 @@
   "dataset_path": "/home/magarcd/Escritorio/ObjectClassificationByTransferLearning/ObjectClassificationByTransferLearning/minidatasetDogCat",
 
   #For the output and results of the program
-  "output_path": "output/dog",
+  "output_path": "output",
 
   #######
   # Batch CONFIGURATION

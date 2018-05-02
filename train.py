@@ -76,7 +76,11 @@ def __main__():
 	args = vars(ap.parse_args())
 	# load the configuration and label encoder
 	conf = Conf(args["conf"])
-	train(conf)
+
+	outputPath=conf["output_path"]
+	datasetPath=conf["dataset_path"]
+	trainingSize=conf["training_size"]
+	train(outputPath, datasetPath, trainingSize)
 
 if __name__ == "__main__":
     __main__()
