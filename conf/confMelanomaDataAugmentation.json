@@ -41,7 +41,7 @@
   # Possible values for classifier model are: RandomForest, SVM, KNN, LogisticRegression, MLP and
   # GradientBoost
   "training_size": 1,
-  "model_classifiers" : [ "MLP","SVM","KNN", "LogisticRegression", "RandomForest"],
+  "model_classifiers" : ["MLP","SVM","KNN","LogisticRegression", "RandomForest"],
 
   #######
   # MEASURE CONFIGURATION
