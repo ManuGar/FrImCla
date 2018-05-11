@@ -3,20 +3,10 @@
 
 # import the necessary packages
 from __future__ import print_function
-from sklearn.metrics import classification_report,accuracy_score
-from sklearn.linear_model import LogisticRegression
-from sklearn.grid_search import GridSearchCV
-from sklearn.ensemble import RandomForestClassifier,GradientBoostingClassifier
-from sklearn.neighbors import KNeighborsClassifier
-from sklearn.svm import SVC
 from utils.conf import Conf
-from sklearn.neural_network import MLPClassifier
-from utils import dataset
-import numpy as np
 import argparse
 import cPickle
 import h5py
-from scipy.stats import randint as sp_randint
 
 from sklearn.model_selection import RandomizedSearchCV
 import shallowmodels.classificationModelFactory as cmf

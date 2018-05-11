@@ -13,7 +13,6 @@ from guppy import hpy
 warnings.simplefilter(action="ignore", category=FutureWarning)
 # import the necessary packages
 from utils.conf import Conf
-from imutils import paths
 import argparse
 
 from index_features import generateFeatures

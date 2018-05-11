@@ -102,18 +102,16 @@ def statisticalComparison(outputPath, datasetPath, featureExtractors, modelClass
 
 def __main__():
     ap = argparse.ArgumentParser()
-    ap.add_argument("-o", "--outputPath", required=True, help="path to output path")
-    ap.add_argument("-d", "--datasetPath", required=True, help="path to the dataset where the images are")
-    ap.add_argument("-f", "--featureExtractors", required=True, help="a list of the feature extractors that will be used")
-    ap.add_argument("-m", "--modelClassifiers", required=True, help="a list of the classifierModels that will be used")
-
-
+    ap.add_argument("-c", "--conf", required=True, help="path to configuration file")
     args = vars(ap.parse_args())
-    outputPath = Conf(args["outputPath"])
-    datasetPath = Conf(args["datasetPath"])
-    featureExtractors = Conf(args["featureExtractors"])
-    modelClassifiers = Conf(args["modelClassifiers"])
-    measure = Conf(args["measure"])
+    # load the configuration and label encoder
+    conf = Conf(args["conf"])
+
+    outputPath = conf["output_path"]
+    datasetPath = conf["dataset_path"]
+    featureExtractors = conf["feature_extractors"]
+    modelClassifiers = conf["model_classifiers"]
+    measure = conf["measure"]
 
 
     # statisticalComparison(conf)
