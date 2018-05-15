@@ -32,7 +32,7 @@ Aquí poner los diferentes enlaces a los cuadernos
 ## List of feature extractor models
 
 | Model | Description | Parameters | 
-| --- | ------- | --- | --- |
+| --- | --- | --- |
 | VGG16| Keras model of the 16-layer network used by the VGG team in the ILSVRC-2014 competition. It has been obtained by directly converting the Caffe model provived by the authors. | *include_top*(either True or False). |
 | VGG19 | Keras model of the 19-layer network used by the VGG team in the ILSVRC-2014 competition. It has been obtained by directly converting the Caffe model provived by the authors.| *include_top*(either True or False).  |
 | Resnet |Residual neural networks utilizes skip connections or short-cuts to jump over some layers. In its limit as ResNets it will only skip over a single layer. With an additional weight matrix to learn the skip weights it is referred to as HighwayNets. With several parallel skips it is referred to as DenseNets. | *include_top*(either True or False).  |
@@ -55,16 +55,6 @@ Aquí poner los diferentes enlaces a los cuadernos
 *   KNN  https://www.techopedia.com/definition/32066/k-nearest-neighbor-k-nn 
 *   Logistic Regression
 *   Random Forest
-
-
-| Classifier | Description | Parameters | 
-| --- | --- | --- | --- |
-| Multilayer perceptron (MLP)| | |
-| Support vector machine (SVM)| | |
-| K-Nearest Neighbor(KNN) | | |
-| Logistic Regression (LR)| | |
-| Random Forest (RF)| | |
-
 
 | Technique | Description | Parameters |
 | --- | --- | --- |
