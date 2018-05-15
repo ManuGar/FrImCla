@@ -48,5 +48,4 @@
   # You can choose one measure
   # Possible values for measures are: f1, accuracy, recall, precision, auroc
   "measure" : "accuracy"
-
 }
