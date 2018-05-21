@@ -56,11 +56,6 @@ Aquí poner el enlace al readme de como usarlo y demás
 
 
 ## List of classifier models
-*   Multilayer perceptron (MLP)
-*   Support vector machine (SVM)
-*   KNN  https://www.techopedia.com/definition/32066/k-nearest-neighbor-k-nn 
-*   Logistic Regression
-*   Random Forest
 
 | Technique | Description |
 | --- | --- |
