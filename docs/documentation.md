@@ -15,13 +15,13 @@
    New methods can be added in the models.py file.
    Currently the methods that are available are inception, xception, vgg16, vgg19,
    resnet, googlenet, overfeat,lab888, lab444, hsv888, hsv444, haralick, lbp, hog,
-   haarhog, densenet and annulus.
+   haarhog and densenet.
 4. Open the conf.json file and edit the variable modelClassifiers
    indicating the model/s that you want to use.
 5. Perform the statistical analysis comparing different methods.
    New methods can be added in the classificationModels.py file.
    Currently the methods that are available are RandomForest, SVM, KNN, LR, MLP and
-   Gradient Boost.
+   RandomForest.
    To perform the analysis use the command:
    python StatisticalComparison.py -c conf/conf.json
    This will take some time but at the end you will get a report
