@@ -56,10 +56,10 @@ Aquí poner los diferentes enlaces a los cuadernos
 *   Logistic Regression
 *   Random Forest
 
-| Technique | Description | Parameters |
-| --- | --- | --- |
-| Multilayer perceptron (MLP)| | |
-| Support vector machine (SVM) | | |
-| K-Nearest Neighbor(KNN)| | |
-| Logistic Regression (LR) | | |
-| Random Forest (RF)| | |
+| Technique | Description |
+| --- | --- |
+| Multilayer perceptron (MLP)| An MLP consists of at least three layers of nodes. Except for the input nodes, each node is a neuron that uses a nonlinear activation function. MLP utilizes a supervised learning technique called backpropagation for training. | 
+| Support vector machine (SVM) | An SVM model is a representation of the examples as points in space, mapped so that the examples of the separate categories are divided by a clear gap that is as wide as possible. New examples are then mapped into that same space and predicted to belong to a category based on which side of the gap they fall.| 
+| K-Nearest Neighbour(KNN)|  The output is a class membership. An object is classified by a majority vote of its neighbors, with the object being assigned to the class most common among its k nearest neighbors (k is a positive integer, typically small). If k = 1, then the object is simply assigned to the class of that single nearest neighbour.| 
+| Logistic Regression (LR) |A logistic model is one where the log-odds of the outputs are a linear function of the input. The two possible output values are often labelled as "0" and "1", which represent outcomes such as pass/fail, win/lose or alive/dead. The logistic model generalizes easily to multiple inputs, where the log-odds are linear in all the inputs; and, with more modification, to more outputs. | 
+| Random Forest (RF)| These models are an ensemble learning method for classification, regression and other tasks, that operate by constructing a multitude of decision trees at training time and outputting the class that is the mode of the classes (classification) or mean prediction (regression) of the individual trees.| 
