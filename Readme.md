@@ -25,6 +25,7 @@ The following packages must be installed:
 
 ## Documentation
 Aquí poner el enlace al readme de como usarlo y demás
+[Documentation of the framework](docs/documentation.txt).
 
 ## Examples
 Aquí poner los diferentes enlaces a los cuadernos
