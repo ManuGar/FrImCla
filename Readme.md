@@ -13,7 +13,6 @@ FrImCla is an open-source framework for Image Classification using traditional a
 The library uses Python 2.7, which must be installed. 
 The following packages must be installed:
 
-
 *   numpy
 *   scipy
 *   scikit_learn
@@ -24,8 +23,6 @@ The following packages must be installed:
 *   commentjson
 
 ## Documentation
-Aquí poner el enlace al readme de como usarlo y demás
-
 [Documentation of the framework](docs/documentation.md).
 
 ## Examples
