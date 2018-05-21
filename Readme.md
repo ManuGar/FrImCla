@@ -25,13 +25,14 @@ The following packages must be installed:
 
 ## Documentation
 Aquí poner el enlace al readme de como usarlo y demás
+
 [Documentation of the framework](docs/documentation.md).
 
 ## Examples
-Aquí poner los diferentes enlaces a los cuadernos
-[How to use the framework](examples/HowToUse.ipynb).
-[How to predict an image class](docs/HowToPredictImageClass.ipynb).
-[Example of use on the melanomas dataset](docs/MelanomaNotebook.ipynb).
+* [How to use the framework.](examples/HowToUse.ipynb)
+* [How to predict an image class.](examples/HowToPredictImageClass.ipynb)
+* [Example of use on the melanomas dataset.](examples/MelanomaNotebook.ipynb)
+
 
 
 ## List of feature extractor models
