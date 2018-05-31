@@ -15,6 +15,12 @@ import os
 
 from shallowmodels.classificationModelFactory import classificationModelFactory
 
+
+blacklist = [["haarhog", "SVM"],
+             ["haralick", "SVM"],
+             ["haralick", "KNN"],
+             ["haarhog", "KNN"]]
+
 def statisticalComparison(outputPath, datasetPath, featureExtractors, modelClassifiers, measure, verbose= False):
     pathAux = outputPath + datasetPath[datasetPath.rfind("/"):]
     filePathAux = pathAux + "/results/kfold-comparison_bestClassifiers.csv"
@@ -43,15 +49,20 @@ def statisticalComparison(outputPath, datasetPath, featureExtractors, modelClass
         filePath = pathAux + "/results/StatisticalComparison_" + model[0] + ".txt"
 
         for classificationModel in modelClassifiers:
-            if verbose:
-                print classificationModel
-            modelClas = factory.getClassificationModel(classificationModel)
-            cMo = modelClas.getModel()
-            params = modelClas.getParams()
-            niter = modelClas.getNIterations()
-            listAlgorithms.append(cMo)
-            listParams.append(params)
-            listNiter.append(niter)
+            combination = [model[0], classificationModel]
+            if (combination in blacklist):
+                print("The combination("+ model[0] + "-" + classificationModel + ") is not allowed")
+            else:
+
+                if verbose:
+                    print classificationModel
+                modelClas = factory.getClassificationModel(classificationModel)
+                cMo = modelClas.getModel()
+                params = modelClas.getParams()
+                niter = modelClas.getNIterations()
+                listAlgorithms.append(cMo)
+                listParams.append(params)
+                listNiter.append(niter)
 
         if os.path.exists(pathAux + "/results"):
             if not os.path.isfile(filePathAux):

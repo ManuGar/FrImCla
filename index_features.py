@@ -34,36 +34,41 @@ def extractFeatures(fE, batchSize, imagePaths, outputPath, datasetPath, le, verb
 	directory = featuresPath[:featuresPath.rfind("/")]
 	if (not os.path.exists(directory)):
 		os.makedirs(directory)
-	oi = Indexer(featuresPath, estNumImages=len(imagePaths))
-	if verbose:
-		print("[INFO] starting feature extraction...")
+	else:
+		if not os.path.isfile(featuresPath):
+			oi = Indexer(featuresPath, estNumImages=len(imagePaths))
+			if verbose:
+				print("[INFO] starting feature extraction...")
 
-	# loop over the image paths in batches
-	for (i, paths) in enumerate(dataset.chunk(imagePaths, batchSize)):
-		# load the set of images from disk and describe them
-		(labels, images) = dataset.build_batch(paths, fE[0])
-		features = oe.describe(images)
-		# loop over each set of (label, vector) pair and add them to the indexer
-		for (label, vector) in zip(labels, features):
-			oi.add(label, vector)
+			# loop over the image paths in batches
+			for (i, paths) in enumerate(dataset.chunk(imagePaths, batchSize)):
+				# load the set of images from disk and describe them
+				(labels, images) = dataset.build_batch(paths, fE[0])
+				features = oe.describe(images)
+				# loop over each set of (label, vector) pair and add them to the indexer
+				for (label, vector) in zip(labels, features):
+					oi.add(label, vector)
 
+				# check to see if progress should be displayed
+				if i > 0 and verbose:
+					oi._debug("processed {} images".format((i + 1) * batchSize, msgType="[PROGRESS]"))
 
-		# check to see if progress should be displayed
-		if i > 0 and verbose:
-			oi._debug("processed {} images".format((i + 1) * batchSize, msgType="[PROGRESS]"))
+			# finish the indexing process
+			oi.finish()
+			# dump the label encoder to file
+			if verbose:
+				print("[INFO] dumping labels to file...")
+			labelEncoderPath = featuresPath[:featuresPath.rfind("/")] + "/le-" + fE[0] + ".cpickle"
 
-	# finish the indexing process
-	oi.finish()
-	# dump the label encoder to file
-	if verbose:
-		print("[INFO] dumping labels to file...")
-	labelEncoderPath = featuresPath[:featuresPath.rfind("/")] + "/le-" + fE[0] + ".cpickle"
+			# confPath["label_encoder_path"][0:confPath["label_encoder_path"].rfind(".")] + "-" + fE[0] + ".cpickle"
+			f = open(labelEncoderPath, "w")
+			f.write(cPickle.dumps(le))
+			f.close()
+			del oe, oi, features, labels, images, imagePaths, f
 
-	# confPath["label_encoder_path"][0:confPath["label_encoder_path"].rfind(".")] + "-" + fE[0] + ".cpickle"
-	f = open(labelEncoderPath, "w")
-	f.write(cPickle.dumps(le))
-	f.close()
-	del oe, oi, features, labels, images, imagePaths, f
+		else:
+			print("This model is already generated")
+
 
 def generateFeatures(outputPath, batchSize, datasetPath, featureExtractors, verbose=False):
 	# hp.setrelheap()
@@ -83,10 +88,10 @@ def generateFeatures(outputPath, batchSize, datasetPath, featureExtractors, verb
 	le = LabelEncoder()
 	le.fit([p.split("/")[-2] for p in imagePaths])
 
-	fParams = open("featureExtractors.csv")
+	# fParams = open("featureExtractors.csv")
 	# Parallel(n_jobs=-1)(delayed(extractFeatures)(fE, batchSize, datasetPath, outputPath,datasetP, le, verbose) for fE in featureExtractors)
 	for (fE) in featureExtractors:
-		fParams.write(fE[0] + "," + fE[1])
+		# fParams.write(fE[0] + "," + fE[1])
 		extractFeatures(fE,batchSize, imagePaths, outputPath, datasetPath, le, verbose)
 	# h = hp.heap()
 	# print(h)

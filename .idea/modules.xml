@@ -3,7 +3,6 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/.idea/FrImCla.iml" filepath="$PROJECT_DIR$/.idea/FrImCla.iml" />
-      <module fileurl="file://$PROJECT_DIR$/.idea/ObjectClassificationByTransferLearning.iml" filepath="$PROJECT_DIR$/.idea/ObjectClassificationByTransferLearning.iml" />
     </modules>
   </component>
 </project>
