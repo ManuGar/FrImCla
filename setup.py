@@ -96,7 +96,7 @@ setup(
     # project page. What does your project relate to?
     #
     # Note that this is a string of words separated by whitespace, not a list.
-    keywords='image classification, classification, transfer learning, , feature extractor, neural network',  # Optional
+    keywords='image classification, classification, transfer learning, feature extractor, neural network',  # Optional
 
     # You can just specify package directories manually here if your project is
     # simple. Or you can use find_packages().
@@ -155,8 +155,7 @@ setup(
     # executes the function `main` from this package when invoked:
     entry_points={  # Optional
         'console_scripts': [
-            'clodsa=clodsa.command_line:main',
-            'clodsa-sample=clodsa.command_line:main_sample',
+            'frimcla=frimcla.command_line:main',
         ],
     },
 )
