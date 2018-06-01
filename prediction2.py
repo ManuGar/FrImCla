@@ -1,10 +1,10 @@
 # import the necessary packages
 from __future__ import print_function
-from utils.conf import Conf
+from FrImCla.utils.conf import Conf
 from FrImCla.extractor.extractor import Extractor
 import numpy as np
 import argparse
-from utils import dataset
+from FrImCla.utils import dataset
 
 import cPickle
 import cv2
