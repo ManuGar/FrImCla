@@ -7,9 +7,6 @@ import warnings
 
 import time
 
-
-from guppy import hpy
-
 warnings.simplefilter(action="ignore", category=FutureWarning)
 # import the necessary packages
 from utils.conf import Conf

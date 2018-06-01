@@ -8,8 +8,6 @@ from Comparing import compare_methods_h5py
 import argparse
 from utils.conf import Conf
 from StatisticalAnalysis.statisticalAnalysis import statisticalAnalysis
-from sklearn.ensemble import ExtraTreesClassifier
-import sys
 import os
 
 
@@ -46,6 +44,7 @@ def statisticalComparison(outputPath, datasetPath, featureExtractors, modelClass
         listAlgorithms = []
         listParams = []
         listNiter = []
+        listNames = []
         filePath = pathAux + "/results/StatisticalComparison_" + model[0] + ".txt"
 
         for classificationModel in modelClassifiers:
@@ -63,6 +62,7 @@ def statisticalComparison(outputPath, datasetPath, featureExtractors, modelClass
                 listAlgorithms.append(cMo)
                 listParams.append(params)
                 listNiter.append(niter)
+                listNames.append(classificationModel)
 
         if os.path.exists(pathAux + "/results"):
             if not os.path.isfile(filePathAux):
@@ -82,7 +82,7 @@ def statisticalComparison(outputPath, datasetPath, featureExtractors, modelClass
 
             fileResults.write("\n")
 
-        listNames = modelClassifiers
+        # listNames = modelClassifiers
         if verbose:
             print("-------------------------------------------------")
             print("Statistical Analysis")

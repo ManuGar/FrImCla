@@ -1,7 +1,7 @@
 # import the necessary packages
 from __future__ import print_function
 from utils.conf import Conf
-from extractor.extractor import Extractor
+from FrImCla.extractor.extractor import Extractor
 import numpy as np
 import argparse
 from utils import dataset

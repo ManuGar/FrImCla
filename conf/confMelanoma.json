@@ -3,19 +3,10 @@
   # DATASET SAMPLING CONFIGURATION
   #######
   # For only considering images without control image: /home/joheras/Escritorio/Research/Fungi/FungiImagesOverfeat
-  "dataset_path": "/home/magarcd/Escritorio/ObjectClassificationByTransferLearning/melanoma",
-  #joheras/Escritorio/Research/Fungi/FungiImagesWithControl",
-  # For only considering images without control image: output/fungi/features.hdf5
-  "features_path": "output//features.hdf5",
+  "dataset_path": "/home/magarcd/Escritorio/ObjectClassificationByTransferLearning/FrImCla/melanoma",
 
-  #######
-  # STATISTICAL COMPARISON CONFIGURATION
-  #######
-  # For only considering images without control image: output/fungi/features.csv
-  "features_csv_path": "melanoma_Training_Part3_GroundTruth.csv",
-  # output/catsWithControl/features.csv
-  # For only considering images without control image: results/fungi/kfold-comparison.csv "results/melanoma/kfold-comparison.csv",
-  "kfold_comparison": "results/melanoma/kfold-comparison.csv",
+  #For the output and results of the program
+  "output_path": "../output",
 
   #######
   # Batch CONFIGURATION
@@ -23,27 +14,35 @@
   "batch_size": 32,
 
   #######
-  # LABEL ENCODER CONFIGURATION
-  #######
-  # For only considering images without control image: output/fungi/le.cpickle
-  "label_encoder_path": "output/melanoma/le.cpickle",
-
-  #######
   # MODEL CONFIGURATION
-  # Possible values for model are: vgg16, vgg19, resnet, inception, googlenet, overfeat, xception (only with tensorflow), and densenet
-  # Shallow features: lab888, lab444, hsv888, hsv444, haralick, lbp, hog, haarhog
-  # Expert features: annulus_4_2, annulus_8_2, annulus_16_2, annulus_4_3, annulus_8_3, annulus_16_3, ...
-  #                  annulus_bags_p-segments
-  #######
+  # You can choose more than one model
+  # Possible values for model are: ["vgg16", include_top], ["vgg19", include_top], ["resnet", include_top],
+  # ["inception", include_top], ["googlenet"], ["overfeat", [outputLayers]], ["xception", include_top] (only with tensorflow),
+  # and ["densenet"]
+  # Shallow features: ["lab888"], ["lab444",4,4,4], ["hsv888"], ["hsv444",4,4,4], ["haralick"], ["lbp"], ["hog"], ["haarhog"]
 
-  "model" : "resnet",
+
+  # Expert features: ["annulus",4,2], ["annulus",8,2], ["annulus",16,2], ["annulus",4,3], ["annulus",8,3], ["annulus",16,3], ...
+  #                  ["annulus",bags,p-segments]
+  #######
+  "feature_extractors" : [["haralick"], ["haarhog"]],
 
   #######
   # CLASSIFIER CONFIGURATION
   #######
-  "classifier_path": "output/melanoma/classifier",
+  # You can choose more than one classifier model
+  # Possible values for classifier model are: RandomForest, SVM, KNN, LogisticRegression, MLP and
+  # GradientBoost
   "training_size": 1,
-  "results_path": "output/melanoma/results",
-  "modelClassifier" : "SVM"
+  "model_classifiers" : ["RandomForest", "SVM", "KNN", "LogisticRegression", "MLP", "GradientBoost"],
 
+
+  #Con knn parece que haralick tampoco funciona. probar con el pequeño y faltan por probar los otros dos con el dataset real
+
+  #######
+  # MEASURE CONFIGURATION
+  #######
+  # You can choose one measure
+  # Possible values for measures are: f1, accuracy, recall, precision, auroc
+  "measure" : "accuracy"
 }

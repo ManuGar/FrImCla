@@ -18,7 +18,6 @@ import argparse
 import cPickle
 import random
 import os
-from sklearn.externals.joblib import Parallel, delayed
 
 from guppy import hpy
 hp = hpy()
@@ -31,11 +30,12 @@ def extractFeatures(fE, batchSize, imagePaths, outputPath, datasetPath, le, verb
 	oe = Extractor(fE)
 	featuresPath = outputPath + datasetPath[datasetPath.rfind("/"):] + \
 				   "/models/features-" + fE[0] + ".hdf5"
+	labelEncoderPath = featuresPath[:featuresPath.rfind("/")] + "/le-" + fE[0] + ".cpickle"
 	directory = featuresPath[:featuresPath.rfind("/")]
 	if (not os.path.exists(directory)):
 		os.makedirs(directory)
 	else:
-		if not os.path.isfile(featuresPath):
+		if not os.path.isfile(featuresPath) and not os.path.isfile(labelEncoderPath):
 			oi = Indexer(featuresPath, estNumImages=len(imagePaths))
 			if verbose:
 				print("[INFO] starting feature extraction...")
@@ -58,7 +58,6 @@ def extractFeatures(fE, batchSize, imagePaths, outputPath, datasetPath, le, verb
 			# dump the label encoder to file
 			if verbose:
 				print("[INFO] dumping labels to file...")
-			labelEncoderPath = featuresPath[:featuresPath.rfind("/")] + "/le-" + fE[0] + ".cpickle"
 
 			# confPath["label_encoder_path"][0:confPath["label_encoder_path"].rfind(".")] + "-" + fE[0] + ".cpickle"
 			f = open(labelEncoderPath, "w")
@@ -67,7 +66,7 @@ def extractFeatures(fE, batchSize, imagePaths, outputPath, datasetPath, le, verb
 			del oe, oi, features, labels, images, imagePaths, f
 
 		else:
-			print("This model is already generated")
+			print("This model (" + fE[0] + ") is already generated")
 
 
 def generateFeatures(outputPath, batchSize, datasetPath, featureExtractors, verbose=False):
