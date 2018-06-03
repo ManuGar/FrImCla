@@ -6,7 +6,7 @@
   "dataset_path": "/home/magarcd/Escritorio/FrImCla/minidatasetDogCat",
 
   #For the output and results of the program
-  "output_path": "output",
+  "output_path": "../output",
 
   #######
   # Batch CONFIGURATION
@@ -24,7 +24,9 @@
   # Expert features: ["annulus",4,2], ["annulus",8,2], ["annulus",16,2], ["annulus",4,3], ["annulus",8,3], ["annulus",16,3], ...
   #                  ["annulus",bags,p-segments]
   #######   ["hog"], ["haarhog"]
-  "feature_extractors" : [["haralick"], ["haarhog"], ["hog"]],
+  "feature_extractors" : [["overfeat", [-3]], ["vgg16", "False"], ["vgg19", "False"], ["resnet", "False"],
+  ["inception", "False"], ["googlenet"], ["xception", "False"],
+  ["densenet"]],
 
 //  , ["vgg19","False"], ["resnet","False"], ["inception","False"], ["googlenet"],["overfeat",[-3]], ["xception","False"], ["densenet"], ["lab888"],
 //  ["lab444",4,4,4], ["hsv888"], ["hsv444",4,4,4], ["haralick"]
