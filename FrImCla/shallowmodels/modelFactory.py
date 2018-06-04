@@ -5,7 +5,7 @@ from keras.applications import InceptionV3
 from keras.applications import Xception # TensorFlow ONLY
 from keras.applications import VGG16
 from keras.applications import VGG19
-from shallowmodels.models import LABModel,HSVModel,Haralick,LBP,HOG,HistogramsSeveralMasksAnnulusLabSegments,HaarHOG,DenseNet
+from models import LABModel,HSVModel,Haralick,LBP,HOG,HistogramsSeveralMasksAnnulusLabSegments,HaarHOG,DenseNet
 
 
 MODELS = {

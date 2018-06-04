@@ -6,7 +6,7 @@
   "dataset_path": "/home/magarcd/Escritorio/ObjectClassificationByTransferLearning/FrImCla/melanoma",
 
   #For the output and results of the program
-  "output_path": "../output",
+  "output_path": "../output/mel",
 
   #######
   # Batch CONFIGURATION
