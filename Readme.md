@@ -5,9 +5,9 @@ FrImCla is an open-source framework for Image Classification using traditional a
 *   Several deep learning models
 *   Classical computer vision techniques
 *   Different performance measures
-*   Jupyter notebook to use the framework
+*   Jupyter notebooks to use the framework
 *   Ability to test several models at the same time
-*   It is possible to easily add models and apply them into the framework to comprobe the performance over the dataset
+*   It is possible to easily add models and apply them into the framework to comprobe the performance over a dataset
 
 ## Requeriments and installation of the library
 The library uses Python 2.7, which must be installed. 
@@ -17,8 +17,16 @@ The following packages must be installed:
 *   scipy
 *   scikit_learn
 *   scikit-image
-*   keras
+*   Keras
 *   h5py
+*   mahotas
+*   imutils
+*   tabulate
+*   tensorflow
+*   matplotlib
+*   pandas
+*   guppy
+*   theano
 *   OpenCV (i.e. cv2 must be available in python)
 *   commentjson
 
@@ -36,8 +44,8 @@ The following packages must be installed:
 
 | Model | Description | Parameters | 
 | --- | --- | --- |
-| VGG16| Keras model of the 16-layer network used by the VGG team in the ILSVRC-2014 competition. It has been obtained by directly converting the Caffe model provived by the authors. | *include_top*(either True or False). |
-| VGG19 | Keras model of the 19-layer network used by the VGG team in the ILSVRC-2014 competition. It has been obtained by directly converting the Caffe model provived by the authors.| *include_top*(either True or False).  |
+| VGG16 | Keras model of the 16-layer network used by the VGG team in the ILSVRC-2014 competition. It has been obtained by directly converting the Caffe model provived by the authors. | *include_top*(either True or False). |
+| VGG19 | Keras model of the 19-layer network used by the VGG team in the ILSVRC-2014 competition. It has been obtained by directly converting the Caffe model provived by the authors. | *include_top*(either True or False). |
 | Resnet |Residual neural networks utilizes skip connections or short-cuts to jump over some layers. In its limit as ResNets it will only skip over a single layer. With an additional weight matrix to learn the skip weights it is referred to as HighwayNets. With several parallel skips it is referred to as DenseNets. | *include_top*(either True or False).  |
 | Inception | The network used a CNN inspired by LeNet but implemented a novel element which is dubbed an inception module. It used batch normalization and image distortions. This module is based on several very small convolutions in order to drastically reduce the number of parameters. | *include_top*(either True or False).
 | Googlenet |  This network used a new variant of convolutional neural network called “Inception” for classification, and for detection the R-CNN was used. Google’s team was able to train a much smaller neural network and obtained much better results  compared to results obtained with convolutional neural networks in the previous year’s challenges. | No parameters. |
