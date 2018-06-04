@@ -1,19 +1,28 @@
 # import the necessary packages
 from __future__ import print_function
-from extractor.extractor import Extractor
+from FrImCla.extractor.extractor import Extractor
 import numpy as np
 import argparse
-from utils.conf import Conf
-from utils import dataset
+from FrImCla.utils.conf import Conf
+from FrImCla.utils import dataset
 import cPickle
 import h5py
-from shallowmodels.classificationModelFactory import classificationModelFactory
+from FrImCla.shallowmodels.classificationModelFactory import classificationModelFactory
 from sklearn.model_selection import RandomizedSearchCV
-from index_features import extractFeatures
+from FrImCla.index_features import extractFeatures
 import random
 from imutils import paths
 from sklearn.preprocessing import LabelEncoder
 import os
+
+
+
+
+
+
+
+
+
 
 
 def prediction(featExt, classi, imagePath, outputPath, datasetPath):
