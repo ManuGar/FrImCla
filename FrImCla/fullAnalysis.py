@@ -1,16 +1,16 @@
 # USAGE
 # python fullAnalysis.py --conf conf/flowers17.json
 # import the necessary packages
+from __future__ import print_function
 import warnings
+warnings.simplefilter(action="ignore", category=FutureWarning)
 import time
 import argparse
 from utils.conf import Conf
 from index_features import generateFeatures
 from StatisticalComparison import statisticalComparison
 from train import train
-from __future__ import print_function
 # suppress any FutureWarning from Theano
-warnings.simplefilter(action="ignore", category=FutureWarning)
 
 
 

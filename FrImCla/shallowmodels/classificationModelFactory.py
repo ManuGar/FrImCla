@@ -11,7 +11,7 @@ class classificationModelFactory():
         elif modelText == "SVM":
             return cM.SVM()
         elif modelText == "KNN":
-            return cM.SVM()
+            return cM.KNN()
         elif modelText == "LogisticRegression":
             return cM.LogRegression()
         elif modelText == "MLP":
