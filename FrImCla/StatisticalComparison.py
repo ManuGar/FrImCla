@@ -15,9 +15,11 @@ from shallowmodels.classificationModelFactory import classificationModelFactory
 
 
 blacklist = [["haarhog", "SVM"],
+             ["haarhog", "KNN"],
              ["haralick", "SVM"],
              ["haralick", "KNN"],
-             ["haarhog", "KNN"]]
+             ["hog", "SVM"],
+             ["hog", "KNN"]]
 
 def statisticalComparison(outputPath, datasetPath, featureExtractors, modelClassifiers, measure, verbose= False):
     pathAux = outputPath + datasetPath[datasetPath.rfind("/"):]

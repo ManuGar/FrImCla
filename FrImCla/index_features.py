@@ -35,7 +35,8 @@ def extractFeatures(fE, batchSize, imagePaths, outputPath, datasetPath, le, verb
 	if (not os.path.exists(directory)):
 		os.makedirs(directory)
 	else:
-		if not os.path.isfile(featuresPath) and not os.path.isfile(labelEncoderPath):
+
+		if not (os.path.isfile(featuresPath) and  os.path.isfile(labelEncoderPath)):
 			oi = Indexer(featuresPath, estNumImages=len(imagePaths))
 			if verbose:
 				print("[INFO] starting feature extraction...")

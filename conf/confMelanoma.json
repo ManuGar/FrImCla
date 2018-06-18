@@ -3,7 +3,7 @@
   # DATASET SAMPLING CONFIGURATION
   #######
   # For only considering images without control image: /home/joheras/Escritorio/Research/Fungi/FungiImagesOverfeat
-  "dataset_path": "/home/magarcd/Escritorio/ObjectClassificationByTransferLearning/FrImCla/melanoma",
+  "dataset_path": "/home/magarcd/Escritorio/FrImCla/melanoma",
 
   #For the output and results of the program
   "output_path": "../output/mel",
@@ -25,7 +25,8 @@
   # Expert features: ["annulus",4,2], ["annulus",8,2], ["annulus",16,2], ["annulus",4,3], ["annulus",8,3], ["annulus",16,3], ...
   #                  ["annulus",bags,p-segments]
   #######
-  "feature_extractors" : [["haralick"], ["haarhog"]],
+  "feature_extractors" : [ ["lab444",4,4,4], ["hsv888"], ["lab888"], ["hsv444",4,4,4],["vgg16", "False"], ["vgg19", "False"], ["resnet", "False"],
+  ["inception", "False"], ["googlenet"], ["overfeat", [-3]], ["xception", "False"],["densenet"], ["haralick"], ["hog"], ["haarhog"]],
 
   #######
   # CLASSIFIER CONFIGURATION
