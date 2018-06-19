@@ -13,7 +13,6 @@ from train import train
 # suppress any FutureWarning from Theano
 
 
-
 def fullAnalysis(config):
     conf = Conf(config)
     verbose = False
@@ -31,14 +30,15 @@ def fullAnalysis(config):
 
     print("It has taken " + str(end - start) + " seg to run")
 
+def __main__():
+    # construct the argument parser and parse the command line arguments
+    ap = argparse.ArgumentParser()
+    ap.add_argument("-c", "--conf", required=True, help="path to configuration file")
+    args = vars(ap.parse_args())
+    # load the configuration and grab all image paths in the dataset
+    fullAnalysis(args["conf"])
 
-# construct the argument parser and parse the command line arguments
-ap = argparse.ArgumentParser()
-ap.add_argument("-c", "--conf", required=True, help="path to configuration file")
-args = vars(ap.parse_args())
-
-# load the configuration and grab all image paths in the dataset
-
-fullAnalysis(args["conf"])
+if __name__ == "__main__":
+    __main__()
 
 
