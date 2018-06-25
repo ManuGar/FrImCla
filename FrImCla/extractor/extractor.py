@@ -1,6 +1,6 @@
 # import the necessary packages
 import numpy as np
-from shallowmodels.modelFactory import modelFactory
+from ..shallowmodels.modelFactory import modelFactory
 
 
 class Extractor:

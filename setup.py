@@ -33,7 +33,7 @@ setup(
     # For a discussion on single-sourcing the version across setup.py and the
     # project code, see
     # https://packaging.python.org/en/latest/single_source_version.html
-    version='1.4.1',  # Required
+    version='0.0.4',  # Required
 
     # This is a one-line description or tagline of what your project does. This
     # corresponds to the "Summary" metadata field:
@@ -86,17 +86,13 @@ setup(
         # that you indicate whether you support Python 2, Python 3 or both.
         'Programming Language :: Python :: 2',
         'Programming Language :: Python :: 2.7',
-        'Programming Language :: Python :: 3',
-        'Programming Language :: Python :: 3.4',
-        'Programming Language :: Python :: 3.5',
-        'Programming Language :: Python :: 3.6',
     ],
 
     # This field adds keywords for your project which will appear on the
     # project page. What does your project relate to?
     #
     # Note that this is a string of words separated by whitespace, not a list.
-    keywords='image classification, classification, transfer learning, feature extractor, neural network',  # Optional
+    keywords='image classification, classification, transfer learning, feature extractor, neural network, deep learning',  # Optional
 
     # You can just specify package directories manually here if your project is
     # simple. Or you can use find_packages().
@@ -115,8 +111,8 @@ setup(
     #
     # For an analysis of "install_requires" vs pip's requirements files see:
     # https://packaging.python.org/en/latest/requirements.html
-    install_requires=['mahotas','pandas','imutils','scikit_image','tabulate','tensorflow','matplotlib',
-                      'guppy','Keras','commentjson','theano','h5py','numpy','scikit_learn'],  # Optional
+    install_requires=['opencv-python','mahotas','pandas','imutils','scikit-image','tabulate','tensorflow','matplotlib',
+                      'guppy','Keras','commentjson','theano','h5py','numpy','scikit-learn'],  # Optional
 
     # List additional groups of dependencies here (e.g. development
     # dependencies). Users will be able to install these using the "extras"

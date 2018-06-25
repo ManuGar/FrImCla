@@ -1,6 +1,6 @@
 # import the necessary packages
 from baseindexer import BaseIndexer
-import numpy as np
+# import numpy as np
 import h5py
 
 class Indexer(BaseIndexer):

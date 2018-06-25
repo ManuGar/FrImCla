@@ -6,7 +6,7 @@ from imutils import auto_canny
 import numpy as np
 import math
 from scipy.spatial import distance
-from DenseNet import densenet
+from ..DenseNet import densenet
 from keras.layers import Flatten
 from keras.models import Model
 
