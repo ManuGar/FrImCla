@@ -1,12 +1,12 @@
 import cv2
 import mahotas
-from skimage import exposure
+# from skimage import exposure
 from skimage import feature
-from imutils import auto_canny
+# from imutils import auto_canny
 import numpy as np
 import math
 from scipy.spatial import distance
-from ..DenseNet import densenet
+from DenseNet import densenet
 from keras.layers import Flatten
 from keras.models import Model
 
