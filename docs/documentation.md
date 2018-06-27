@@ -1,8 +1,8 @@
 # How to use the different files
 
 There are different ways to use the framework, with jupyter notebooks, with a configuration file or using the API of the framework.
-Jupyter notebooks are files that contain a guided process with embedded code on how to use FrImCla. In those notebooks the user can go running the code while we read what each algorithm is used for.
-On the other hand we have configuration files. These files contain all the configuration that the framework needs to be executed. In this files, the user have to indicate parameters such as the feature extractor algorithms or the measure to use. This process is more automatic than the one mentioned before but it is also less interactive and not as guided.
+Jupyter notebooks are files that contain a guided process with embedded code on how to use FrImCla. In those notebooks the user can go running the code while they read what each algorithm is used for.
+On the other hand we have configuration files. These files contain all the configuration that the framework needs to be executed. In this files, the user has to indicate parameters such as the feature extractor algorithms or the measure to use. This process is more automatic than the one mentioned before but it is also less interactive and not as guided.
 Finally, using the API directly the users get completly freedom to use the algorithms as they want. This is the option for the most expert users.
 
 Now we are going through the most important parts of the framework. 
@@ -57,7 +57,7 @@ After training the best model, you can use it to predict the class of
 new images.
 
 1. Execute the command:
-   python prediction.py -c conf/conf.json -i imagePath
+   python prediction.py -c conf/conf.json -i imagePath -f featureExtractor -p params -m classifierModel
    In the above command you must replace imagePath with the path of the image.
 
 
