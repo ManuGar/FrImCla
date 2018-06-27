@@ -3,10 +3,10 @@
   # DATASET SAMPLING CONFIGURATION
   #######
   # For only considering images without control image: /home/joheras/Escritorio/Research/Fungi/FungiImagesOverfeat
-  "dataset_path": "/home/magarcd/Escritorio/FrImCla/minidatasetDogCat",
+  "dataset_path": "./minidatasetDogCat",
 
   #For the output and results of the program
-  "output_path": "../output",
+  "output_path": "./output/perritos",
 
   #######
   # Batch CONFIGURATION
