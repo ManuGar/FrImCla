@@ -1,5 +1,5 @@
 # FrImCla
-FrImCla is an open-source framework for Image Classification using traditional and deep learning tchniques. It supports a wide variety of deep learning and classical computer vision models. 
+FrImCla is an open-source framework for Image Classification using traditional and deep learning techniques. It supports a wide variety of deep learning and classical computer vision models. 
 
 ## Features
 *   Several deep learning models
@@ -14,7 +14,6 @@ The library uses Python 2.7, which must be installed.
 The following packages must be installed:
 
 *   numpy
-*   scipy
 *   scikit_learn
 *   scikit-image
 *   Keras
@@ -37,8 +36,6 @@ The following packages must be installed:
 * [How to use the framework.](examples/HowToUse.ipynb)
 * [How to predict an image class.](examples/HowToPredictImageClass.ipynb)
 * [Example of use on the melanomas dataset.](examples/MelanomaNotebook.ipynb)
-
-
 
 ## List of feature extractor models
 
