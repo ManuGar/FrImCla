@@ -1,6 +1,7 @@
 # FrImCla
 
 FrImCla is an open-source framework for Image Classification using traditional and deep learning techniques. It supports a wide variety of deep learning and classical computer vision models.
+
 ## Features
 
 Several feature extractors methods and machine learning algorithms are provided.
