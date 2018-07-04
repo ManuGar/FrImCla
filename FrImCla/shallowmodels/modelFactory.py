@@ -40,7 +40,6 @@ class modelFactory():
     def getModel(self,modelText,params):
         if modelText in ("inception", "xception", "vgg16", "vgg19", "resnet"):
             if params=="True" or params =="False":
-                print("ESTO SI QUE FUNCIONA!!!!")
                 Network = MODELS[modelText]
                 return Network(include_top=params[0])
             else:
