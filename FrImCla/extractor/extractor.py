@@ -1,5 +1,6 @@
 # import the necessary packages
 import numpy as np
+# from FrImCla.shallowmodels.modelFactory import modelFactory
 from shallowmodels.modelFactory import modelFactory
 
 
@@ -10,7 +11,7 @@ class Extractor:
 		self.params =[]
 		self.modelText=modelText[0]
 		if len(modelText)>1:
-			self.params= modelText[1:]
+			self.params= str(modelText[1])
 		print("[INFO] loading {}...".format(modelText))
 		modelFac = modelFactory()
 		self.model = modelFac.getModel(self.modelText, self.params)  #the model choice moved to modelFactory.py

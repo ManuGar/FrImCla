@@ -9,7 +9,7 @@ import argparse
 from utils.conf import Conf
 from StatisticalAnalysis.statisticalAnalysis import statisticalAnalysis
 import os
-
+import json
 
 from shallowmodels.classificationModelFactory import classificationModelFactory
 
@@ -110,6 +110,23 @@ def statisticalComparison(outputPath, datasetPath, featureExtractors, modelClass
     fileResults2 = open(pathAux + "/results/bestExtractorClassifier" + ".csv", "a")
     statisticalAnalysis(pathAux + "/results/kfold-comparison_bestClassifiers.csv", filePath2, fileResults2, verbose)
     fileResults2.close()
+
+    file = open(pathAux + "/results/bestExtractorClassifier.csv")
+    line = file.read()
+    extractorClassifier = line.split(",")[0]
+    extractor, classifier = extractorClassifier.split("_")
+    for model in featureExtractors:
+        if model[0]==extractor:
+            fileConfModel = open(pathAux + "ConfModel.json")
+
+            ConfModel={
+                    'featureExtractor': {'model': str(model[0]), 'params': str(model[1])},
+                    'classificationModel': classifier
+                }
+
+    with fileConfModel as outfile:
+        json.dump(ConfModel, outfile)
+
     del resultsAccuracy, dfAccuracy
         # sys.stdout = sys.__stdout__
 

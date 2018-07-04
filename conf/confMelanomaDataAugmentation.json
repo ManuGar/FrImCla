@@ -6,7 +6,7 @@
   "dataset_path": "/home/magarcd/Escritorio/FrImCla/dataAugmentation",
 
   #For the output and results of the program
-  "output_path": "../p/output",
+  "output_path": "../output",
 
   #######
   # Batch CONFIGURATION
@@ -20,12 +20,8 @@
   # ["inception", include_top], ["googlenet"], ["overfeat", [outputLayers]], ["xception", include_top] (only with tensorflow),
   # and ["densenet"]
   # Shallow features: ["lab888"], ["lab444",4,4,4], ["hsv888"], ["hsv444",4,4,4], ["haralick"], ["lbp"], ["hog"], ["haarhog"]
-
-
-  # Expert features: ["annulus",4,2], ["annulus",8,2], ["annulus",16,2], ["annulus",4,3], ["annulus",8,3], ["annulus",16,3], ...
-  #                  ["annulus",bags,p-segments]
   #######
-  "feature_extractors" : [["lab888"], ["lab444",4,4,4], ["hsv888"], ["hsv444",4,4,4],["hog"], ["haarhog"]],
+  "feature_extractors" : [["overfeat", "[-3]"]],
 //        ["overfeat", [-3]], ["vgg16", "False"], ["vgg19", "False"], ["resnet", "False"],
 //  ["inception", "False"], ["googlenet"], ["xception", "False"],
 
@@ -36,7 +32,7 @@
   # Possible values for classifier model are: RandomForest, SVM, KNN, LogisticRegression, MLP and
   # GradientBoost
   "training_size": 1,
-  "model_classifiers" : ["RandomForest", "LogisticRegression", "MLP", "GradientBoost","SVM", "KNN"],
+  "model_classifiers" : ["KNN"],
 
 
   #Con knn parece que haralick tampoco funciona. probar con el pequeño y faltan por probar los otros dos con el dataset real
@@ -46,5 +42,5 @@
   #######
   # You can choose one measure
   # Possible values for measures are: f1, accuracy, recall, precision, auroc
-  "measure" : "accuracy"
+  "measure" : "auroc"
 }

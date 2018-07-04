@@ -1,3 +1,5 @@
+from ast import literal_eval
+
 from sklearn_theano.feature_extraction.caffe.googlenet import GoogLeNetTransformer
 from sklearn_theano.feature_extraction import OverfeatTransformer
 # from ..sklearn_theano.feature_extraction.caffe.googlenet import GoogLeNetTransformer
@@ -37,7 +39,8 @@ class modelFactory():
 
     def getModel(self,modelText,params):
         if modelText in ("inception", "xception", "vgg16", "vgg19", "resnet"):
-            if(len(params)==1):
+            if params=="True" or params =="False":
+                print("ESTO SI QUE FUNCIONA!!!!")
                 Network = MODELS[modelText]
                 return Network(include_top=params[0])
             else:
@@ -45,12 +48,14 @@ class modelFactory():
         elif modelText in ("googlenet", "lab888", "hsv888", "haralick", "lbp", "hog", "haarhog", "densenet"):
             return MODELS[modelText]()
         elif modelText == "overfeat":
+            params = str(params)
+            params = literal_eval(params)
             if len(params)==1:
-                return MODELS[modelText](output_layers=params[0]) #[-3]
-
+                return MODELS[modelText](output_layers=params) #"[-3]"
             else:
                 raise ValueError('The number of parameters is not correct')
         elif modelText == "lab444":
+            params = [int(s) for s in params.split(',')]
             if (len(params)==3):
                 bin1=params[0]
                 bin2=params[1]
@@ -60,6 +65,7 @@ class modelFactory():
                 raise ValueError('The number of parameters is not correct')
         elif modelText == "hsv444":
             if (len(params)==3):
+                params = [int(s) for s in params.split(',')]
                 bin1=params[0]
                 bin2=params[1]
                 bin3=params[2]
@@ -67,15 +73,16 @@ class modelFactory():
             else:
                 raise ValueError('The number of parameters is not correct')
 
-        elif "annulus" in modelText:
-            if (len(params)==3):
-                bags=params[0]
-                p_segments =params[1]
-                plainImgPath=params[2]
-            else: raise ValueError('The number of parameters is not correct')
-            #bags = int(modelText[modelText.find('_') + 1:modelText.rfind('_')])
-            #p_segments = int(modelText[modelText.rfind('_') + 1])
-            return MODELS[modelText](
-                bags=[bags, bags, bags],
-                p_segments=p_segments,
-                plainImagePath=plainImgPath ) #"/home/joheras/Escritorio/Research/Fungi/FungiImages/plain.jpg",
+        # elif "annulus" in modelText:
+        #     params = [int(s) for s in params.split(',')]
+        #     if (len(params)==3):
+        #         bags=params[0]
+        #         p_segments =params[1]
+        #         plainImgPath=params[2]
+        #     else: raise ValueError('The number of parameters is not correct')
+        #     #bags = int(modelText[modelText.find('_') + 1:modelText.rfind('_')])
+        #     #p_segments = int(modelText[modelText.rfind('_') + 1])
+        #     return MODELS[modelText](
+        #         bags=[bags, bags, bags],
+        #         p_segments=p_segments,
+        #         plainImagePath=plainImgPath ) #"/home/joheras/Escritorio/Research/Fungi/FungiImages/plain.jpg",

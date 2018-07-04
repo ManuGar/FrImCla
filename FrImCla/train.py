@@ -7,6 +7,7 @@ from utils.conf import Conf
 import argparse
 import cPickle
 import h5py
+import json
 
 from sklearn.model_selection import RandomizedSearchCV
 import shallowmodels.classificationModelFactory as cmf
@@ -14,20 +15,25 @@ import shallowmodels.classificationModelFactory as cmf
 def train(outputPath, datasetPath, trainingSize):
 	datasetName = datasetPath[datasetPath.rfind("/"):]
 	auxPath = outputPath + datasetName
+	# file = open(auxPath + "/results/bestExtractorClassifier.csv")
+	# line =file.read()
+	# extractorClassifier = line.split(",")[0]
+	# extractor, classifier = extractorClassifier.split("_")
 
-	file = open(auxPath + "/results/bestExtractorClassifier.csv")
-	line =file.read()
-	extractorClassifier = line.split(",")[0]
-	extractor, classifier = extractorClassifier.split("_")
+	with open(auxPath + "ConfModel.json") as json_file:
+		data = json.load(json_file)
 
-	labelEncoderPath = auxPath + "/models/le-" + extractor + ".cpickle"
+	extractor = data[0]['featureExtractor']
+	classifier = data[0]['classifierModel']
+
+	labelEncoderPath = auxPath + "/models/le-" + extractor[0] + ".cpickle"
 	#[0:conf["label_encoder_path"].rfind(".")] + "-"+ conf["model"] +".cpickle"
 	le = cPickle.loads(open(labelEncoderPath).read())
 	# open the database and split the data into their respective training and
 	# testing splits
 	print("[INFO] gathering train/test splits...")
 
-	featuresPath = auxPath + "/models/features-" + extractor + ".hdf5"
+	featuresPath = auxPath + "/models/features-" + extractor[0] + ".hdf5"
 	#conf["features_path"][0:conf["features_path"].rfind(".")] + "-"+ conf["model"] +".hdf5"
 	db = h5py.File(featuresPath)
 	split = int(db["image_ids"].shape[0] * trainingSize)
@@ -53,7 +59,7 @@ def train(outputPath, datasetPath, trainingSize):
 	print("[INFO] best hyperparameters: {}".format(model.best_params_))
 	# dump classifier to file
 	print("[INFO] dumping classifier...")
-	f = open(auxPath + "/classifier_" + extractor + "_" + classifier + ".cpickle", "w")
+	f = open(auxPath + "/classifier_" + extractor[0] + "_" + classifier + ".cpickle", "w")
 	f.write(cPickle.dumps(model))
 	f.close()
 	# close the database

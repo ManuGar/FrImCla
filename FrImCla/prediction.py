@@ -1,20 +1,22 @@
 # import the necessary packages
+#Example python prediction.py -c ../conf/confMelanomaDataAugmentation.conf -i ../pos.jpg -f overfeat -p [-3] -m svm
 from __future__ import print_function
-from FrImCla.extractor.extractor import Extractor
+
+from extractor.extractor import Extractor
+from utils.conf import Conf
+from utils import dataset
+from index_features import extractFeatures
+from shallowmodels.classificationModelFactory import classificationModelFactory
 import numpy as np
 import argparse
-from FrImCla.utils.conf import Conf
-from FrImCla.utils import dataset
 import cPickle
 import h5py
-from FrImCla.shallowmodels.classificationModelFactory import classificationModelFactory
 from sklearn.model_selection import RandomizedSearchCV
-from FrImCla.index_features import extractFeatures
+from sklearn.preprocessing import LabelEncoder
 import random
 from imutils import paths
-from sklearn.preprocessing import LabelEncoder
 import os
-
+import json
 
 def prediction(featExt, classi, imagePath, outputPath, datasetPath):
     # load the configuration, label encoder, and classifier
@@ -80,15 +82,35 @@ def prediction(featExt, classi, imagePath, outputPath, datasetPath):
             f.close()
             db.close()
 
-    (labels, images) = dataset.build_batch([imagePath], featExt[0])
+
+    filePrediction = open(auxPath+"/predictionResults.csv","a")
+    filePrediction.write("image_id, melanoma\n")
     oe = Extractor(featExt)
+    imagePaths = list(paths.list_images(imagePath))
+
+    for (i, imPaths) in enumerate(dataset.chunk(imagePaths, 32)):
+        (labels, images) = dataset.build_batch(imPaths, featExt[0])
+
+        features = oe.describe(images)
+        for (label, vector) in zip(labels, features):
+            prediction = model.predict(np.atleast_2d(vector))[0]
+            filePrediction.write( str(label) + ", " + str(prediction) + "\r\n")
+            prediction = le.inverse_transform(prediction)
+            print("[INFO] class predicted for the image {}: {}".format(label, prediction))
+
+    filePrediction.close()
 
 
-    features = oe.describe(images)
-    for (label, vector) in zip(labels, features):
-        prediction = model.predict(np.atleast_2d(vector))[0]
-        prediction = le.inverse_transform(prediction)
-        print("[INFO] predicted: {}".format(prediction))
+#This method only if you want to execute the prediction with the output of the previous steps
+def predictionSimple(imagePath, outputPath, datasetPath):
+    datasetName = datasetPath[datasetPath.rfind("/"):]
+    auxPath = outputPath + datasetName
+    with open(auxPath + "ConfModel.json") as json_file:
+        data = json.load(json_file)
+
+    extractor = data[0]['featureExtractor']
+    classifier = data[0]['classifierModel']
+    prediction(extractor,classifier,imagePath,outputPath,datasetPath)
 
 def __main__():
     # construct the argument parser and parse the command line arguments
