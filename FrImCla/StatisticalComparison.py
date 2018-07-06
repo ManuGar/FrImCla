@@ -107,7 +107,7 @@ def statisticalComparison(outputPath, datasetPath, featureExtractors, modelClass
         statisticalAnalysis(KFoldComparisionPathAccuracy,filePath, fileResults,verbose)
     fileResults.close()
     filePath2 = pathAux + "/results/StatisticalComparison_bestClassifiers.txt"
-    fileResults2 = open(pathAux + "/results/bestExtractorClassifier" + ".csv", "a")
+    fileResults2 = open(pathAux + "/results/bestExtractorClassifier.csv", "a")
     statisticalAnalysis(pathAux + "/results/kfold-comparison_bestClassifiers.csv", filePath2, fileResults2, verbose)
     fileResults2.close()
 
@@ -117,7 +117,7 @@ def statisticalComparison(outputPath, datasetPath, featureExtractors, modelClass
     extractor, classifier = extractorClassifier.split("_")
     for model in featureExtractors:
         if model[0]==extractor:
-            fileConfModel = open(pathAux + "ConfModel.json")
+            fileConfModel = open(pathAux + "ConfModel.json","w")
 
             ConfModel={
                     'featureExtractor': {'model': str(model[0]), 'params': str(model[1])},

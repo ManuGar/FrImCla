@@ -6,7 +6,7 @@
   "dataset_path": "./minidatasetDogCat",
 
   #For the output and results of the program
-  "output_path": "./output/perritos",
+  "output_path": "./output",
 
   #######
   # Batch CONFIGURATION
