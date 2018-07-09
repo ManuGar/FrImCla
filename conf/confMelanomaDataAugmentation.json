@@ -21,8 +21,7 @@
   # and ["densenet"]
   # Shallow features: ["lab888"], ["lab444",4,4,4], ["hsv888"], ["hsv444",4,4,4], ["haralick"], ["lbp"], ["hog"], ["haarhog"]
   #######
-  "feature_extractors" : [["overfeat", "[-3]"], ["vgg16", "False"], ["vgg19", "False"], ["inception", "False"], ["resnet", "False"],
-    ["xception", "False"], ["inception", "False"], ["googlenet"], ["densenet"], ["hog"], ["haarhog"]],
+  "feature_extractors" : [["densenet"], ["hog"], ["haarhog"]], //["googlenet"], ["inception", "False"],["overfeat", "[-3]"],["resnet", "False"],["vgg16", "False"],["vgg19", "False"],["xception", "False"],
 //        ["overfeat", [-3]], ["vgg16", "False"], ["vgg19", "False"], ["resnet", "False"],
 //  ["inception", "False"], ["googlenet"], ["xception", "False"],
 
