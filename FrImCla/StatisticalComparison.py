@@ -124,8 +124,8 @@ def statisticalComparison(outputPath, datasetPath, featureExtractors, modelClass
                     'classificationModel': classifier
                 }
 
-    with fileConfModel as outfile:
-        json.dump(ConfModel, outfile)
+            with fileConfModel as outfile:
+                json.dump(ConfModel, outfile)
 
     del resultsAccuracy, dfAccuracy
         # sys.stdout = sys.__stdout__
