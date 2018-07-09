@@ -20,7 +20,7 @@ def train(outputPath, datasetPath, trainingSize):
 	# extractorClassifier = line.split(",")[0]
 	# extractor, classifier = extractorClassifier.split("_")
 
-	with open(auxPath + "ConfModel.json") as json_file:
+	with open(auxPath + "/ConfModel.json") as json_file:
 		data = json.load(json_file)
 
 	extractor = data[0]['featureExtractor']
