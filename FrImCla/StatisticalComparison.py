@@ -117,10 +117,13 @@ def statisticalComparison(outputPath, datasetPath, featureExtractors, modelClass
     extractor, classifier = extractorClassifier.split("_")
     for model in featureExtractors:
         if model[0]==extractor:
+            if len(model)==1:
+                parametros =""
+            else:
+                parametros=model[1]
             fileConfModel = open(pathAux + "/ConfModel.json","w")
-
             ConfModel={
-                    'featureExtractor': {'model': str(model[0]), 'params': str(model[1])},
+                    'featureExtractor': {'model': model[0], 'params': parametros},
                     'classificationModel': classifier
                 }
 

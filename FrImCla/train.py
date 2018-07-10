@@ -22,18 +22,17 @@ def train(outputPath, datasetPath, trainingSize):
 
 	with open(auxPath + "/ConfModel.json") as json_file:
 		data = json.load(json_file)
+	extractor = data['featureExtractor']
+	classifier = data['classificationModel']
 
-	extractor = data[0]['featureExtractor']
-	classifier = data[0]['classifierModel']
-
-	labelEncoderPath = auxPath + "/models/le-" + extractor[0] + ".cpickle"
+	labelEncoderPath = auxPath + "/models/le-" + extractor["model"] + ".cpickle"
 	#[0:conf["label_encoder_path"].rfind(".")] + "-"+ conf["model"] +".cpickle"
 	le = cPickle.loads(open(labelEncoderPath).read())
 	# open the database and split the data into their respective training and
 	# testing splits
 	print("[INFO] gathering train/test splits...")
 
-	featuresPath = auxPath + "/models/features-" + extractor[0] + ".hdf5"
+	featuresPath = auxPath + "/models/features-" + extractor["model"] + ".hdf5"
 	#conf["features_path"][0:conf["features_path"].rfind(".")] + "-"+ conf["model"] +".hdf5"
 	db = h5py.File(featuresPath)
 	split = int(db["image_ids"].shape[0] * trainingSize)
@@ -59,7 +58,7 @@ def train(outputPath, datasetPath, trainingSize):
 	print("[INFO] best hyperparameters: {}".format(model.best_params_))
 	# dump classifier to file
 	print("[INFO] dumping classifier...")
-	f = open(auxPath + "/classifier_" + extractor[0] + "_" + classifier + ".cpickle", "w")
+	f = open(auxPath + "/classifier_" + extractor["model"] + "_" + classifier + ".cpickle", "w")
 	f.write(cPickle.dumps(model))
 	f.close()
 	# close the database
