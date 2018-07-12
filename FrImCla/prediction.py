@@ -29,11 +29,9 @@ def prediction(featExt, classi, imagePath, outputPath, datasetPath):
     if os.path.isfile(cPickleFile):
         labelEncoderPath = auxPath + "/models/le-" + featExt[0] + ".cpickle"
         le = cPickle.loads(open(labelEncoderPath).read())
-        # cPickleFile = auxPath + "/classifier_" + extractor + "_" + classifier + ".cpickle"
         model = cPickle.loads(open(cPickleFile).read())
-        # open(conf["classifier_path"]+ conf["modelClassifier"] + ".cpickle").read()
 
-    else:
+    else: #Aqui es donde deberia hacer la pregunta de que si quiere realmente entrenar ese modelo o el mejor
         files = os.walk(auxPath + "/models")
         listFeatExt = []
         for  _, _, file in files:
