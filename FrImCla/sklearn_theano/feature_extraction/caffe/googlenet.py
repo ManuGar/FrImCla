@@ -14,6 +14,11 @@ from sklearn.base import BaseEstimator, TransformerMixin
 import theano
 import numpy as np
 
+
+
+
+import wget
+
 GOOGLENET_PATH = get_dataset_dir("caffe/bvlc_googlenet")
 
 
@@ -44,9 +49,10 @@ def fetch_googlenet_protobuffer_file(caffemodel_file=None):
         if not os.path.exists(GOOGLENET_PATH):
             os.makedirs(GOOGLENET_PATH)
 
-    url = "https://dl.dropboxusercontent.com/u/15378192/"
-    url += "bvlc_googlenet.caffemodel"
-    download(url, caffemodel_file, progress_update_percentage=1)
+    url = "https://www.dropbox.com/s/v2iu6qllimq1thg/GoogleNet.caffemodel?dl=1"
+    # url += "bvlc_googlenet.caffemodel"
+    wget.download(url,caffemodel_file)
+    # download(url, caffemodel_file, progress_update_percentage=1)
     return caffemodel_file
 
 

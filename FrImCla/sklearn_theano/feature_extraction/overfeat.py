@@ -18,6 +18,10 @@ from ..base import (Convolution, MaxPool, PassThrough,
 from ..utils import check_tensor
 
 
+
+import wget
+
+
 # better get it from a config file
 NETWORK_WEIGHTS_PATH = get_dataset_dir("overfeat_weights")
 
@@ -58,15 +62,17 @@ def fetch_overfeat_weights_and_biases(large_network=False, weights_file=None):
     if weights_file is None:
         weights_file = os.path.join(NETWORK_WEIGHTS_PATH, fname)
         if not os.path.exists(weights_file):
-            url = "https://dl.dropboxusercontent.com/u/15378192/net_weights.zip"
+            url = "https://www.dropbox.com/s/qch2s1krczbrezm/net_weight_0?dl=1"
             if not os.path.exists(NETWORK_WEIGHTS_PATH):
                 os.makedirs(NETWORK_WEIGHTS_PATH)
-            full_path = os.path.join(NETWORK_WEIGHTS_PATH, "net_weights.zip")
+            full_path = os.path.join(NETWORK_WEIGHTS_PATH, "net.txt")
             if not os.path.exists(full_path):
-                download(url, full_path, progress_update_percentage=1)
-            zip_obj = zipfile.ZipFile(full_path, 'r')
-            zip_obj.extractall(NETWORK_WEIGHTS_PATH)
-            zip_obj.close()
+                wget.download(url, full_path)
+                os.rename(full_path, full_path[:full_path.rfind("/")] + "/net_weight_0")
+                # download(url, full_path, progress_update_percentage=1)
+            # zip_obj = zipfile.ZipFile(full_path, 'r')
+            # zip_obj.extractall(NETWORK_WEIGHTS_PATH)
+            # zip_obj.close()
 
     memmap = np.memmap(weights_file, dtype=np.float32)
     mempointer = 0

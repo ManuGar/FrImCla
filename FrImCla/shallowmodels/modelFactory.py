@@ -1,9 +1,9 @@
 from ast import literal_eval
 
-from sklearn_theano.feature_extraction.caffe.googlenet import GoogLeNetTransformer
-from sklearn_theano.feature_extraction import OverfeatTransformer
-# from ..sklearn_theano.feature_extraction.caffe.googlenet import GoogLeNetTransformer
-# from ..sklearn_theano.feature_extraction import OverfeatTransformer
+# from sklearn_theano.feature_extraction.caffe.googlenet import GoogLeNetTransformer
+# from sklearn_theano.feature_extraction import OverfeatTransformer
+from ..sklearn_theano.feature_extraction.caffe.googlenet import GoogLeNetTransformer
+from ..sklearn_theano.feature_extraction import OverfeatTransformer
 from keras.applications import ResNet50
 from keras.applications import InceptionV3
 from keras.applications import Xception # TensorFlow ONLY

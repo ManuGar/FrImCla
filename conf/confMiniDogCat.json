@@ -3,7 +3,7 @@
   # DATASET SAMPLING CONFIGURATION
   #######
   # For only considering images without control image: /home/joheras/Escritorio/Research/Fungi/FungiImagesOverfeat
-  "dataset_path": "/home/magarcd/Escritorio/ObjectClassificationByTransferLearning/FrImCla/minidatasetDogCat",
+  "dataset_path": "/home/magarcd/Escritorio/FrImCla/minidatasetDogCat",
 
   #For the output and results of the program
   "output_path": "../output/ESTOESUNAPRUEBA",
