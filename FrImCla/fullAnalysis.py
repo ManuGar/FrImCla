@@ -37,10 +37,10 @@ def fullAnalysis(config):
     extractor = data['featureExtractor']
     classifier = data['classificationModel']
     if(webapp.upper() in ("YES","Y")):
-        shutil.copyfile(aux + "/ConfModel.json", "./webApp/FlaskApp/ConfModel.json")
-        shutil.copyfile(aux + "/classifier_" + extractor["model"] + "_" + classifier + ".cpickle", "./webApp/FlaskApp/classifier_" + extractor["model"] + "_" + classifier + ".cpickle")
-        shutil.copyfile(aux + "/models/le-" + extractor["model"] + ".cpickle", "./webApp/FlaskApp/le-" + extractor["model"] + ".cpickle")
-        shutil.make_archive(aux + "/webapp", 'zip', './webApp')
+        shutil.copyfile(aux + "/ConfModel.json", "./FrImCla/webApp/FlaskApp/ConfModel.json")
+        shutil.copyfile(aux + "/classifier_" + extractor["model"] + "_" + classifier + ".cpickle", "./FrImCla/webApp/FlaskApp/classifier_" + extractor["model"] + "_" + classifier + ".cpickle")
+        shutil.copyfile(aux + "/models/le-" + extractor["model"] + ".cpickle", "./FrImCla/webApp/FlaskApp/le-" + extractor["model"] + ".cpickle")
+        shutil.make_archive(aux + "/webapp", 'zip', './FrImCla/webApp')
 
 def __main__():
     # construct the argument parser and parse the command line arguments
