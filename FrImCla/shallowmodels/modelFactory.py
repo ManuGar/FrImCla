@@ -53,7 +53,7 @@ class modelFactory():
                 return MODELS[modelText](output_layers=params) #"[-3]"
             else:
                 raise ValueError('The number of parameters is not correct')
-        elif modelText == "lab444":
+        elif modelText in ("hsv444","lab444" ):
             params = [int(s) for s in params.split(',')]
             if (len(params)==3):
                 bin1=params[0]
@@ -62,16 +62,6 @@ class modelFactory():
                 return MODELS[modelText](bins=[bin1, bin2, bin3])
             else:
                 raise ValueError('The number of parameters is not correct')
-        elif modelText == "hsv444":
-            if (len(params)==3):
-                params = [int(s) for s in params.split(',')]
-                bin1=params[0]
-                bin2=params[1]
-                bin3=params[2]
-                return MODELS[modelText](bins=[bin1, bin2, bin3])
-            else:
-                raise ValueError('The number of parameters is not correct')
-
         # elif "annulus" in modelText:
         #     params = [int(s) for s in params.split(',')]
         #     if (len(params)==3):

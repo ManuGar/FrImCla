@@ -1,0 +1,30 @@
+{% extends "layout.html" %}
+{% block body %}
+
+    <body>
+        <div class="container">
+
+
+            <div class="jumbotron">
+                <div class="page-header">
+                    <h2>Please, introduce the image yout want to classifiy</h2>
+                </div>
+                <form class="form-group" method="post" enctype=multipart/form-data action="/predict">
+                    <div class="form-group">
+                        <label >Image to classify</label>
+                    <input type="file" name="file" class="form-control" required autofocus accept="image/png, .jpeg, .jpg, image/tiff, image/gif">
+                    </div>
+                    <div class="form-group">
+                        <button id="btnPredict" class="btn btn-default" type="submit">Predict</button>
+                    </div>
+                </form>
+                <div class="prediction">
+                    {% if prediction!="" %}
+                    <div class ='alert alert-success fade in'>The class of your image is: <b><i>{{prediction}}</i></b></div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </body>
+
+{% endblock %}

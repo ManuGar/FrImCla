@@ -6,7 +6,7 @@
   "dataset_path": "/home/magarcd/Escritorio/FrImCla/minidatasetDogCat",
 
   #For the output and results of the program
-  "output_path": "../output/ESTOESUNAPRUEBA",
+  "output_path": "../output/ESTOESUNaA",
 
   #######
   # Batch CONFIGURATION
@@ -17,11 +17,11 @@
   # MODEL CONFIGURATION
   # You can choose more than one model
   # Possible values for model are: ["vgg16", include_top], ["vgg19", include_top], ["resnet", include_top],
-  # ["inception", include_top], ["googlenet"], ["overfeat", [outputLayers]], ["xception", include_top] (only with tensorflow),
+  # ["inception", include_top], ["googlenet"], ["overfeat", "[outputLayers]"], ["xception", include_top] (only with tensorflow),
   # and ["densenet"]
   # Shallow features: ["lab888"], ["lab444","4,4,4"], ["hsv888"], ["hsv444","4,4,4"], ["haralick"], ["lbp"], ["hog"], ["haarhog"]
   #######
-  "feature_extractors" : [["overfeat", [-3]]], //["googlenet"], ["inception", "False"],["overfeat", "[-3]"],["resnet", "False"],["vgg16", "False"],["vgg19", "False"],["xception", "False"],
+  "feature_extractors" : [["overfeat", "[-3]"]], //["googlenet"], ["inception", "False"],["overfeat", "[-3]"],["resnet", "False"],["vgg16", "False"],["vgg19", "False"],["xception", "False"],
 //        ["overfeat", [-3]], ["vgg16", "False"], ["vgg19", "False"], ["resnet", "False"],
 //  ["inception", "False"], ["googlenet"], ["xception", "False"],
 

@@ -66,7 +66,7 @@ def extractFeatures(fE, batchSize, imagePaths, outputPath, datasetPath, le, verb
 		del oe, oi, features, labels, images, imagePaths, f
 
 	else:
-		print("This model (" + fE[0] + ") is already generated")
+		print("This features (" + fE[0] + ") are already generated")
 
 
 def generateFeatures(outputPath, batchSize, datasetPath, featureExtractors, verbose=False):

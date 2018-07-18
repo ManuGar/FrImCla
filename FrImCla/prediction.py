@@ -32,53 +32,60 @@ def prediction(featExt, classi, imagePath, outputPath, datasetPath):
         model = cPickle.loads(open(cPickleFile).read())
 
     else: #Aqui es donde deberia hacer la pregunta de que si quiere realmente entrenar ese modelo o el mejor
-        files = os.walk(auxPath + "/models")
-        listFeatExt = []
-        for  _, _, file in files:
-            for feat in file:
-                feat = feat.split("-")[1].split(".")[0]
-                listFeatExt.append(feat)
-        listFeatExt = list(set(listFeatExt))
-        if(featExt[0] in listFeatExt):
-            labelEncoderPath = auxPath + "/models/le-" + featExt[0] + ".cpickle"
-            le = cPickle.loads(open(labelEncoderPath).read())
-            featuresPath = auxPath + "/models/features-" + featExt[0] + ".hdf5"
-            db = h5py.File(featuresPath)
-            split = int(db["image_ids"].shape[0])
-            (trainData, trainLabels) = (db["features"][:split], db["image_ids"][:split])
-            trainLabels = [le.transform([l.split(":")[0]])[0] for l in trainLabels]
-            classifierModel = factory.getClassificationModel(classi)
+        print("This is not the best model. Are you sure you want to predict with it?")
+        response = raw_input()
+        if (response.upper() in ("YES", "Y")):
+            files = os.walk(auxPath + "/models")
+            listFeatExt = []
+            for _, _, file in files:
+                for feat in file:
+                    feat = feat.split("-")[1].split(".")[0]
+                    listFeatExt.append(feat)
+            listFeatExt = list(set(listFeatExt))
+            if (featExt[0] in listFeatExt):
+                labelEncoderPath = auxPath + "/models/le-" + featExt[0] + ".cpickle"
+                le = cPickle.loads(open(labelEncoderPath).read())
+                featuresPath = auxPath + "/models/features-" + featExt[0] + ".hdf5"
+                db = h5py.File(featuresPath)
+                split = int(db["image_ids"].shape[0])
+                (trainData, trainLabels) = (db["features"][:split], db["image_ids"][:split])
+                trainLabels = [le.transform([l.split(":")[0]])[0] for l in trainLabels]
+                classifierModel = factory.getClassificationModel(classi)
 
-            model = RandomizedSearchCV(classifierModel.getModel(), param_distributions=classifierModel.getParams(),
-                                       n_iter=classifierModel.getNIterations())
-            model.fit(trainData, trainLabels)
-            f = open(auxPath + "/classifier_" + featExt[0] + "_" + classi + ".cpickle", "w")
-            f.write(cPickle.dumps(model))
-            f.close()
-            db.close()
-
-        else:
-            imagePaths = list(paths.list_images(datasetPath))
-            random.seed(42)
-            random.shuffle(imagePaths)
-            le = LabelEncoder()
-            le.fit([p.split("/")[-2] for p in imagePaths])
-            extractFeatures(featExt, 32, imagePaths, outputPath, datasetPath, le, False)
-            labelEncoderPath = auxPath + "/models/le-" + featExt[0] + ".cpickle"
-            le = cPickle.loads(open(labelEncoderPath).read())
-            featuresPath = auxPath + "/models/features-" + featExt[0] + ".hdf5"
-            db = h5py.File(featuresPath)
-            split = int(db["image_ids"].shape[0])
-            (trainData, trainLabels) = (db["features"][:split], db["image_ids"][:split])
-            trainLabels = [le.transform([l.split(":")[0]])[0] for l in trainLabels]
-            classifierModel = factory.getClassificationModel(classi)
-            model = RandomizedSearchCV(classifierModel.getModel(), param_distributions=classifierModel.getParams(),
+                model = RandomizedSearchCV(classifierModel.getModel(), param_distributions=classifierModel.getParams(),
                                            n_iter=classifierModel.getNIterations())
-            model.fit(trainData, trainLabels)
-            f = open(auxPath + "/classifier_" + featExt[0] + "_" + classi + ".cpickle", "w")
-            f.write(cPickle.dumps(model))
-            f.close()
-            db.close()
+                model.fit(trainData, trainLabels)
+                f = open(auxPath + "/classifier_" + featExt[0] + "_" + classi + ".cpickle", "w")
+                f.write(cPickle.dumps(model))
+                f.close()
+                db.close()
+
+            else:
+                imagePaths = list(paths.list_images(datasetPath))
+                random.seed(42)
+                random.shuffle(imagePaths)
+                le = LabelEncoder()
+                le.fit([p.split("/")[-2] for p in imagePaths])
+                extractFeatures(featExt, 32, imagePaths, outputPath, datasetPath, le, False)
+                labelEncoderPath = auxPath + "/models/le-" + featExt[0] + ".cpickle"
+                le = cPickle.loads(open(labelEncoderPath).read())
+                featuresPath = auxPath + "/models/features-" + featExt[0] + ".hdf5"
+                db = h5py.File(featuresPath)
+                split = int(db["image_ids"].shape[0])
+                (trainData, trainLabels) = (db["features"][:split], db["image_ids"][:split])
+                trainLabels = [le.transform([l.split(":")[0]])[0] for l in trainLabels]
+                classifierModel = factory.getClassificationModel(classi)
+                model = RandomizedSearchCV(classifierModel.getModel(), param_distributions=classifierModel.getParams(),
+                                           n_iter=classifierModel.getNIterations())
+                model.fit(trainData, trainLabels)
+                f = open(auxPath + "/classifier_" + featExt[0] + "_" + classi + ".cpickle", "w")
+                f.write(cPickle.dumps(model))
+                f.close()
+                db.close()
+        else:
+            labelEncoderPath = auxPath + "/models/le-" + featExt[0] + ".cpickle"
+            le = cPickle.loads(open(labelEncoderPath).read())
+            model = cPickle.loads(open(cPickleFile).read())
 
 
     filePrediction = open(auxPath+"/predictionResults.csv","a")
