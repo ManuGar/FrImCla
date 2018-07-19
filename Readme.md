@@ -8,6 +8,7 @@ FrImCla is an open-source framework for Image Classification using traditional a
 *   Jupyter notebooks to use the framework
 *   Ability to test several models at the same time
 *   It is possible to easily add models and apply them into the framework to comprobe the performance over a dataset
+*   A web application automatically created to predict the image class
 
 ## Requeriments and installation of the library
 The library uses Python 2.7, which must be installed. 
@@ -16,7 +17,7 @@ The following packages must be installed:
 *   numpy
 *   scikit_learn
 *   scikit-image
-*   Keras
+*   Keras (2.1.6)
 *   h5py
 *   mahotas
 *   imutils
@@ -25,6 +26,7 @@ The following packages must be installed:
 *   matplotlib
 *   pandas
 *   guppy
+*   wget
 *   theano
 *   OpenCV (i.e. cv2 must be available in python)
 *   commentjson
