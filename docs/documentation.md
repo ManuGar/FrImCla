@@ -27,8 +27,7 @@ Now we are going through the most important parts of the framework.
    indicating the model/s that you want to use.
 5. Perform the statistical analysis comparing different methods.
    New methods can be added in the classificationModels.py file.
-   Currently the methods that are available are RandomForest, SVM, KNN, LR, MLP and
-   RandomForest.
+   Currently the methods that are available are RandomForest, SVM, KNN, LR, MLP, RandomForest and GradientBoost.
    To perform the analysis use the command:
    python StatisticalComparison.py -c conf/conf.json
    This will take some time but at the end you will get a report
@@ -64,9 +63,9 @@ new images.
 ## Adding new machine learning algorithms and feature extractor models
 
 
-To add a new feature extractor models the user has to create a new class in models.py. This class implements Model and has to implement the method describe(self, image). The user also has to add this new model in modelFactory.py. In the method getModel(self,modelText) the user will create an object of the new class and its default params.
+To add a new feature extractor models, the user has to create a new class in models.py. This class implements Model and has to implement the method describe(self, image). The user also has to add this new model in modelFactory.py. In the method getModel(self,modelText) the user will create an object of the new class and its default params.
 
-To add a new machine learning algorithm the user has to create a new class in classificationModels.py.
+To add a new machine learning algorithms, the user has to create a new class in classificationModels.py.
 This class implements classifierModel.getModel and getters and setters for params and
 nIterations. We also have to add this classifier model in classificationModelFactory.py. In the
 method getClassificationModel(self,modelText) we will create an object of the new
