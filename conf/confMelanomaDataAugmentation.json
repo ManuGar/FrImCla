@@ -4,15 +4,12 @@
   #######
   # For only considering images without control image: /home/joheras/Escritorio/Research/Fungi/FungiImagesOverfeat
   "dataset_path": "/home/magarcd/Escritorio/ObjectClassificationByTransferLearning/FrImCla/dataAugmentation",
-
   #For the output and results of the program
   "output_path": "../output/nuevapruebaROC",
-
   #######
   # Batch CONFIGURATION
   #######
   "batch_size": 32,
-
   #######
   # MODEL CONFIGURATION
   # You can choose more than one model
@@ -21,10 +18,8 @@
   # and ["densenet"]
   # Shallow features: ["lab888"], ["lab444","4,4,4"], ["hsv888"], ["hsv444","4,4,4"], ["haralick"], ["lbp"], ["hog"], ["haarhog"]
   #######
-  "feature_extractors" : [ ["hog"], ["haarhog"]], //["googlenet"], ["inception", "False"],["overfeat", "[-3]"],["resnet", "False"],["vgg16", "False"],["vgg19", "False"],["xception", "False"],
-//        ["overfeat", [-3]], ["vgg16", "False"], ["vgg19", "False"], ["resnet", "False"],
-//  ["inception", "False"], ["googlenet"], ["xception", "False"],
-
+  "feature_extractors" : [ ["hog"], ["haarhog"], ["googlenet"], ["inception", "False"],["overfeat", "[-3]"],
+  ["resnet", "False"],["vgg16", "False"],["vgg19", "False"],["xception", "False"]],
   #######
   # CLASSIFIER CONFIGURATION
   #######
@@ -33,10 +28,6 @@
   # GradientBoost
   "training_size": 1,
   "model_classifiers" : ["KNN", "RandomForest", "SVM", "LogisticRegression", "MLP", "GradientBoost"],
-
-
-  #Con knn parece que haralick tampoco funciona. probar con el pequeño y faltan por probar los otros dos con el dataset real
-
   #######
   # MEASURE CONFIGURATION
   #######

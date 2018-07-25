@@ -2,8 +2,8 @@ from flask import Flask, render_template,request
 from werkzeug.utils import secure_filename
 import json
 import cPickle
-import FrImCla.extractor.extractor as e
-import FrImCla.utils.dataset as dataset
+import frimcla.extractor.extractor as e
+import frimcla.utils.dataset as dataset
 import numpy as np
 import os
 
@@ -22,14 +22,14 @@ def prediction():
     prediction =""
     f = request.files['file']
     f.save(secure_filename(f.filename))
-    with open('ConfModel.json') as data:
+    with open('FlaskApp/ConfModel.json') as data:
         datos = json.load(data)
 
     #Tener cuidado con esto, cuando suba la nueva version de frimcla a pip hay que quitar el literal eval
     featureExtractor = [str(datos["featureExtractor"]["model"]), datos["featureExtractor"]["params"]]
     classificationModel = datos["classificationModel"]
-    cPickleFile = "classifier_" + featureExtractor[0] + "_" + classificationModel + ".cpickle"
-    labelEncoderPath = "le-" + featureExtractor[0] + ".cpickle"
+    cPickleFile = "FlaskApp/classifier_" + featureExtractor[0] + "_" + classificationModel + ".cpickle"
+    labelEncoderPath = "FlaskApp/le-" + featureExtractor[0] + ".cpickle"
     le = cPickle.loads(open(labelEncoderPath).read())
     model = cPickle.loads(open(cPickleFile).read())
     oe = e.Extractor(featureExtractor)

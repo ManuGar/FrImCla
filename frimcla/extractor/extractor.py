@@ -1,7 +1,7 @@
 # import the necessary packages
 import numpy as np
-# from FrImCla.shallowmodels.modelFactory import modelFactory
-from shallowmodels.modelFactory import modelFactory
+from frimcla.shallowmodels.modelFactory import modelFactory
+# from shallowmodels.modelFactory import modelFactory
 
 
 class Extractor:

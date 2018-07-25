@@ -1,4 +1,4 @@
 # Include the license file
 include LICENSE.txt
-recursive-include FrImCla *.css *.html
+recursive-include frimcla *.css *.html
 

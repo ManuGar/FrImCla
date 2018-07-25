@@ -33,7 +33,7 @@ setup(
     # For a discussion on single-sourcing the version across setup.py and the
     # project code, see
     # https://packaging.python.org/en/latest/single_source_version.html
-    version='0.0.53',  # Required
+    version='0.0.514',  # Required
 
     # This is a one-line description or tagline of what your project does. This
     # corresponds to the "Summary" metadata field:
@@ -54,7 +54,7 @@ setup(
     #
     # This field corresponds to the "Home-Page" metadata field:
     # https://packaging.python.org/specifications/core-metadata/#home-page-optional
-    url='https://github.com/manugar/FrImCla',  # Optional
+    url='https://github.com/manugar/frimcla',  # Optional
 
     # This should be your name or the name of the organization which owns the
     # project.
@@ -103,7 +103,7 @@ setup(
     #
     #   py_modules=["my_module"],
     #
-    packages=find_packages('webApp', exclude=['contrib', 'docs', 'tests']),  # Required
+    packages=find_packages( exclude=['contrib', 'docs', 'tests']),  # Required
     include_package_data=True,
 
 
@@ -151,7 +151,7 @@ setup(
     # executes the function `main` from this package when invoked:
     entry_points={  # Optional
         'console_scripts': [
-            'frimcla=FrImCla.command_line:main',
+            'frimcla=frimcla.command_line:main',
         ],
     },
 )

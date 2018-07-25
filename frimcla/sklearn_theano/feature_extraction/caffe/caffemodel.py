@@ -10,9 +10,9 @@ import numpy as np
 from collections import OrderedDict
 import theano.tensor as T
 from ...datasets import get_dataset_dir, download
-# from ....sklearn_theano.base import Convolution, Relu, LRN, Feedforward, ZeroPad, CaffePool
-from sklearn_theano.base import Convolution, Relu, LRN, Feedforward, ZeroPad
-from sklearn_theano.base import CaffePool
+from ....sklearn_theano.base import Convolution, Relu, LRN, Feedforward, ZeroPad, CaffePool
+# from sklearn_theano.base import Convolution, Relu, LRN, Feedforward, ZeroPad
+# from sklearn_theano.base import CaffePool
 import warnings
 
 
