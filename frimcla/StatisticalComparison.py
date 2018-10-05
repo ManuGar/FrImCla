@@ -19,7 +19,8 @@ blacklist = [["haarhog", "SVM"],
              ["haralick", "SVM"],
              ["haralick", "KNN"],
              ["hog", "SVM"],
-             ["hog", "KNN"]]
+             ["hog", "KNN"],
+             ["hog", "LogisticRegression"]]
 
 def statisticalComparison(outputPath, datasetPath, featureExtractors, modelClassifiers, measure, verbose= False):
     pathAux = outputPath + datasetPath[datasetPath.rfind("/"):]

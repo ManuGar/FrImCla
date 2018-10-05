@@ -3,10 +3,10 @@
   # DATASET SAMPLING CONFIGURATION
   #######
   # For only considering images without control image: /home/joheras/Escritorio/Research/Fungi/FungiImagesOverfeat
-  "dataset_path": "/home/magarcd/Escritorio/frimcla/minidatasetDogCat",
+  "dataset_path": "/home/magarcd/Escritorio/dataset/minidatasetDogCat",
 
   #For the output and results of the program
-  "output_path": "../output/ESTOESUNaA",
+  "output_path": "../output/",
 
   #######
   # Batch CONFIGURATION
@@ -21,7 +21,7 @@
   # and ["densenet"]
   # Shallow features: ["lab888"], ["lab444","4,4,4"], ["hsv888"], ["hsv444","4,4,4"], ["haralick"], ["lbp"], ["hog"], ["haarhog"]
   #######
-  "feature_extractors" : [["overfeat", "[-3]"]], //["googlenet"], ["inception", "False"],["overfeat", "[-3]"],["resnet", "False"],["vgg16", "False"],["vgg19", "False"],["xception", "False"],
+  "feature_extractors" : [["xception", "False"]], //["googlenet"], ["inception", "False"],["overfeat", "[-3]"],["resnet", "False"],["vgg16", "False"],["vgg19", "False"],["xception", "False"],
 //        ["overfeat", [-3]], ["vgg16", "False"], ["vgg19", "False"], ["resnet", "False"],
 //  ["inception", "False"], ["googlenet"], ["xception", "False"],
 
@@ -32,7 +32,7 @@
   # Possible values for classifier model are: RandomForest, SVM, KNN, LogisticRegression, MLP and
   # GradientBoost
   "training_size": 1,
-  "model_classifiers" : ["GradientBoost"],
+  "model_classifiers" : ["GradientBoost","RandomForest", "SVM","KNN","LogisticRegression", "MLP"],
 
 
   #Con knn parece que haralick tampoco funciona. probar con el pequeño y faltan por probar los otros dos con el dataset real
@@ -42,5 +42,5 @@
   #######
   # You can choose one measure
   # Possible values for measures are: f1, accuracy, recall, precision, auroc
-  "measure" : "auroc"
+  "measure" : "accuracy"
 }

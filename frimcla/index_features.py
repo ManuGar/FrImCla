@@ -22,6 +22,23 @@ import os
 from guppy import hpy
 hp = hpy()
 
+def ls(ruta = '.'):
+	dir, subdirs, archivos = next(os.walk(ruta))
+	return subdirs
+
+def cropDataset(datasetPath,n_images_dataset=100):
+	subdirs = ls(datasetPath)
+	n_classes = len(subdirs)
+	images_path = []
+	for subdir in subdirs:
+		_, _, files = next(os.walk(os.path.join(datasetPath, subdir)))
+		files = [os.path.join(datasetPath, subdir, file) for file in files]
+		random.seed(42)
+		random.shuffle(files)
+		images_path+=files[0:(n_images_dataset / n_classes)]
+
+	return images_path
+
 
 def extractFeatures(fE, batchSize, imagePaths, outputPath, datasetPath, le, verbose = False):
 	# initialize the Overfeat extractor and the Overfeat indexer
@@ -63,7 +80,7 @@ def extractFeatures(fE, batchSize, imagePaths, outputPath, datasetPath, le, verb
 		f = open(labelEncoderPath, "w")
 		f.write(cPickle.dumps(le))
 		f.close()
-		del oe, oi, features, labels, images, imagePaths, f
+		# del oe, oi, features, labels, images, imagePaths, f
 
 	else:
 		print("This features (" + fE[0] + ") are already generated")
@@ -75,7 +92,8 @@ def generateFeatures(outputPath, batchSize, datasetPath, featureExtractors, verb
 
 	# shuffle the image paths to ensure randomness -- this will help make our
 	# training and testing split code more efficient
-	imagePaths = list(paths.list_images(datasetPath))
+	imagePaths = cropDataset(datasetPath,100)
+	# imagePaths = list(paths.list_images(datasetPath))
 	random.seed(42)
 	random.shuffle(imagePaths)
 

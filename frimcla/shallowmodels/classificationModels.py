@@ -87,7 +87,7 @@ class KNN(classifierModel):
 
 class LogRegression(classifierModel):
     def __init__(self, rdm_state=84,params={"C": [0.1, 1.0, 10.0, 100.0, 1000.0, 10000.0]},
-                 niterations=5):
+                 niterations=1):
         self.model = LogisticRegression(random_state=rdm_state)
         self.params = params
         self.niterations = niterations
@@ -111,7 +111,7 @@ class MultiLayerPerceptron(classifierModel):
     def __init__(self, random_state=84,params={'activation':['identity', 'logistic', 'tanh', 'relu'],
                 'solver':['lbfgs','sgd','adam'], 'alpha': sp_randint(0.0001, 1),
                 'learning_rate':['constant','invscaling','adaptive'],'momentum':[0.9,0.95,0.99]},
-                 niterations=10):
+                 niterations=1):
         self.model = MLPClassifier(random_state=random_state)
         self.params = params
         self.niterations = niterations
