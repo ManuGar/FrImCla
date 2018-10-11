@@ -13,7 +13,6 @@ from indexer.indexer import Indexer
 from utils.conf import Conf
 from utils import dataset
 from sklearn.preprocessing import LabelEncoder
-from imutils import paths
 import argparse
 import cPickle
 import random
@@ -92,7 +91,7 @@ def generateFeatures(outputPath, batchSize, datasetPath, featureExtractors, verb
 
 	# shuffle the image paths to ensure randomness -- this will help make our
 	# training and testing split code more efficient
-	imagePaths = cropDataset(datasetPath,100)
+	imagePaths = cropDataset(datasetPath,50)
 	# imagePaths = list(paths.list_images(datasetPath))
 	random.seed(42)
 	random.shuffle(imagePaths)

@@ -60,12 +60,15 @@ def train(outputPath, datasetPath, trainingSize):
 	extractor = data['featureExtractor']
 	classifier = data['classificationModel']
 	if (webapp.upper() in ("YES", "Y")):
-		shutil.copyfile(auxPath + "/ConfModel.json", "./frimcla/webApp/FlaskApp/ConfModel.json")
+
+		shutil.copytree("./frimcla/webApp/", auxPath + "/webApp")
+		shutil.copyfile(auxPath + "/ConfModel.json", auxPath +"/webApp/FlaskApp/ConfModel.json")
 		shutil.copyfile(auxPath + "/classifier_" + extractor["model"] + "_" + classifier + ".cpickle",
-						"./frimcla/webApp/FlaskApp/classifier_" + extractor["model"] + "_" + classifier + ".cpickle")
+						auxPath + "/webApp/FlaskApp/classifier_" + extractor["model"] + "_" + classifier + ".cpickle")
 		shutil.copyfile(auxPath + "/models/le-" + extractor["model"] + ".cpickle",
-						"./frimcla/webApp/FlaskApp/le-" + extractor["model"] + ".cpickle")
-		shutil.make_archive(auxPath + "/webapp", 'zip', './frimcla/webApp')
+						auxPath + "/webApp/FlaskApp/le-" + extractor["model"] + ".cpickle")
+		shutil.make_archive(auxPath + "/webApp", 'zip', auxPath + '/webApp')
+		shutil.rmtree(auxPath + '/webApp')
 
 
 def __main__():
