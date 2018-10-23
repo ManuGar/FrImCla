@@ -11,9 +11,16 @@ from utils.conf import Conf
 from index_features import generateFeatures
 from StatisticalComparison import statisticalComparison
 from train import train
-
 # suppress any FutureWarning from Theano
 
+
+
+"""
+    With this method we execute the whole process to obtain the model to predict the class that the images belongs to. This process has three parts:
+    generation of features, creation of the prediction model (in some cases there is a statistical analisys to obtain the comparison of the models and decide the best one) 
+    and training of the model choosing in the previous step.
+
+"""
 def fullAnalysis(config):
     conf = Conf(config)
     verbose = False

@@ -13,10 +13,16 @@ import json
 from sklearn.model_selection import RandomizedSearchCV
 import shallowmodels.classificationModelFactory as cmf
 
+
+"""
+	This algorithm trains the method indicated in the ConfModel.json file. In this file is sotred the feature extractor,
+	the params of the extractor and the classifier model. The method returns the model trained and asks to the user if
+	he wants a webapp.  The web application is a simple application that allows the user to exploit the model to predict
+	the classes of the images.
+"""
 def train(outputPath, datasetPath, trainingSize):
 	datasetName = datasetPath[datasetPath.rfind("/"):]
 	auxPath = outputPath + datasetName
-
 	with open(auxPath + "/ConfModel.json") as json_file:
 		data = json.load(json_file)
 	extractor = data['featureExtractor']
@@ -26,18 +32,15 @@ def train(outputPath, datasetPath, trainingSize):
 	# open the database and split the data into their respective training and
 	# testing splits
 	print("[INFO] gathering train/test splits...")
-
 	featuresPath = auxPath + "/models/features-" + extractor["model"] + ".hdf5"
 	db = h5py.File(featuresPath)
 	split = int(db["image_ids"].shape[0] * trainingSize)
 	(trainData, trainLabels) = (db["features"][:split], db["image_ids"][:split])
-	# (testData, testLabels) = (db["features"][split:], db["image_ids"][split:])
 	# use the label encoder to encode the training and testing labels
 	trainLabels = [le.transform([l.split(":")[0]])[0] for l in trainLabels]
 	# define the grid of parameters to explore, then start the grid search where
 	# we evaluate a Linear SVM for each value of C
 	print("[INFO] tuning hyperparameters...")
-
 	factory = cmf.classificationModelFactory()
 	classifierModel = factory.getClassificationModel(classifier)
 	model = RandomizedSearchCV(classifierModel.getModel(), param_distributions=classifierModel.getParams(),
@@ -52,7 +55,6 @@ def train(outputPath, datasetPath, trainingSize):
 	f.close()
 	# close the database
 	db.close()
-
 	print("Do you want to generate a web app to classify the images with the best combination? y/n")
 	webapp = raw_input()
 	with open(auxPath + "/ConfModel.json") as json_file:
@@ -60,7 +62,6 @@ def train(outputPath, datasetPath, trainingSize):
 	extractor = data['featureExtractor']
 	classifier = data['classificationModel']
 	if (webapp.upper() in ("YES", "Y")):
-
 		shutil.copytree("./frimcla/webApp/", auxPath + "/webApp")
 		shutil.copyfile(auxPath + "/ConfModel.json", auxPath +"/webApp/FlaskApp/ConfModel.json")
 		shutil.copyfile(auxPath + "/classifier_" + extractor["model"] + "_" + classifier + ".cpickle",
@@ -70,7 +71,6 @@ def train(outputPath, datasetPath, trainingSize):
 		shutil.make_archive(auxPath + "/webApp", 'zip', auxPath + '/webApp')
 		shutil.rmtree(auxPath + '/webApp')
 
-
 def __main__():
 	# construct the argument parser and parse the command line arguments
 	ap = argparse.ArgumentParser()
@@ -78,11 +78,10 @@ def __main__():
 	args = vars(ap.parse_args())
 	# load the configuration and label encoder
 	conf = Conf(args["conf"])
-
 	outputPath=conf["output_path"]
 	datasetPath=conf["dataset_path"]
 	trainingSize=conf["training_size"]
 	train(outputPath, datasetPath, trainingSize)
 
 if __name__ == "__main__":
-    __main__()
+	__main__()

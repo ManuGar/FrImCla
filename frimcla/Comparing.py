@@ -97,8 +97,12 @@ def compare_methods(dataset,listAlgorithms,listParameters,listAlgorithmNames,lis
 
     return (resultsAccuracy,resultsPrecision,resultsRecall,resultsFmeasure)
 
-
-def accuracyPrediction(clf, params, name, n_iter, trainData, testData, trainLabels, testLabels, measure = "accuracy", verbose=False):
+"""
+    This method is used to predict the class of the images and compare with the test labels to know how good works 
+    the model. Returns the name of the model and the result of the comparison of the predictions with the test labels 
+    using the measure selected by the user. 
+"""
+def measurePrediction(clf, params, name, n_iter, trainData, testData, trainLabels, testLabels, measure = "accuracy", verbose=False):
     if verbose:
         print(name)
     if params is None:
@@ -113,10 +117,12 @@ def accuracyPrediction(clf, params, name, n_iter, trainData, testData, trainLabe
     # return (name, accuracy_score(testLabels, predictions))
     return (name, measure_score(testLabels,predictions, measure))
 
-
+"""
+    This method performs a statistical analysis of the methods for a feature extractor. The output is a list of the 
+    classification models with their results using the measure selected by the user. 
+"""
 def compare_methods_h5py(model, featuresPath,labelEncoderPath,listAlgorithms,listParameters,listAlgorithmNames,
                          listNiters, measure, verbose=False, normalization=False):
-
     # Loading dataset
     db = h5py.File(featuresPath)
     labels = db["image_ids"]
@@ -144,7 +150,7 @@ def compare_methods_h5py(model, featuresPath,labelEncoderPath,listAlgorithms,lis
             testData -= np.mean(testData, axis=0)
             testData /= np.std(testData, axis=0)
 
-        output = Parallel(n_jobs=-1)(delayed(accuracyPrediction)(clf, params, name, n_iter, trainData, testData, trainLabels, testLabels, measure,verbose)
+        output = Parallel(n_jobs=-1)(delayed(measurePrediction)(clf, params, name, n_iter, trainData, testData, trainLabels, testLabels, measure,verbose)
                            for clf, params, name, n_iter in
                            zip(listAlgorithms, listParameters, listAlgorithmNames, listNiters))
 
@@ -154,7 +160,10 @@ def compare_methods_h5py(model, featuresPath,labelEncoderPath,listAlgorithms,lis
         del output
     return resultsAccuracy
 
-
+"""
+    With this method the user obtain the results of comparing the test labels with the prediction labels of a 
+    classifier model. The measure is selected by the user.
+"""
 def measure_score(testLabels, predictions, measure_name = "accuracy"):
     if measure_name == "accuracy":
         return accuracy_score(testLabels, predictions)

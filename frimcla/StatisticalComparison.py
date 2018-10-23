@@ -3,17 +3,16 @@
 # the other files.
 #=======================================================================================================================
 
-import pandas as pd
-from Comparing import compare_methods_h5py
-import argparse
-from utils.conf import Conf
-from StatisticalAnalysis.statisticalAnalysis import statisticalAnalysis
 import os
 import json
-
+import argparse
+import pandas as pd
+from utils.conf import Conf
+from Comparing import compare_methods_h5py
+from StatisticalAnalysis.statisticalAnalysis import statisticalAnalysis
 from shallowmodels.classificationModelFactory import classificationModelFactory
 
-
+#This list is used to say what combinations are not allowed
 blacklist = [["haarhog", "SVM"],
              ["haarhog", "KNN"],
              ["haralick", "SVM"],
@@ -22,40 +21,32 @@ blacklist = [["haarhog", "SVM"],
              ["hog", "KNN"],
              ["hog", "LogisticRegression"]]
 
+"""
+    This is the method of the second part of FrImCla. The input are the output path, dataset path, the list of feature 
+    extractors that have been used in the previous step, the list of classification models, the measure that the user 
+    wants to use and the verbose flag. The output is a list of files with the results of the statistical analysis and
+    the combination of feature extractor and classifier model with the highest % of the measure selected by the user.
+"""
 def statisticalComparison(outputPath, datasetPath, featureExtractors, modelClassifiers, measure, verbose= False):
     pathAux = outputPath + datasetPath[datasetPath.rfind("/"):]
     filePathAux = pathAux + "/results/kfold-comparison_bestClassifiers.csv"
 
     for model in featureExtractors:
-
         if verbose:
             print(model)
-
         featuresPath = pathAux + "/models/features-" + model[0] + ".hdf5"
-        # db = h5py.File(featuresPath)
-        # labels = db["image_ids"]
         labelEncoderPath = pathAux + "/models/le-" + model[0] + ".cpickle"
-
-        #conf["label_encoder_path"][0:conf["label_encoder_path"].rfind(".")] + "-" + model[0] + ".cpickle"
-        # le = cPickle.loads(open(labelEncoderPath).read())
-        # labels = [le.transform([l.split(":")[0]])[0] for l in labels]
-        # df1 = pd.DataFrame([np.append(x,y) for (x,y) in zip(db["features"],labels)])
-
-        # df = pd.read_csv(featuresCSVPath)
-        # data = df.ix[:, :-1].values
         factory =classificationModelFactory()
         listAlgorithms = []
         listParams = []
         listNiter = []
         listNames = []
         filePath = pathAux + "/results/StatisticalComparison_" + model[0] + ".txt"
-
         for classificationModel in modelClassifiers:
             combination = [model[0], classificationModel]
             if (combination in blacklist):
                 print("The combination("+ model[0] + "-" + classificationModel + ") is not allowed")
             else:
-
                 if verbose:
                     print classificationModel
                 modelClas = factory.getClassificationModel(classificationModel)
@@ -66,39 +57,27 @@ def statisticalComparison(outputPath, datasetPath, featureExtractors, modelClass
                 listParams.append(params)
                 listNiter.append(niter)
                 listNames.append(classificationModel)
-
         if os.path.exists(pathAux + "/results"):
             if not os.path.isfile(filePathAux):
                 fileResults = open(filePathAux, "a")
                 for j in range(listNiter[0]):
                     fileResults.write("," + str(j))
-
                 fileResults.write("\n")
             else:
                 fileResults = open(filePathAux, "a")
-
         else:
             os.makedirs(filePathAux[:filePathAux.rfind("/")])
             fileResults = open(filePathAux, "a")
             for j in range(listNiter[0]):
                 fileResults.write(","+str(j))
-
             fileResults.write("\n")
-
-        # listNames = modelClassifiers
         if verbose:
             print("-------------------------------------------------")
             print("Statistical Analysis")
             print("-------------------------------------------------")
-
-        #listAlgorithms = [clfRF, clfSVC, clfKNN, clfLR, clfMLP]  # ,clfET
-        #listParams = [param_distRF, param_distSVC, param_distKNN, param_distLR, param_distMLP]  # ,param_distET
-        #listNames = ["RF", "SVM", "KNN", "LR", "MLP"]  # ,"ET"
         #Niteraciones de las clases [10, 10, 10, 5, 10]
-
         resultsAccuracy = compare_methods_h5py(model, featuresPath, labelEncoderPath, listAlgorithms, listParams, listNames,
                                                listNiter,measure , verbose, normalization=False)  # ,10
-
         dfAccuracy = pd.DataFrame.from_dict(resultsAccuracy, orient='index')
         KFoldComparisionPathAccuracy = pathAux + "/results/kfold-comparison_"+model[0] + ".csv"
         #KFoldComparisionPathAccuracy=conf["kfold_comparison"][0:conf["kfold_comparison"].rfind(".")] + "-" + model[0] + ".csv"
@@ -111,7 +90,6 @@ def statisticalComparison(outputPath, datasetPath, featureExtractors, modelClass
     fileResults2 = open(pathAux + "/results/bestExtractorClassifier.csv", "a")
     statisticalAnalysis(pathAux + "/results/kfold-comparison_bestClassifiers.csv", filePath2, fileResults2, verbose)
     fileResults2.close()
-
     file = open(pathAux + "/results/bestExtractorClassifier.csv")
     line = file.read()
     extractorClassifier = line.split(",")[0]
@@ -127,10 +105,8 @@ def statisticalComparison(outputPath, datasetPath, featureExtractors, modelClass
                     'featureExtractor': {'model': model[0], 'params': str(parametros)},
                     'classificationModel': classifier
                 }
-
             with fileConfModel as outfile:
                 json.dump(ConfModel, outfile)
-
     del resultsAccuracy, dfAccuracy
         # sys.stdout = sys.__stdout__
 
@@ -140,15 +116,11 @@ def __main__():
     args = vars(ap.parse_args())
     # load the configuration and label encoder
     conf = Conf(args["conf"])
-
     outputPath = conf["output_path"]
     datasetPath = conf["dataset_path"]
     featureExtractors = conf["feature_extractors"]
     modelClassifiers = conf["model_classifiers"]
     measure = conf["measure"]
-
-
-    # statisticalComparison(conf)
     statisticalComparison(outputPath, datasetPath, featureExtractors, modelClassifiers, measure, False)
 
 if __name__ == "__main__":
