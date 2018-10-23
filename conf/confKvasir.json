@@ -6,7 +6,7 @@
   "dataset_path": "/home/magarcd/Escritorio/dataset/kvasir-dataset",
 
   #For the output and results of the program
-  "output_path": "../output/datPrue",
+  "output_path": "../output/",
 
   #######
   # Batch CONFIGURATION
