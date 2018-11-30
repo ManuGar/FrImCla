@@ -7,16 +7,19 @@ from utils.conf import Conf
 from utils import dataset
 from index_features import extractFeatures
 from shallowmodels.classificationModelFactory import classificationModelFactory
+from sklearn.model_selection import RandomizedSearchCV
+from sklearn.preprocessing import LabelEncoder
+from imutils import paths
+from scipy import stats
 import numpy as np
 import argparse
 import cPickle
 import h5py
-from sklearn.model_selection import RandomizedSearchCV
-from sklearn.preprocessing import LabelEncoder
-import random
-from imutils import paths
 import os
 import json
+import random
+
+
 
 def prediction(featExt, classi, imagePath, outputPath, datasetPath):
     # load the configuration, label encoder, and classifier
@@ -87,7 +90,6 @@ def prediction(featExt, classi, imagePath, outputPath, datasetPath):
             le = cPickle.loads(open(labelEncoderPath).read())
             model = cPickle.loads(open(cPickleFile).read())
 
-
     filePrediction = open(auxPath+"/predictionResults.csv","a")
     filePrediction.write("image_id, melanoma\n")
     oe = Extractor(featExt)
@@ -117,25 +119,70 @@ def predictionSimple(imagePath, outputPath, datasetPath):
     classifier = data[0]['classifierModel']
     prediction(extractor,classifier,imagePath,outputPath,datasetPath)
 
+def predictionEnsemble(featureExtractors, classifiers, imagePaths, outputPath, datasetName):
+    auxPath = outputPath + datasetName
+    filePrediction = open(auxPath + "/predictionResults.csv", "a")
+    filePrediction.write("image_id, " + datasetName)
+    labelEncoderPath = auxPath + "/models/le.cpickle"
+    le = cPickle.loads(open(labelEncoderPath).read())
+    predictions = []
+    modes = []
+
+    for fe in featureExtractors:
+        (labels, images) = dataset.build_batch(imagePaths, fe[0])
+        oe = Extractor(fe)
+        features = oe.describe(images)
+        for classi in classifiers:
+            cPickleFile = auxPath + "/classifiers/classifier_" + fe[0] + "_" + classi + ".cpickle"
+            print(cPickleFile)
+            if os.path.isfile(cPickleFile):
+                model = cPickle.loads(open(cPickleFile).read())
+                prediction = model.predict(features)
+                predictions.append(prediction)
+    # aux = np.array(predictions)
+    aux = []
+    for i in range((len(imagePaths))):
+        for x in predictions:
+            aux.append(x[i])
+        aux = np.array(aux)
+        mode = stats.mode(aux[0])
+
+        # mode = le.inverse_transform(mode[0])
+        modes.append(mode[0])
+        aux = []
+
+    # mode = stats.mode(aux[0])
+    # prediction = le.inverse_transform(mode[0])
+    # filePrediction.write(str(labels) + ", " + str(prediction) + "\r\n")
+    # le = cPickle.loads(open(labelEncoderPath).read())
+    # prediction = le.inverse_transform(prediction)
+    for (image, mode) in zip(imagePaths,modes):
+        print("[INFO] class predicted for the image {}: {}".format(image, mode[0]))
+        filePrediction.write("\n" + str(image) + ", " + str(mode[0]))
+
+    filePrediction.close()
+
+
+
 def __main__():
     # construct the argument parser and parse the command line arguments
     ap = argparse.ArgumentParser()
-    ap.add_argument("-c", "--conf", required=True, help="path to configuration file")
     ap.add_argument("-i", "--image", required=True, help="path to the image to predict")
-    ap.add_argument("-f", "--feature", required=True, help="feature extractor to predict the class")
-    ap.add_argument("-p", "--params", required=False , help="parameters of the feature extractor")
-    ap.add_argument("-m", "--classifierModel", required=True, help="model to classify the images")
+    ap.add_argument("-f", "--features", required=True, help="feature extractor to predict the class")
+    ap.add_argument("-m", "--classifierModels", required=True, help="model to classify the images")
+    ap.add_argument("-o", "--outputPath", required=True, help="Path of the output of the algorithm")
+    ap.add_argument("-d", "--datasetPath", required=True, help="model to classify the images")
 
     args = vars(ap.parse_args())
     conf = Conf(args["conf"])
     outputPath = conf["output_path"]
-    featureExtractor = [args["feature"], args["params"]]
-    classifier = args["classifierModel"]
-
+    featureExtractors = args["feature"]
+    classifiers = args["classifierModels"]
     datasetPath = conf["dataset_path"]
-    # load the configuration and grab all image paths in the dataset
-    # generateFeatures(conf,imagePaths,"False")
-    prediction(featureExtractor, classifier, args["image"], outputPath, datasetPath)
+    # This method must have the same output path and dataset path that in the other parts of the program, in other case the program
+    # will not work
+    # prediction(featureExtractors, classifiers, args["image"], outputPath, datasetPath)
+    predictionEnsemble(featureExtractors, classifiers, args["image"], outputPath, datasetPath)
 
 
 if __name__ == "__main__":

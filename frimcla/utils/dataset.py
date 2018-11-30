@@ -12,7 +12,7 @@ import cv2
 def prepare_image(imagePath,model):
 	#print imagePath #to display the image on the screen that is working in case the image gives error
 
-	if model in ("inception", "xception", "vgg16","vgg19","resnet","densenet"):
+	if model in ("inception", "xception", "vgg16","vgg19","resnet","densenet", "mymodel"):
 		fixedSize = (224, 224)
 		preprocess = imagenet_utils.preprocess_input
 		if model in ("inception", "xception"):
@@ -20,9 +20,13 @@ def prepare_image(imagePath,model):
 			preprocess = preprocess_input
 		if model in ("densenet"):
 			fixedSize = (32,32)
-
+		if model in ("mymodel"):
+			fixedSize = (64,64)
 		image = load_img(imagePath, target_size=fixedSize)
 		image = img_to_array(image)
+		if model == "mymodel":
+			image = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
+
 		image = np.expand_dims(image, axis=0)
 
 		if model not in ("densenet"):

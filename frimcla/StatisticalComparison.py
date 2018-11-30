@@ -6,20 +6,149 @@
 import os
 import json
 import argparse
+import cPickle
+import numpy as np
 import pandas as pd
+
+import os
+import json
+import numpy as np
+import h5py
+import cPickle
+from sklearn.model_selection import KFold
+from sklearn.metrics import accuracy_score
+from scipy import stats
 from utils.conf import Conf
-from Comparing import compare_methods_h5py
+from Comparing import compare_methods_h5py, prepareModel, measure_score
 from StatisticalAnalysis.statisticalAnalysis import statisticalAnalysis
 from shallowmodels.classificationModelFactory import classificationModelFactory
 
 #This list is used to say what combinations are not allowed
 blacklist = [["haarhog", "SVM"],
              ["haarhog", "KNN"],
+             ["haarhog","MLP"],
              ["haralick", "SVM"],
              ["haralick", "KNN"],
              ["hog", "SVM"],
              ["hog", "KNN"],
              ["hog", "LogisticRegression"]]
+
+def majorityVoting(outputPath, datasetPath, featureExtractors, modelClassifiers, measure, verbose= False):
+    pathAux = outputPath + datasetPath[datasetPath.rfind("/"):]
+    filePathAux = pathAux + "/results/combinationsAllowedMajorityVoting.txt"
+    if not os.path.exists(pathAux + "/results"):
+        os.makedirs(filePathAux[:filePathAux.rfind("/")])
+
+    # predictions = []
+    # modes = []
+    # realimages = []
+    combinations = []
+
+    for fE in featureExtractors:
+        if verbose:
+            print(fE)
+
+        featuresPath = pathAux + "/models/features-" + fE[0] + ".hdf5"
+        labelEncoderPath = pathAux + "/models/le.cpickle"
+        factory = classificationModelFactory()
+        listAlgorithms = []
+        listParams = []
+        listNiter = []
+        listNames = []
+        fileAux = open(labelEncoderPath)
+        le = cPickle.loads(fileAux.read())
+        fileAux.close()
+        fichero = open(filePathAux, "a")
+
+        for classificationModel in modelClassifiers:
+            combination = [fE[0], classificationModel]
+            if (combination in blacklist):
+                print("The combination(" + fE[0] + "-" + classificationModel + ") is not allowed")
+            else:
+                if verbose:
+                    print classificationModel
+                modelClas = factory.getClassificationModel(classificationModel)
+                listAlgorithms.append(modelClas.getModel())
+                listParams.append(modelClas.getParams())
+                listNiter.append(modelClas.getNIterations())
+                listNames.append(classificationModel)
+
+        db = h5py.File(featuresPath)
+        labels = db["image_ids"]
+        data = db["features"][()]
+        labels = np.asarray([le.transform([l.split(":")[0]])[0] for l in labels])
+        kf = KFold(n_splits=10, shuffle=False, random_state=42)  # n_splits=10
+        # __, (train_index, test_index) = enumerate(kf.split(data))
+        # i, (train_index, test_index) = kf.split(data)
+        (train_index, test_index) = next(kf.split(data), None)
+
+        trainData, testData = data[train_index], data[test_index]
+        trainLabels, testLabels = labels[train_index], labels[test_index]
+        trainData = np.nan_to_num(trainData)
+        testData = np.nan_to_num(testData)
+        classif, models=prepareModel(trainData, trainLabels,testData, testLabels, listAlgorithms, listParams,
+                                               listNames, listNiter, measure, verbose, normalization=False) # ,10)
+
+        combinations.append( (fE[0], classif))
+        # for mo in models:
+            # prediction = mo.predict(testData)
+            # prediction = le.inverse_transform(prediction)
+            # fichero.write("Prediccion de " + str(fE[0]))
+            # fichero.write(str(prediction) + "\n" )
+            # predictions.append(prediction)
+
+
+    # for j in testLabels:
+    #     realimages.append(le.inverse_transform(j))
+
+
+    '''
+        With this code, the framework collects the mode of the columns of the matrix generated with the predictions.
+    '''
+    # aux = []
+    # for i in range((len(testData))):
+    #     for x in predictions:
+    #         aux.append(x[i])
+    #     aux = np.array(aux)
+    #     mode = stats.mode(aux[0])
+    #     # mode = le.inverse_transform(mode[0])
+    #     # modes.append(le.inverse_transform(mode[0]))
+    #     modes.append(mode[0])
+    #     aux = []
+
+    # measure = measure_score(testLabels, modes)
+    # for mod in modes:
+    #     fichero.write(str(le.inverse_transform(mod)) + "\n")
+    # for ri in realimages:
+    #     fichero.write(str(ri) + "\n")
+
+    # fichero.write("El resultado de la medida es: " + str(measure))
+    # fichero.close()
+
+    fextractors = []
+    cmodels = []
+    for com in combinations:
+        for fExtr in featureExtractors:
+            if(fExtr[0]==com[0] and (len(com[1])>0)):
+                classificationModels = com[1]
+                fichero.write("For the feature extractor " + fExtr[0] + " there are available these classifiers: " + str(classificationModels) + "\n")
+                if len(fExtr)==1:
+                    fextractors.append({'model': fExtr[0], 'params': '', 'classificationModels':classificationModels})
+
+                else:
+                    fextractors.append({'model':  fExtr[0] , 'params': fExtr[1], 'classificationModels':classificationModels})
+
+    for mod in modelClassifiers:
+        cmodels.append(str(mod))
+
+    fileConfModel = open(pathAux + "/ConfModel.json","w+")
+    ConfModel={
+          'featureExtractors': fextractors
+          # 'classificationModel': cmodels
+    }
+    fichero.close()
+    with fileConfModel as outfile:
+        json.dump(ConfModel, outfile, indent=4)
 
 """
     This is the method of the second part of FrImCla. The input are the output path, dataset path, the list of feature 
@@ -35,7 +164,7 @@ def statisticalComparison(outputPath, datasetPath, featureExtractors, modelClass
         if verbose:
             print(model)
         featuresPath = pathAux + "/models/features-" + model[0] + ".hdf5"
-        labelEncoderPath = pathAux + "/models/le-" + model[0] + ".cpickle"
+        labelEncoderPath = pathAux + "/models/le.cpickle"
         factory =classificationModelFactory()
         listAlgorithms = []
         listParams = []
@@ -94,6 +223,7 @@ def statisticalComparison(outputPath, datasetPath, featureExtractors, modelClass
     line = file.read()
     extractorClassifier = line.split(",")[0]
     extractor, classifier = extractorClassifier.split("_")
+
     for model in featureExtractors:
         if model[0]==extractor:
             if len(model)==1:
@@ -102,11 +232,11 @@ def statisticalComparison(outputPath, datasetPath, featureExtractors, modelClass
                 parametros=model[1]
             fileConfModel = open(pathAux + "/ConfModel.json","w+")
             ConfModel={
-                    'featureExtractor': {'model': model[0], 'params': str(parametros)},
-                    'classificationModel': classifier
+                    'featureExtractors': [{'model': model[0], 'params': str(parametros),'classificationModels': [classifier]}],
+
                 }
             with fileConfModel as outfile:
-                json.dump(ConfModel, outfile)
+                json.dump(ConfModel, outfile, indent=4)
     del resultsAccuracy, dfAccuracy
         # sys.stdout = sys.__stdout__
 

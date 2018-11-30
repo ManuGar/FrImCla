@@ -8,10 +8,35 @@ import math
 from scipy.spatial import distance
 from ..DenseNet import densenet
 # from DenseNet import densenet
-from keras.layers import Flatten
-from keras.models import Model
+from keras.models import Model, Sequential, load_model
+from keras.layers import Dense, Dropout, Activation, Flatten, BatchNormalization
+from keras.layers import Convolution2D, MaxPooling2D
+from keras.optimizers import SGD
+from keras.utils import np_utils
+from keras.callbacks import ModelCheckpoint
+from keras.applications import VGG16
+from keras.callbacks import LearningRateScheduler
+from keras import optimizers
 
+class MyModel(Model):
+    def __init__(self):
+        my_model = load_model("frimcla/shallowmodels/modeloRaices.h5")
+        pruebaModel = Model(my_model.input, my_model.layers[-3].output)
+        self.model = pruebaModel
 
+    def describe(self,image):
+        image = np.reshape(image,(64,64,1))
+        image=np.expand_dims(image, axis=0)
+        return self.model.predict(image)
+
+class Histonet(Model):
+    def __init__(self):
+        my_model = load_model("frimcla/shallowmodels/histonet.h5")
+        pruebaModel = Model(my_model.input, my_model.layers[-1].output)
+        self.model = pruebaModel
+
+    def describe(self,image):
+        return self.model.predict(image)
 
 
 class DenseNet(Model):
@@ -28,7 +53,12 @@ class DenseNet(Model):
         self.model = Model(new_input, new_output)
 
     def describe(self,image):
-        return self.model.predict(image)
+
+        '''
+        Lo de que se tenga qeu poner solo la componente 0 de ese vector revisar porque se ha tenido que poner para que funcione la prediccion
+        no deberia ser asi. En el entrenamiento ha valido sin eso
+        '''
+        return self.model.predict(image)[0]
 
 class LABModel(Model):
     def __init__(self,bins=[8,8,8],channels=[0,1,2],histValues=[0,256,0,256,0,256]):

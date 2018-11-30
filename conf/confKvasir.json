@@ -6,7 +6,15 @@
   "dataset_path": "/home/magarcd/Escritorio/dataset/kvasir-dataset",
 
   #For the output and results of the program
-  "output_path": "../output/",
+  "output_path": "../output/dddddddd",
+
+
+
+  #######
+  # ENSEMBLE FLAG
+  # This flag allows the user the possibility of create a model with several different models and feature extractors.
+  #######
+  "ensemble": false,
 
   #######
   # Batch CONFIGURATION
@@ -21,10 +29,10 @@
   # and ["densenet"]
   # Shallow features: ["lab888"], ["lab444","4,4,4"], ["hsv888"], ["hsv444","4,4,4"], ["haralick"], ["lbp"], ["hog"], ["haarhog"]
   #######
-  "feature_extractors" : [["vgg16", "False"], ["vgg19", "False"],["resnet", "False"], ["inception", "False"],["googlenet"], ["overfeat", "[-3]"],
-      ["xception", "False"], ["densenet"],["lab888"], ["lab444","4,4,4"], ["hsv888"], ["hsv444","4,4,4"], ["haralick"], ["hog"], ["haarhog"]],
+  "feature_extractors" : [["vgg16", "False"], ["vgg19", "False"],["resnet", "False"], ["overfeat", "[-3]"]],
 //["googlenet"], ["inception", "False"],["overfeat", "[-3]"],["resnet", "False"],["vgg16", "False"],["vgg19", "False"],["xception", "False"],
-//        ["overfeat", [-3]], ["vgg16", "False"], ["vgg19", "False"], ["resnet", "False"],
+//        ["overfeat", [-3]], ["vgg16", "False"], ["vgg19", "False"], ["resnet", "False"],                                    , ["inception", "False"],["googlenet"], ["overfeat", "[-3]"],
+//      ["xception", "False"], ["densenet"],["lab888"], ["lab444","4,4,4"], ["hsv888"], ["hsv444","4,4,4"], ["haralick"], ["hog"], ["haarhog"]
 
   #######
   # CLASSIFIER CONFIGURATION

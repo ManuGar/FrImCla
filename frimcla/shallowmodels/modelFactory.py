@@ -9,7 +9,7 @@ from keras.applications import InceptionV3
 from keras.applications import Xception # TensorFlow ONLY
 from keras.applications import VGG16
 from keras.applications import VGG19
-from models import LABModel,HSVModel,Haralick,LBP,HOG,HistogramsSeveralMasksAnnulusLabSegments,HaarHOG,DenseNet
+from models import LABModel,HSVModel,Haralick,LBP,HOG,HistogramsSeveralMasksAnnulusLabSegments,HaarHOG,DenseNet, MyModel
 
 
 MODELS = {
@@ -29,7 +29,8 @@ MODELS = {
     "hog": HOG,
     "haarhog": HaarHOG,
     "densenet": DenseNet,
-    "annulus": HistogramsSeveralMasksAnnulusLabSegments
+    "annulus": HistogramsSeveralMasksAnnulusLabSegments,
+    "mymodel": MyModel
 }
 
 class modelFactory():
@@ -44,7 +45,7 @@ class modelFactory():
                 return Network(include_top=params[0])
             else:
                 raise ValueError('The number of parameters is not correct')
-        elif modelText in ("googlenet", "lab888", "hsv888", "haralick", "lbp", "hog", "haarhog", "densenet"):
+        elif modelText in ("googlenet", "lab888", "hsv888", "haralick", "lbp", "hog", "haarhog", "densenet","mymodel"):
             return MODELS[modelText]()
         elif modelText == "overfeat":
             params = str(params)

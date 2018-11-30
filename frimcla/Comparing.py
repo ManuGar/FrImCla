@@ -52,12 +52,6 @@ def compare_methods(dataset,listAlgorithms,listParameters,listAlgorithmNames,lis
     resultsPrecision = {name: [] for name in listAlgorithmNames}
     resultsRecall = {name: [] for name in listAlgorithmNames}
     resultsFmeasure = {name: [] for name in listAlgorithmNames}
-    # tuple = [(i,(train_index,test_index),data,labels,listAlgorithms,listParameters,listAlgorithmNames,listNiters,normalization) for i,(train_index,test_index) in enumerate(kf.split(data))]
-    # comparison = map(compare_method, tuple)
-    #
-    # for i,result in comparison:
-    #     for name in listAlgorithmNames:
-    #         results[name].append(result[name])
 
     for i,(train_index,test_index) in enumerate(kf.split(data)):
         if verbose:
@@ -97,6 +91,45 @@ def compare_methods(dataset,listAlgorithms,listParameters,listAlgorithmNames,lis
 
     return (resultsAccuracy,resultsPrecision,resultsRecall,resultsFmeasure)
 
+
+def trainModel(clf, params, name, n_iter, trainData, trainLabels, verbose=False):
+    if verbose:
+        print(name)
+    if params is None:
+        model = clf
+    else:
+        model = RandomizedSearchCV(clf, param_distributions=params, n_iter=n_iter)
+    model.fit(trainData, trainLabels)
+    outp = (name, model)
+    return outp
+
+
+def prepareModel(trainData, trainLabels,testData, testLabels, listAlgorithms, listParameters,
+                                               listAlgorithmNames, listNiters, measure, verbose=False, normalization=False):
+    combinations = []
+    output = []
+    # Normalization
+    if normalization:
+        trainData = np.asarray(trainData).astype("float32")
+        trainData -= np.mean(trainData, axis=0)
+        trainData /= np.std(trainData, axis=0)
+        testData = np.asarray(testData).astype("float32")
+        testData -= np.mean(testData, axis=0)
+        testData /= np.std(testData, axis=0)
+
+    output = Parallel(n_jobs=-1)(delayed(trainModel)(clf, params, name, n_iter, trainData, trainLabels, verbose)
+                        for clf, params, name, n_iter in
+                        zip(listAlgorithms, listParameters, listAlgorithmNames, listNiters))
+    models = []
+    for (name, model) in output:
+        predictions = model.predict(testData)
+        if measure_score(predictions, testLabels, measure) > 0.56:
+            models.append(model)
+            combinations.append(name)
+    del output
+    return (combinations,models)
+
+
 """
     This method is used to predict the class of the images and compare with the test labels to know how good works 
     the model. Returns the name of the model and the result of the comparison of the predictions with the test labels 
@@ -114,7 +147,6 @@ def measurePrediction(clf, params, name, n_iter, trainData, testData, trainLabel
     testData = np.nan_to_num(testData)
     model.fit(trainData, trainLabels)
     predictions = model.predict(testData)
-    # return (name, accuracy_score(testLabels, predictions))
     return (name, measure_score(testLabels,predictions, measure))
 
 """

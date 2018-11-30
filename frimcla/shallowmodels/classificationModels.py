@@ -65,7 +65,7 @@ class SVM(classifierModel):
         self.niterations = nIterations
 
 class KNN(classifierModel):
-    def __init__(self,params={'n_neighbors': range(5, 30,2)}, niterations=10):
+    def __init__(self,params={'n_neighbors': range(5, 27,2)}, niterations=10):
         self.model = KNeighborsClassifier()
         self.params = params
         self.niteraciones = niterations

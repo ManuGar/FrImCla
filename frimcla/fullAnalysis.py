@@ -9,7 +9,7 @@ import argparse
 import os
 from utils.conf import Conf
 from index_features import generateFeatures
-from StatisticalComparison import statisticalComparison
+from StatisticalComparison import statisticalComparison, majorityVoting
 from train import train
 # suppress any FutureWarning from Theano
 
@@ -28,10 +28,14 @@ def fullAnalysis(config):
 
     generateFeatures(conf["output_path"], conf["batch_size"], conf["dataset_path"], conf["feature_extractors"], verbose)
     end1 = time.time()
-
     start2 = time.time()
-    statisticalComparison(conf["output_path"], conf["dataset_path"], conf["feature_extractors"],
-                          conf["model_classifiers"], conf["measure"], verbose)
+
+    if(conf["ensemble"]):
+        majorityVoting(conf["output_path"], conf["dataset_path"], conf["feature_extractors"],
+                       conf["model_classifiers"], conf["measure"], verbose)
+    else:
+        statisticalComparison(conf["output_path"], conf["dataset_path"], conf["feature_extractors"],
+                              conf["model_classifiers"], conf["measure"], verbose)
 
     end2 = time.time()
     start3 = time.time()
@@ -51,6 +55,7 @@ def fullAnalysis(config):
 
 
 def __main__():
+
     # construct the argument parser and parse the command line arguments
     ap = argparse.ArgumentParser()
     ap.add_argument("-c", "--conf", required=True, help="path to configuration file")

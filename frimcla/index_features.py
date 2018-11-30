@@ -1,24 +1,25 @@
 # USAGE
 # python index_features.py --conf conf/flowers17.json
-
 # suppress any FutureWarning from Theano
 from __future__ import print_function
 # from mpi4py import MPI
 import warnings
-warnings.simplefilter(action="ignore", category=FutureWarning)
 
+from imutils import paths
+
+warnings.simplefilter(action="ignore", category=FutureWarning)
 # import the necessary packages
 from extractor.extractor import Extractor
 from indexer.indexer import Indexer
 from utils.conf import Conf
 from utils import dataset
 from sklearn.preprocessing import LabelEncoder
+from guppy import hpy
 import argparse
 import cPickle
 import random
 import os
 
-from guppy import hpy
 hp = hpy()
 
 #This method list the dirs and files that are inside the path of the parameter
@@ -56,11 +57,15 @@ def extractFeatures(fE, batchSize, imagePaths, outputPath, datasetPath, le, verb
 		print("[INFO] initializing network...")
 	featuresPath = outputPath + datasetPath[datasetPath.rfind("/"):] + \
 				   "/models/features-" + fE[0] + ".hdf5"
-	labelEncoderPath = featuresPath[:featuresPath.rfind("/")] + "/le-" + fE[0] + ".cpickle"
+	labelEncoderPath = featuresPath[:featuresPath.rfind("/")] + "/le.cpickle"
+
 	directory = featuresPath[:featuresPath.rfind("/")]
 	if (not os.path.exists(directory)):
 		os.makedirs(directory)
-	if (not (os.path.isfile(featuresPath) and  os.path.isfile(labelEncoderPath))):
+	f = open(labelEncoderPath, "w")
+	f.write(cPickle.dumps(le))
+	f.close()
+	if (not (os.path.isfile(featuresPath))):
 		oe = Extractor(fE)
 		oi = Indexer(featuresPath, estNumImages=len(imagePaths))
 		if verbose:
@@ -81,11 +86,9 @@ def extractFeatures(fE, batchSize, imagePaths, outputPath, datasetPath, le, verb
 		# dump the label encoder to file
 		if verbose:
 			print("[INFO] dumping labels to file...")
-		f = open(labelEncoderPath, "w")
-		f.write(cPickle.dumps(le))
-		f.close()
+
 	else:
-		print("This features (" + fE[0] + ") are already generated")
+		print("These features (" + fE[0] + ") are already generated")
 
 """
 	This is the method that collects the features of all the feature extractors selected. The output are the features of each method that are stored in different files.
@@ -94,8 +97,8 @@ def extractFeatures(fE, batchSize, imagePaths, outputPath, datasetPath, le, verb
 def generateFeatures(outputPath, batchSize, datasetPath, featureExtractors, verbose=False):
 	# shuffle the image paths to ensure randomness -- this will help make our
 	# training and testing split code more efficient
-	imagePaths = cropDataset(datasetPath,50)
-	# imagePaths = list(paths.list_images(datasetPath))
+	# imagePaths = cropDataset(datasetPath,50)
+	imagePaths = list(paths.list_images(datasetPath))
 	random.seed(42)
 	random.shuffle(imagePaths)
 	# determine the set of possible class labels from the image dataset assuming
@@ -118,16 +121,13 @@ def __main__():
 	args = vars(ap.parse_args())
 	# load the configuration and label encoder
 	conf = Conf(args["conf"])
-
 	outputPath = conf["output_path"]
 	datasetPath = conf["dataset_path"]
 	featureExtractors = conf["feature_extractors"]
 	batchSize = conf["batch_size"]
-
 	# load the configuration and grab all image paths in the dataset
 	# generateFeatures(conf,imagePaths,"False")
 	generateFeatures(outputPath, batchSize, datasetPath, featureExtractors, False)
 
-
 if __name__ == "__main__":
-    __main__()
+	__main__()
