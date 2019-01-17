@@ -36,7 +36,7 @@ The following packages must be installed:
 
 ## Examples
 * [How to use the framework.](examples/HowToUse.ipynb)
-* [How to use the framework with majority voting (Ensemble technique).](examples/HowToUse (Ensemble).ipynb)
+* [How to use the framework with majority voting (Ensemble technique).](examples/HowToUse(Ensemble).ipynb)
 * [How to predict an image class.](examples/HowToPredictImageClass.ipynb)
 * [Example of use on the melanomas dataset.](examples/MelanomaNotebook.ipynb)
 
