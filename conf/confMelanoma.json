@@ -3,10 +3,24 @@
   # DATASET SAMPLING CONFIGURATION
   #######
   # For only considering images without control image: /home/joheras/Escritorio/Research/Fungi/FungiImagesOverfeat
-  "dataset_path": "/home/magarcd/Escritorio/FrImCla/melanoma",
+  "dataset_path": "/home/magarcd/Escritorio/dataset/melanomaD74747",
 
   #For the output and results of the program
-  "output_path": "../output/mel",
+  "output_path": "../output",
+
+  #######
+  # EXPERT USER FLAG
+  # This flag allows the user to select if he is an expert user or not. If you are not a expert usert, the framework
+  # automatically will select all the possible combinations to find the best one. If the user select false, he does not
+  # have to select feature_extractors and model_classifiers .
+  #######
+  "expert":true,
+
+  #######
+  # ENSEMBLE FLAG
+  # This flag allows the user the possibility of create a model with several different models and feature extractors.
+  #######
+  "ensemble":false,
 
   #######
   # Batch CONFIGURATION
@@ -17,16 +31,11 @@
   # MODEL CONFIGURATION
   # You can choose more than one model
   # Possible values for model are: ["vgg16", include_top], ["vgg19", include_top], ["resnet", include_top],
-  # ["inception", include_top], ["googlenet"], ["overfeat", [outputLayers]], ["xception", include_top] (only with tensorflow),
+  # ["inception", include_top], ["googlenet"], ["overfeat", "[outputLayers]"], ["xception", include_top] (only with tensorflow),
   # and ["densenet"]
   # Shallow features: ["lab888"], ["lab444","4,4,4"], ["hsv888"], ["hsv444","4,4,4"], ["haralick"], ["lbp"], ["hog"], ["haarhog"]
-
-
-  # Expert features: ["annulus",4,2], ["annulus",8,2], ["annulus",16,2], ["annulus",4,3], ["annulus",8,3], ["annulus",16,3], ...
-  #                  ["annulus",bags,p-segments]
   #######
-  "feature_extractors" : [ ["lab444",4,4,4], ["hsv888"], ["lab888"], ["hsv444",4,4,4],["vgg16", "False"], ["vgg19", "False"], ["resnet", "False"],
-  ["inception", "False"], ["googlenet"], ["overfeat", [-3]], ["xception", "False"],["densenet"], ["haralick"], ["hog"], ["haarhog"]],
+  "feature_extractors" : [["googlenet"], ["overfeat", "[-3]"],["inception", "False"], ["xception", "False"], ["densenet"], ["vgg16", "False"], ["vgg19", "False"],["resnet", "False"]],
 
   #######
   # CLASSIFIER CONFIGURATION
@@ -35,7 +44,7 @@
   # Possible values for classifier model are: RandomForest, SVM, KNN, LogisticRegression, MLP and
   # GradientBoost
   "training_size": 1,
-  "model_classifiers" : ["RandomForest", "SVM", "KNN", "LogisticRegression", "MLP", "GradientBoost"],
+  "model_classifiers" : ["GradientBoost","RandomForest", "SVM","KNN","LogisticRegression", "MLP"],
 
 
   #Con knn parece que haralick tampoco funciona. probar con el pequeño y faltan por probar los otros dos con el dataset real
@@ -45,5 +54,6 @@
   #######
   # You can choose one measure
   # Possible values for measures are: f1, accuracy, recall, precision, auroc
-  "measure" : "accuracy"
+  "measure" : "accuracy",
+  "n_steps" : 5
 }

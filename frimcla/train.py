@@ -13,6 +13,9 @@ import shutil
 import json
 import os
 import shallowmodels.classificationModelFactory as cmf
+import wget
+import zipfile
+
 
 
 """
@@ -69,7 +72,12 @@ def train(outputPath, datasetPath, trainingSize):
 	# classifier = data['classificationModel']
 
 	if (webapp.upper() in ("YES", "Y")):
-		shutil.copytree("./frimcla/webApp/", auxPath + "/webApp")
+		url = "https://drive.google.com/uc?id=1r_Dk4dhVq0ABVf5YeCTBjbLAdl61KkTn&export=download&authuser=0"
+		file = wget.download(url, auxPath + "/webApp.zip")
+		zip = zipfile.ZipFile(file)#auxPath + '/webApp.zip'
+		zip.extractall(auxPath)
+		os.remove(auxPath + '/webApp.zip')
+		# shutil.copytree("./frimcla/webApp/", auxPath + "/webApp")
 		shutil.copyfile(auxPath + "/ConfModel.json", auxPath + "/webApp/FlaskApp/ConfModel.json")
 		for ext in extractors:
 			for classi in ext["classificationModels"]:

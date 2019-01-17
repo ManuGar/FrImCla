@@ -97,7 +97,7 @@ def extractFeatures(fE, batchSize, imagePaths, outputPath, datasetPath, le, verb
 def generateFeatures(outputPath, batchSize, datasetPath, featureExtractors, verbose=False):
 	# shuffle the image paths to ensure randomness -- this will help make our
 	# training and testing split code more efficient
-	# imagePaths = cropDataset(datasetPath,50)
+	# imagePaths = cropDataset(datasetPath,100)
 	imagePaths = list(paths.list_images(datasetPath))
 	random.seed(42)
 	random.shuffle(imagePaths)

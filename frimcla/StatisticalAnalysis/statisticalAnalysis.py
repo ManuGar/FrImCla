@@ -81,7 +81,8 @@ def multipleAlgorithmsNonParametric(algorithms,accuracies, file, fileResults, mo
         fileResults.write(model + "_" + winner)
 
         for ele in algorithmsDataset[winner]:
-            fileResults.write("," + str(ele))
+            fileResults.write(",")
+            fileResults.write(str(ele))
         fileResults.write("\n")
         for (c, p) in zip(comparions, adjustedpvalues):
             cohend = abs(cohen_d(algorithmsDataset[winner], algorithmsDataset[c[c.rfind(" ") + 1:]]))
@@ -231,12 +232,14 @@ def multipleAlgorithmsParametric(algorithms,accuracies, file, fileResults,alpha=
                 if(np.mean(algorithmsDataset[c[0:c.find(" ")]])>np.mean(algorithmsDataset[c[c.rfind(" ") + 1:]])):
                     fileResults.write(c[0:c.find(" ")])
                     for ele in algorithmsDataset[c[0:c.find(" ")]]:
-                        fileResults.write(","+str(ele))
+                        fileResults.write(",")
+                        fileResults.write(str(ele))
                     fileResults.write("\n")
                 else:
                     fileResults.write(c[c.rfind(" ") + 1:])
                     for ele in algorithmsDataset[c[c.rfind(" ") + 1:]]:
-                        fileResults.write("," + str(ele))
+                        fileResults.write(",")
+                        fileResults.write(str(ele))
                     fileResults.write("\n")
 
             else:
@@ -262,12 +265,14 @@ def multipleAlgorithmsParametric(algorithms,accuracies, file, fileResults,alpha=
                 if (np.mean(algorithmsDataset[c[0:c.find(" ")]]) > np.mean(algorithmsDataset[c[c.rfind(" ") + 1:]])):
                     fileResults.write(c[0:c.find(" ")])
                     for ele in algorithmsDataset[c[0:c.find(" ")]]:
-                        fileResults.write("," + str(ele))
+                        fileResults.write(",")
+                        fileResults.write(str(ele))
                     fileResults.write("\n")
                 else:
                     fileResults.write(c[c.rfind(" ") + 1:])
                     for ele in algorithmsDataset[c[c.rfind(" ") + 1:]]:
-                        fileResults.write("," + str(ele))
+                        fileResults.write(",")
+                        fileResults.write(str(ele))
                     fileResults.write("\n")
 
     else:
@@ -290,14 +295,19 @@ def multipleAlgorithmsParametric(algorithms,accuracies, file, fileResults,alpha=
         featureExtractor = filePath[filePath.rfind("_") + 1:filePath.rfind(("."))]
         classifier = (algorithms[means.tolist().index(maximum)])
         #f = fileResults  # confPath["classifier_path"] + conf["modelClassifiers"]             +filePath[filePath.rfind("_"):filePath.rfind(("."))]
+        # print(filePath[:filePath.rfind("/")] + "/kfold-comparison_" + featureExtractor + ".csv")
         fStatistical = open(filePath[:filePath.rfind("/")] + "/kfold-comparison_" + featureExtractor + ".csv", "r")
         fStatistical.readline()
         for line in fStatistical:
             line = line.split(",")
+            # print(line[0][1:len(line[0])-1])
+            # print(""+classifier)
+            # print(line[0] == str(classifier))
             if (line[0] == classifier):
                 fileResults.write(line[0])
                 for it in line[1:]:
-                    fileResults.write("," + it)
+                    fileResults.write(",")
+                    fileResults.write(it)
                 fileResults.write("\n")
         fStatistical.close()
 
@@ -340,12 +350,14 @@ def twoAlgorithmsParametric(algorithms,accuracies,alpha,file, fileResults, verbo
         if(np.mean(accuracies[0])>np.mean(accuracies[1])):
             fileResults.write(algorithms[0])
             for ele in accuracies[0]:
-                fileResults.write("," + str(ele))
+                fileResults.write(",")
+                fileResults.write(str(ele))
             fileResults.write("\n")
         else:
             fileResults.write(algorithms[1])
             for ele in accuracies[1]:
-                fileResults.write("," + str(ele))
+                fileResults.write(",")
+                fileResults.write(str(ele))
             fileResults.write("\n")
     else:
         if verbose:
@@ -356,12 +368,14 @@ def twoAlgorithmsParametric(algorithms,accuracies,alpha,file, fileResults, verbo
         if (np.mean(accuracies[0]) > np.mean(accuracies[1])):
             fileResults.write(algorithms[0])
             for ele in accuracies[0]:
-                fileResults.write("," + str(ele))
+                fileResults.write(",")
+                fileResults.write(str(ele))
             fileResults.write("\n")
         else:
             fileResults.write(algorithms[1])
             for ele in accuracies[1]:
-                fileResults.write("," + str(ele))
+                fileResults.write(",")
+                fileResults.write(str(ele))
             fileResults.write("\n")
     if verbose:
         print("----------------------------------------------------------")
@@ -399,12 +413,14 @@ def twoAlgorithmsNonParametric(algorithms,accuracies,alpha,file, fileResults, ve
         if (np.mean(accuracies[0]) > np.mean(accuracies[1])):
             fileResults.write(algorithms[0])
             for ele in accuracies[0]:
-                fileResults.write("," + str(ele))
+                fileResults.write(",")
+                fileResults.write(str(ele))
             fileResults.write("\n")
         else:
             fileResults.write(algorithms[1])
             for ele in accuracies[1]:
-                fileResults.write("," + str(ele))
+                fileResults.write(",")
+                fileResults.write(str(ele))
             fileResults.write("\n")
 
     else:
@@ -418,12 +434,14 @@ def twoAlgorithmsNonParametric(algorithms,accuracies,alpha,file, fileResults, ve
         if(np.mean(accuracies[0])>np.mean(accuracies[1])):
             fileResults.write( algorithms[0])
             for ele in accuracies[0]:
-                fileResults.write("," + str(ele))
+                fileResults.write(",")
+                fileResults.write(str(ele))
             fileResults.write("\n")
         else:
             fileResults.write(algorithms[1])
             for ele in accuracies[1]:
-                fileResults.write("," + str(ele))
+                fileResults.write(",")
+                fileResults.write(str(ele))
             fileResults.write("\n")
 
     cohend = abs(cohen_d(accuracies[0], accuracies[1]))
@@ -524,7 +542,8 @@ def statisticalAnalysis(dataset, file, fileResults ,alpha=0.05, verbose=False):
         file.write("It is neccessary to compare at least two algorithms\n")
         fileResults.write(algorithms[0])
         for ele in accuracies[0]:
-            fileResults.write("," + str(ele))
+            fileResults.write(",") #str(ele)
+            fileResults.write(str(ele))
         fileResults.write("\n")
         return
 

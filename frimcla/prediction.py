@@ -28,9 +28,9 @@ def prediction(featExt, classi, imagePath, outputPath, datasetPath):
     auxPath = outputPath + datasetName
     factory = classificationModelFactory()
 
-    cPickleFile = auxPath + "/classifier_" + featExt[0] + "_" + classi + ".cpickle"
+    cPickleFile = auxPath + "/classifiers/classifier_" + featExt[0] + "_" + classi + ".cpickle"
     if os.path.isfile(cPickleFile):
-        labelEncoderPath = auxPath + "/models/le-" + featExt[0] + ".cpickle"
+        labelEncoderPath = auxPath + "/models/le.cpickle"
         le = cPickle.loads(open(labelEncoderPath).read())
         model = cPickle.loads(open(cPickleFile).read())
 
@@ -46,7 +46,7 @@ def prediction(featExt, classi, imagePath, outputPath, datasetPath):
                     listFeatExt.append(feat)
             listFeatExt = list(set(listFeatExt))
             if (featExt[0] in listFeatExt):
-                labelEncoderPath = auxPath + "/models/le-" + featExt[0] + ".cpickle"
+                labelEncoderPath = auxPath + "/models/le.cpickle"
                 le = cPickle.loads(open(labelEncoderPath).read())
                 featuresPath = auxPath + "/models/features-" + featExt[0] + ".hdf5"
                 db = h5py.File(featuresPath)
@@ -70,7 +70,7 @@ def prediction(featExt, classi, imagePath, outputPath, datasetPath):
                 le = LabelEncoder()
                 le.fit([p.split("/")[-2] for p in imagePaths])
                 extractFeatures(featExt, 32, imagePaths, outputPath, datasetPath, le, False)
-                labelEncoderPath = auxPath + "/models/le-" + featExt[0] + ".cpickle"
+                labelEncoderPath = auxPath + "/models/le.cpickle"
                 le = cPickle.loads(open(labelEncoderPath).read())
                 featuresPath = auxPath + "/models/features-" + featExt[0] + ".hdf5"
                 db = h5py.File(featuresPath)
@@ -86,7 +86,7 @@ def prediction(featExt, classi, imagePath, outputPath, datasetPath):
                 f.close()
                 db.close()
         else:
-            labelEncoderPath = auxPath + "/models/le-" + featExt[0] + ".cpickle"
+            labelEncoderPath = auxPath + "/models/le.cpickle"
             le = cPickle.loads(open(labelEncoderPath).read())
             model = cPickle.loads(open(cPickleFile).read())
 
@@ -134,7 +134,6 @@ def predictionEnsemble(featureExtractors, classifiers, imagePaths, outputPath, d
         features = oe.describe(images)
         for classi in classifiers:
             cPickleFile = auxPath + "/classifiers/classifier_" + fe[0] + "_" + classi + ".cpickle"
-            print(cPickleFile)
             if os.path.isfile(cPickleFile):
                 model = cPickle.loads(open(cPickleFile).read())
                 prediction = model.predict(features)
@@ -155,7 +154,7 @@ def predictionEnsemble(featureExtractors, classifiers, imagePaths, outputPath, d
     # prediction = le.inverse_transform(mode[0])
     # filePrediction.write(str(labels) + ", " + str(prediction) + "\r\n")
     # le = cPickle.loads(open(labelEncoderPath).read())
-    # prediction = le.inverse_transform(prediction)
+    prediction = le.inverse_transform(prediction)
     for (image, mode) in zip(imagePaths,modes):
         print("[INFO] class predicted for the image {}: {}".format(image, mode[0]))
         filePrediction.write("\n" + str(image) + ", " + str(mode[0]))

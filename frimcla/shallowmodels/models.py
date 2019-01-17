@@ -20,7 +20,8 @@ from keras import optimizers
 
 class MyModel(Model):
     def __init__(self):
-        my_model = load_model("frimcla/shallowmodels/modeloRaices.h5")
+        # /home/magarcd/Escritorio/frimcla/frimcla/shallowmodels
+        my_model = load_model("/home/magarcd/Escritorio/frimcla/frimcla/shallowmodels/modeloRaices.h5")
         pruebaModel = Model(my_model.input, my_model.layers[-3].output)
         self.model = pruebaModel
 

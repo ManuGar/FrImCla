@@ -22,20 +22,25 @@ from train import train
 
 """
 def fullAnalysis(config):
+    featureExtractors = [["mymodel"], ["vgg16", "False"], ["vgg19", "False"],["resnet", "False"], ["inception", "False"],["googlenet"], ["overfeat", "[-3]"], ["xception", "False"],
+                         ["densenet"], ["lab888"], ["lab444","4,4,4"], ["hsv888"], ["hsv444","4,4,4"], ["haralick"], ["hog"], ["haarhog"]]
+    modelClassifiers = ["GradientBoost","RandomForest", "SVM","KNN","LogisticRegression", "MLP"]
     conf = Conf(config)
     verbose = False
     start1 = time.time()
-
-    generateFeatures(conf["output_path"], conf["batch_size"], conf["dataset_path"], conf["feature_extractors"], verbose)
+    if (conf["expert"]):
+        featureExtractors = conf["feature_extractors"]
+        modelClassifiers = conf["model_classifiers"]
+    generateFeatures(conf["output_path"], conf["batch_size"], conf["dataset_path"], featureExtractors, verbose)
     end1 = time.time()
     start2 = time.time()
 
     if(conf["ensemble"]):
-        majorityVoting(conf["output_path"], conf["dataset_path"], conf["feature_extractors"],
-                       conf["model_classifiers"], conf["measure"], verbose)
+        majorityVoting(conf["output_path"], conf["dataset_path"], featureExtractors,
+                       modelClassifiers, conf["measure"], verbose)
     else:
-        statisticalComparison(conf["output_path"], conf["dataset_path"], conf["feature_extractors"],
-                              conf["model_classifiers"], conf["measure"], verbose)
+        statisticalComparison(conf["output_path"], conf["dataset_path"], featureExtractors,
+                              modelClassifiers, conf["measure"], conf["n_steps"], verbose)
 
     end2 = time.time()
     start3 = time.time()
@@ -48,7 +53,7 @@ def fullAnalysis(config):
     f.write("It has taken " + str(end2 - start2) + " seg to generate the model comparison and the statistical analysis\n")
     f.write("It has taken " + str(end3 - start3) + " seg to train the best model\n")
     f.write("It has taken " + str(end3 - start1) + " seg to run\n")
-    print("It has taken " + str(end1 - start1) + " seg to generate the features")
+    print("\nIt has taken " + str(end1 - start1) + " seg to generate the features")
     print("It has taken " + str(end2 - start2) + " seg to generate the model comparison and the statistical analysis")
     print("It has taken " + str(end3 - start3) + " seg to train the best model")
     print("It has taken " + str(end3 - start1) + " seg to run")

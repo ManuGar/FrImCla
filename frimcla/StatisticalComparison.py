@@ -3,13 +3,8 @@
 # the other files.
 #=======================================================================================================================
 
-import os
-import json
 import argparse
-import cPickle
-import numpy as np
 import pandas as pd
-
 import os
 import json
 import numpy as np
@@ -19,7 +14,7 @@ from sklearn.model_selection import KFold
 from sklearn.metrics import accuracy_score
 from scipy import stats
 from utils.conf import Conf
-from Comparing import compare_methods_h5py, prepareModel, measure_score
+from Comparing import compare_methods_h5py, prepareModel
 from StatisticalAnalysis.statisticalAnalysis import statisticalAnalysis
 from shallowmodels.classificationModelFactory import classificationModelFactory
 
@@ -156,10 +151,9 @@ def majorityVoting(outputPath, datasetPath, featureExtractors, modelClassifiers,
     wants to use and the verbose flag. The output is a list of files with the results of the statistical analysis and
     the combination of feature extractor and classifier model with the highest % of the measure selected by the user.
 """
-def statisticalComparison(outputPath, datasetPath, featureExtractors, modelClassifiers, measure, verbose= False):
+def statisticalComparison(outputPath, datasetPath, featureExtractors, modelClassifiers, measure, nSteps=10, verbose= False):
     pathAux = outputPath + datasetPath[datasetPath.rfind("/"):]
     filePathAux = pathAux + "/results/kfold-comparison_bestClassifiers.csv"
-
     for model in featureExtractors:
         if verbose:
             print(model)
@@ -186,34 +180,46 @@ def statisticalComparison(outputPath, datasetPath, featureExtractors, modelClass
                 listParams.append(params)
                 listNiter.append(niter)
                 listNames.append(classificationModel)
-        if os.path.exists(pathAux + "/results"):
-            if not os.path.isfile(filePathAux):
-                fileResults = open(filePathAux, "a")
-                for j in range(listNiter[0]):
-                    fileResults.write("," + str(j))
-                fileResults.write("\n")
-            else:
-                fileResults = open(filePathAux, "a")
-        else:
-            os.makedirs(filePathAux[:filePathAux.rfind("/")])
+
+        if os.path.isfile(filePathAux):
             fileResults = open(filePathAux, "a")
-            for j in range(listNiter[0]):
+        else:
+            if not(os.path.exists(pathAux + "/results")):
+                os.makedirs(filePathAux[:filePathAux.rfind("/")])
+            fileResults = open(filePathAux, "a")
+            for j in range(int(nSteps)):
                 fileResults.write(","+str(j))
             fileResults.write("\n")
+
+        # if os.path.exists(pathAux + "/results"):
+        #     if not os.path.isfile(filePathAux):
+        #         fileResults = open(filePathAux, "a")
+        #         for j in range(listNiter[0]):
+        #             fileResults.write("," + str(j))
+        #         fileResults.write("\n")
+        #     else:
+        #         fileResults = open(filePathAux, "a")
+        # else:
+        #     os.makedirs(filePathAux[:filePathAux.rfind("/")])
+        #     fileResults = open(filePathAux, "a")
+        #     for j in range(listNiter[0]):
+        #         fileResults.write(","+str(j))
+        #     fileResults.write("\n")
         if verbose:
             print("-------------------------------------------------")
             print("Statistical Analysis")
             print("-------------------------------------------------")
         #Niteraciones de las clases [10, 10, 10, 5, 10]
         resultsAccuracy = compare_methods_h5py(model, featuresPath, labelEncoderPath, listAlgorithms, listParams, listNames,
-                                               listNiter,measure , verbose, normalization=False)  # ,10
+                                               listNiter,measure, nSteps, verbose, normalization=False)  # ,10
+
         dfAccuracy = pd.DataFrame.from_dict(resultsAccuracy, orient='index')
         KFoldComparisionPathAccuracy = pathAux + "/results/kfold-comparison_"+model[0] + ".csv"
         #KFoldComparisionPathAccuracy=conf["kfold_comparison"][0:conf["kfold_comparison"].rfind(".")] + "-" + model[0] + ".csv"
         if (not os.path.exists(KFoldComparisionPathAccuracy[:KFoldComparisionPathAccuracy.rfind("/")])):
             os.mkdir(KFoldComparisionPathAccuracy[:KFoldComparisionPathAccuracy.rfind("/")])
         dfAccuracy.to_csv(KFoldComparisionPathAccuracy)
-        statisticalAnalysis(KFoldComparisionPathAccuracy,filePath, fileResults,verbose)
+        statisticalAnalysis(KFoldComparisionPathAccuracy,filePath, fileResults, verbose)
     fileResults.close()
     filePath2 = pathAux + "/results/StatisticalComparison_bestClassifiers.txt"
     fileResults2 = open(pathAux + "/results/bestExtractorClassifier.csv", "a")

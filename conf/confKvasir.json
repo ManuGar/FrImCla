@@ -6,10 +6,16 @@
   "dataset_path": "/home/magarcd/Escritorio/dataset/kvasir-dataset",
 
   #For the output and results of the program
-  "output_path": "../output/dddddddd",
+  "output_path": "../output/dddgdfgsdgdfgfdgdfFFFFFFFg",
 
 
-
+  #######
+  # EXPERT USER FLAG
+  # This flag allows the user to select if he is an expert user or not. If you are not a expert usert, the framework
+  # automatically will select all the possible combinations to find the best one. If the user select false, he does not
+  # have to select feature_extractors and model_classifiers .
+  #######
+  "expert":false,
   #######
   # ENSEMBLE FLAG
   # This flag allows the user the possibility of create a model with several different models and feature extractors.
@@ -51,5 +57,6 @@
   #######
   # You can choose one measure
   # Possible values for measures are: f1, accuracy, recall, precision, auroc
-  "measure" : "accuracy"
+  "measure" : "accuracy",
+  "n_steps" : 10
 }

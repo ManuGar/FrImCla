@@ -154,7 +154,7 @@ def measurePrediction(clf, params, name, n_iter, trainData, testData, trainLabel
     classification models with their results using the measure selected by the user. 
 """
 def compare_methods_h5py(model, featuresPath,labelEncoderPath,listAlgorithms,listParameters,listAlgorithmNames,
-                         listNiters, measure, verbose=False, normalization=False):
+                         listNiters, measure, nSteps, verbose=False, normalization=False):
     # Loading dataset
     db = h5py.File(featuresPath)
     labels = db["image_ids"]
@@ -164,7 +164,7 @@ def compare_methods_h5py(model, featuresPath,labelEncoderPath,listAlgorithms,lis
     fileAux.close()
     labels = np.asarray([le.transform([l.split(":")[0]])[0] for l in labels])
     del le
-    kf = KFold(n_splits=10,shuffle=False,random_state=42) #n_splits=10
+    kf = KFold(n_splits=int(nSteps), shuffle=False,random_state=42) #n_splits=10
     resultsAccuracy = {model[0]+ "_" +name:[] for name in listAlgorithmNames}
 
     for i,(train_index,test_index) in enumerate(kf.split(data)):
@@ -181,7 +181,6 @@ def compare_methods_h5py(model, featuresPath,labelEncoderPath,listAlgorithms,lis
             testData = np.asarray(testData).astype("float32")
             testData -= np.mean(testData, axis=0)
             testData /= np.std(testData, axis=0)
-
         output = Parallel(n_jobs=-1)(delayed(measurePrediction)(clf, params, name, n_iter, trainData, testData, trainLabels, testLabels, measure,verbose)
                            for clf, params, name, n_iter in
                            zip(listAlgorithms, listParameters, listAlgorithmNames, listNiters))
