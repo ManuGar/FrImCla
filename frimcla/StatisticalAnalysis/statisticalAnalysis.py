@@ -29,8 +29,11 @@ def SSTotal(accuracies):
 def eta_sqrd(accuracies):
     return SSbetween(accuracies)/SSTotal(accuracies)
 
-def multipleAlgorithmsNonParametric(algorithms,accuracies, file, fileResults, model, alpha=0.05, verbose=False):
+def multipleAlgorithmsNonParametric(algorithms,accuracies, file, fileResults, alpha=0.05, verbose=False):
     algorithmsDataset = {x: y for (x, y) in zip(algorithms, accuracies)}
+    filePath = file.name
+    featureExtractor = filePath[filePath.rfind("_") + 1:filePath.rfind(("."))]
+
     if len(algorithms) < 5:
         if verbose:
             print("----------------------------------------------------------")
@@ -53,7 +56,6 @@ def multipleAlgorithmsNonParametric(algorithms,accuracies, file, fileResults, mo
         print("F-value: %f, p-value: %s" % (Fvalue, pvalue))
     file.write("F-value: %f, p-value: %s \n" % (Fvalue, pvalue))
 
-    filePath = file.name
     if (pvalue < alpha):
         r = {x: y for (x, y) in zip(algorithms, rankings)}
         sorted_ranking = sorted(r.items(), key=operator.itemgetter(1))
@@ -78,7 +80,7 @@ def multipleAlgorithmsNonParametric(algorithms,accuracies, file, fileResults, mo
         file.write("Applying Holm p-value adjustment procedure and analysing effect size\n")
         file.write("----------------------------------------------------------\n")
         file.write(tabulate(res, headers=['Comparison', 'Zvalue', 'p-value', 'adjusted p-value'])+ "\n")
-        fileResults.write(model + "_" + winner)
+        fileResults.write(winner)
 
         for ele in algorithmsDataset[winner]:
             fileResults.write(",")
@@ -132,18 +134,19 @@ def multipleAlgorithmsNonParametric(algorithms,accuracies, file, fileResults, mo
         file.write("----------------------------------------------------------\n")
         file.write("We take the model with the best mean (%s, mean: %f) and compare it with the other models: \n" % (
             algorithms[means.tolist().index(maximum)], maximum))
-        classifier = (algorithms[means.tolist().index(maximum)])
          #f = fileResults   confPath["classifier_path"] + conf["modelClassifiers"]             +filePath[filePath.rfind("_"):filePath.rfind(("."))]
 
-        fStatistical = open(filePath[:filePath.rfind("/")] + "/kfold-comparison_"+ model + ".csv", "r")
+
+        classifier = (algorithms[means.tolist().index(maximum)])
+        fStatistical = open(filePath[:filePath.rfind("/")] + "/kfold-comparison_" + featureExtractor + ".csv", "r")
         fStatistical.readline()
+
         for line in fStatistical:
             line = line.split(",")
             if (line[0] == classifier):
-                fileResults.write(model + "_" + line[0])
+                fileResults.write(line[0])
                 for it in line[1:]:
                     fileResults.write("," + it)
-                fileResults.write("\n")
         fStatistical.close()
 
         for i in range(0,len(algorithms)):
@@ -170,7 +173,7 @@ def multipleAlgorithmsNonParametric(algorithms,accuracies, file, fileResults, mo
     file.write("Eta squared: %f (%s) \n" % (eta,effectsize))
 
 
-def multipleAlgorithmsParametric(algorithms,accuracies, file, fileResults,alpha=0.05, verbose=False):
+def multipleAlgorithmsParametric(algorithms,accuracies, file, fileResults, alpha=0.05, verbose=False):
     algorithmsDataset = {x: y for (x, y) in zip(algorithms, accuracies)}
     (Fvalue, pvalue, pivots) = anova_test(*accuracies)
     if verbose:
@@ -308,7 +311,6 @@ def multipleAlgorithmsParametric(algorithms,accuracies, file, fileResults,alpha=
                 for it in line[1:]:
                     fileResults.write(",")
                     fileResults.write(it)
-                fileResults.write("\n")
         fStatistical.close()
 
         for i in range(0,len(algorithms)):
@@ -522,105 +524,103 @@ def checkParametricConditions(accuracies,alpha, file, verbose=False):
         if verbose: print("The null hypothesis (heteroscedasticity) is accepted")
         file.write("The null hypothesis (heteroscedasticity) is accepted\n")
         heteroscedasticity = True
-
     parametric = independence and normality and heteroscedasticity
     return parametric
 
 # This is the main method employed to compare a dataset where the cross validation
 # process has been already carried out.
-def statisticalAnalysis(dataset, file, fileResults ,alpha=0.05, verbose=False):
+def statisticalAnalysis(dataset, filePath, fileResults ,alpha=0.05, verbose=False):
     #path=dataset[:index]
-    file = open(file,"w")  #path+"/StatisticalComparison"+model[model.rfind("_"):]+".txt"
-    df = pd.read_csv(dataset)
-    algorithms = df.ix[0:,0].values
-    accuracies = df.ix[0:, 1:].values
+    with open(filePath,"w") as file:  #path+"/StatisticalComparison"+model[model.rfind("_"):]+".txt"
+        df = pd.read_csv(dataset)
+        algorithms = df.ix[0:,0].values
+        accuracies = df.ix[0:, 1:].values
 
-    del df
-    if (len(algorithms)<2):
-        if verbose:
-            print("It is neccessary to compare at least two algorithms")
-        file.write("It is neccessary to compare at least two algorithms\n")
-        fileResults.write(algorithms[0])
-        for ele in accuracies[0]:
-            fileResults.write(",") #str(ele)
-            fileResults.write(str(ele))
-        fileResults.write("\n")
-        return
-
-    if verbose:
-        print(dataset)
-        print(algorithms)
-        print("==========================================================")
-        print("Report")
-        print("==========================================================")
-
-    file.write(dataset)
-    file.write(algorithms)
-    file.write("==========================================================\n")
-    file.write("Report\n")
-    file.write("==========================================================\n")
-    meanStdReportAndPlot(algorithms,accuracies,file, verbose)
-
-    if verbose:
-        print("**********************************************************")
-        print("Statistical tests")
-        print("**********************************************************")
-        print("----------------------------------------------------------")
-        print("Checking parametric conditions ")
-        print("----------------------------------------------------------")
-
-    file.write("**********************************************************\n")
-    file.write("Statistical test\n")
-    file.write("**********************************************************\n")
-    file.write("----------------------------------------------------------\n")
-    file.write("Cheking parametric conditions\n")
-    file.write("----------------------------------------------------------\n")
-    parametric = checkParametricConditions(accuracies,alpha,file)
-
-    if parametric:
-        if verbose: print("Conditions for a parametric test are fulfilled")
-        file.write("Conditions for a parametric test are fulfilled\n")
-        if(len(algorithms)==2):
+        if (len(algorithms)<2):
             if verbose:
-                print("----------------------------------------------------------")
-                print("Working with 2 algorithms")
-                print("----------------------------------------------------------")
-            file.write("----------------------------------------------------------\n")
-            file.write("Working with 2 algorithms\n")
-            file.write("----------------------------------------------------------\n")
-            twoAlgorithmsParametric(algorithms,accuracies,alpha,file, fileResults, verbose)
+                print("It is neccessary to compare at least two algorithms")
+            file.write("It is neccessary to compare at least two algorithms\n")
+            fileResults.write(algorithms[0])
+            for ele in accuracies[0]:
+                fileResults.write(",") #str(ele)
+                fileResults.write(str(ele))
+            fileResults.write("\n")
+            return
+
+        if verbose:
+            print(dataset)
+            print(algorithms)
+            print("==========================================================")
+            print("Report")
+            print("==========================================================")
+
+        file.write(dataset)
+        #file.write(algorithms)
+        file.write("\n==========================================================\n")
+        file.write("Report\n")
+        file.write("==========================================================\n")
+        meanStdReportAndPlot(algorithms,accuracies,file, verbose)
+
+        if verbose:
+            print("**********************************************************")
+            print("Statistical tests")
+            print("**********************************************************")
+            print("----------------------------------------------------------")
+            print("Checking parametric conditions ")
+            print("----------------------------------------------------------")
+
+        file.write("**********************************************************\n")
+        file.write("Statistical test\n")
+        file.write("**********************************************************\n")
+        file.write("----------------------------------------------------------\n")
+        file.write("Cheking parametric conditions\n")
+        file.write("----------------------------------------------------------\n")
+        parametric = checkParametricConditions(accuracies,alpha,file)
+
+        if parametric:
+            if verbose: print("Conditions for a parametric test are fulfilled")
+            file.write("Conditions for a parametric test are fulfilled\n")
+            if(len(algorithms)==2):
+                if verbose:
+                    print("----------------------------------------------------------")
+                    print("Working with 2 algorithms")
+                    print("----------------------------------------------------------")
+                file.write("----------------------------------------------------------\n")
+                file.write("Working with 2 algorithms\n")
+                file.write("----------------------------------------------------------\n")
+                twoAlgorithmsParametric(algorithms,accuracies,alpha,file, fileResults, verbose)
+            else:
+                if verbose:
+                    print("----------------------------------------------------------")
+                    print("Working with more than 2 algorithms")
+                    print("----------------------------------------------------------")
+                file.write("----------------------------------------------------------\n")
+                file.write("Working with more than 2 algorithms\n")
+                file.write("----------------------------------------------------------\n")
+                multipleAlgorithmsParametric(algorithms,accuracies,file, fileResults, alpha, verbose)
         else:
             if verbose:
-                print("----------------------------------------------------------")
-                print("Working with more than 2 algorithms")
-                print("----------------------------------------------------------")
-            file.write("----------------------------------------------------------\n")
-            file.write("Working with more than 2 algorithms\n")
-            file.write("----------------------------------------------------------\n")
-            multipleAlgorithmsParametric(algorithms,accuracies,file, fileResults, alpha, verbose)
-    else:
-        if verbose:
-            print("Conditions for a parametric test are not fulfilled, applying a non-parametric test")
-        file.write("Conditions for a parametric test are not fulfilled, applying a non-parametric test\n")
-        if (len(algorithms) == 2):
-            if verbose:
-                print("----------------------------------------------------------")
-                print("Working with 2 algorithms")
-                print("----------------------------------------------------------")
-            file.write("----------------------------------------------------------\n")
-            file.write("Working with 2 algorithms\n")
-            file.write("----------------------------------------------------------\n")
-            twoAlgorithmsNonParametric(algorithms, accuracies,alpha,file, fileResults, verbose)
-        else:
-            if verbose:
-                print("----------------------------------------------------------")
-                print("Working with more than 2 algorithms")
-                print("----------------------------------------------------------")
-            file.write("----------------------------------------------------------\n")
-            file.write("Working with more than 2 algorithms\n")
-            file.write("----------------------------------------------------------\n")
-            multipleAlgorithmsNonParametric(algorithms,accuracies,file, fileResults, alpha, verbose)
-    file.close()
+                print("Conditions for a parametric test are not fulfilled, applying a non-parametric test")
+            file.write("Conditions for a parametric test are not fulfilled, applying a non-parametric test\n")
+            if (len(algorithms) == 2):
+                if verbose:
+                    print("----------------------------------------------------------")
+                    print("Working with 2 algorithms")
+                    print("----------------------------------------------------------")
+                file.write("----------------------------------------------------------\n")
+                file.write("Working with 2 algorithms\n")
+                file.write("----------------------------------------------------------\n")
+                twoAlgorithmsNonParametric(algorithms, accuracies,alpha,file, fileResults, verbose)
+            else:
+                if verbose:
+                    print("----------------------------------------------------------")
+                    print("Working with more than 2 algorithms")
+                    print("----------------------------------------------------------")
+                file.write("----------------------------------------------------------\n")
+                file.write("Working with more than 2 algorithms\n")
+                file.write("----------------------------------------------------------\n")
+                multipleAlgorithmsNonParametric(algorithms,accuracies,file, fileResults, alpha, verbose)
+        file.close()
 
 def compare_method(tuple):
     iteration, train_index,test_index,data,labels, clf, params, name,metric = tuple
