@@ -3,16 +3,18 @@
 
 # import the necessary packages
 from __future__ import print_function
+from __future__ import absolute_import
 from utils.conf import Conf
 from sklearn.model_selection import RandomizedSearchCV
-
 import argparse
-import cPickle
+import _pickle as cPickle
+# import cPickle
 import h5py
 import shutil
 import json
 import os
-import shallowmodels.classificationModelFactory as cmf
+from frimcla.shallowmodels import classificationModelFactory as cmf
+# from . import shallowmodels.classificationModelFactory as cmf
 import wget
 import zipfile
 
@@ -34,7 +36,7 @@ def train(outputPath, datasetPath, trainingSize):
 	# classifiers = data['classificationModels']
 	for ex in extractors:
 		labelEncoderPath = auxPath + "/models/le.cpickle"
-		le = cPickle.loads(open(labelEncoderPath).read())
+		le = cPickle.loads(open(labelEncoderPath, "rb").read())
 		# open the database and split the data into their respective training and
 		# testing splits
 		print("[INFO] gathering train/test splits...")
@@ -59,13 +61,13 @@ def train(outputPath, datasetPath, trainingSize):
 			print("[INFO] dumping classifier...")
 			if (not os.path.exists(auxPath + "/classifiers")):
 				os.makedirs(auxPath + "/classifiers")
-			f = open(auxPath + "/classifiers/classifier_" + ex["model"] + "_" + clas + ".cpickle", "w")
+			f = open(auxPath + "/classifiers/classifier_" + ex["model"] + "_" + clas + ".cpickle", "wb")
 			f.write(cPickle.dumps(model))
 			f.close()
 			# close the database
 			db.close()
 	print("Do you want to generate a web app to classify the images with the best combination? y/n")
-	webapp = raw_input()
+	webapp = input()
 	# with open(auxPath + "/ConfModel.json") as json_file:
 	# 	data = json.load(json_file)
 	# extractor = data['featureExtractor']

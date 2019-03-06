@@ -1,7 +1,8 @@
 # USAGE
 # python fullAnalysis.py --conf conf/flowers17.json
 # import the necessary packages
-from __future__ import print_function
+
+
 import warnings
 warnings.simplefilter(action="ignore", category=FutureWarning)
 import time

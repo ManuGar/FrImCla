@@ -1,5 +1,5 @@
 # import the necessary packages
-from baseindexer import BaseIndexer
+from .baseindexer import BaseIndexer
 # import numpy as np
 import h5py
 
@@ -50,7 +50,7 @@ class Indexer(BaseIndexer):
 		# initialize the datasets
 		self._debug("creating datasets...")
 		self.imageIDDB = self.db.create_dataset("image_ids", (self.estNumImages,),
-			maxshape=(None,), dtype=h5py.special_dtype(vlen=unicode))
+			maxshape=(None,), dtype=h5py.special_dtype(vlen= str))#unicode
 		self.featuresDB = self.db.create_dataset("features",
 			(self.estNumImages, fvectorSize), maxshape=(None, fvectorSize),
 			dtype="float")

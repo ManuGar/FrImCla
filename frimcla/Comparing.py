@@ -1,3 +1,4 @@
+from __future__ import print_function
 import pandas as pd
 import numpy as np
 from sklearn.cross_validation import train_test_split
@@ -10,7 +11,8 @@ from sklearn.metrics import f1_score
 
 from sklearn.model_selection import KFold
 import h5py
-import cPickle
+import _pickle as cPickle
+# import cPickle
 from sklearn.externals.joblib import Parallel, delayed
 
 def apply_algorithm(tuple):
@@ -55,7 +57,7 @@ def compare_methods(dataset,listAlgorithms,listParameters,listAlgorithmNames,lis
 
     for i,(train_index,test_index) in enumerate(kf.split(data)):
         if verbose:
-            print "Iteration " + str(i+1) + "/10"
+            print("Iteration " + str(i+1) + "/10")
 
         trainData , testData = data[train_index],data[test_index]
         trainLabels, testLabels = labels[train_index], labels[test_index]
@@ -159,7 +161,7 @@ def compare_methods_h5py(model, featuresPath,labelEncoderPath,listAlgorithms,lis
     db = h5py.File(featuresPath)
     labels = db["image_ids"]
     data = db["features"][()]
-    fileAux = open(labelEncoderPath)
+    fileAux = open(labelEncoderPath, "rb")
     le = cPickle.loads(fileAux.read())
     fileAux.close()
     labels = np.asarray([le.transform([l.split(":")[0]])[0] for l in labels])
@@ -169,7 +171,7 @@ def compare_methods_h5py(model, featuresPath,labelEncoderPath,listAlgorithms,lis
 
     for i,(train_index,test_index) in enumerate(kf.split(data)):
         if verbose:
-            print "Iteration " + str(i)
+            print("Iteration " + str(i))
         trainData , testData = data[train_index],data[test_index]
         trainLabels, testLabels = labels[train_index], labels[test_index]
 

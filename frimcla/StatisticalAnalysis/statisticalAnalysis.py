@@ -6,8 +6,8 @@ import operator
 from scipy.stats import shapiro,levene,ttest_ind,wilcoxon
 from multiprocessing.pool import ThreadPool
 
-from stac.nonparametric_tests import quade_test,holm_test,friedman_test
-from stac.parametric_tests import anova_test,bonferroni_test
+from .stac.nonparametric_tests import quade_test,holm_test,friedman_test
+from .stac.parametric_tests import anova_test,bonferroni_test
 from tabulate import tabulate
 from sklearn.model_selection import RandomizedSearchCV
 from sklearn.metrics import accuracy_score,precision_score,roc_auc_score,recall_score,f1_score
@@ -49,7 +49,7 @@ def multipleAlgorithmsNonParametric(algorithms,accuracies, file, fileResults, al
             print("Applying Friedman test")
             print("----------------------------------------------------------")
         file.write("----------------------------------------------------------\n")
-        file.write("Applying Friedman test")
+        file.write("Applying Friedman test\n")
         file.write("----------------------------------------------------------\n")
         (Fvalue, pvalue, rankings, pivots) = friedman_test(*accuracies)
     if verbose:
@@ -66,7 +66,7 @@ def multipleAlgorithmsNonParametric(algorithms,accuracies, file, fileResults, al
         res = zip(comparions, zvalues, pvalues, adjustedpvalues)
         if verbose:
             print("Null hypothesis is rejected; hence, models have different performance")
-            print tabulate(sorted_ranking, headers=['Technique', 'Ranking'])
+            print (tabulate(sorted_ranking, headers=['Technique', 'Ranking']))
             print("Winner model: %s" % winner)
             print("----------------------------------------------------------")
             print("Applying Holm p-value adjustment procedure and analysing effect size")

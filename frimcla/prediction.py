@@ -1,12 +1,13 @@
 # import the necessary packages
 #Example python prediction.py -c ../conf/confMelanomaDataAugmentation.conf -i ../pos.jpg -f overfeat -p [-3] -m svm
 from __future__ import print_function
+from __future__ import absolute_import
 
-from extractor.extractor import Extractor
-from utils.conf import Conf
-from utils import dataset
-from index_features import extractFeatures
-from shallowmodels.classificationModelFactory import classificationModelFactory
+from .extractor.extractor import Extractor
+from .utils.conf import Conf
+from .utils import dataset
+from .index_features import extractFeatures
+from .shallowmodels.classificationModelFactory import classificationModelFactory
 from sklearn.model_selection import RandomizedSearchCV
 from sklearn.preprocessing import LabelEncoder
 from imutils import paths

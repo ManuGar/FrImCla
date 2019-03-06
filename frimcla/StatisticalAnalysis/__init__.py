@@ -4,6 +4,6 @@
 
 """
 
-from statisticalAnalysis import *
+from .statisticalAnalysis import *
 
 __all__ = ['compare_methods']

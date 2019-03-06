@@ -1,4 +1,5 @@
-import fullAnalysis
+from __future__ import absolute_import
+from . import fullAnalysis
 import argparse
 import sys
 

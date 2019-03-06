@@ -2,6 +2,7 @@
 # python index_features.py --conf conf/flowers17.json
 # suppress any FutureWarning from Theano
 from __future__ import print_function
+from __future__ import absolute_import
 # from mpi4py import MPI
 import warnings
 
@@ -14,13 +15,14 @@ from indexer.indexer import Indexer
 from utils.conf import Conf
 from utils import dataset
 from sklearn.preprocessing import LabelEncoder
-from guppy import hpy
+# from guppy import hpy
 import argparse
-import cPickle
+import _pickle as cPickle
+# import cPickle
 import random
 import os
 
-hp = hpy()
+# hp = hpy()
 
 #This method list the dirs and files that are inside the path of the parameter
 def ls(ruta = '.'):
@@ -62,7 +64,7 @@ def extractFeatures(fE, batchSize, imagePaths, outputPath, datasetPath, le, verb
 	directory = featuresPath[:featuresPath.rfind("/")]
 	if (not os.path.exists(directory)):
 		os.makedirs(directory)
-	f = open(labelEncoderPath, "w")
+	f = open(labelEncoderPath, "wb")
 	f.write(cPickle.dumps(le))
 	f.close()
 	if (not (os.path.isfile(featuresPath))):

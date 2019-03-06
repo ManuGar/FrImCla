@@ -1,4 +1,5 @@
-from StatisticalAnalysis.statisticalAnalysis import statisticalAnalysis
+from __future__ import absolute_import
+from .StatisticalAnalysis.statisticalAnalysis import statisticalAnalysis
 
 KFoldComparisionPath = "/home/magarcd/Escritorio/frimcla/frimcla/results/melanoma/kfold-comparison-resnet.csv"
 index=KFoldComparisionPath.rfind("/")

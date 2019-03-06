@@ -1,3 +1,5 @@
+from __future__ import print_function
+from __future__ import absolute_import
 #=======================================================================================================================
 # Multilayer perceptron is given in a separate file since it is not available in the python version employed in
 # the other files.
@@ -9,14 +11,15 @@ import os
 import json
 import numpy as np
 import h5py
-import cPickle
+import _pickle as cPickle
+# import cPickle
 from sklearn.model_selection import KFold
 from sklearn.metrics import accuracy_score
 from scipy import stats
 from utils.conf import Conf
 from Comparing import compare_methods_h5py, prepareModel
-from StatisticalAnalysis.statisticalAnalysis import statisticalAnalysis
-from shallowmodels.classificationModelFactory import classificationModelFactory
+from frimcla.StatisticalAnalysis.statisticalAnalysis import statisticalAnalysis
+from frimcla.shallowmodels.classificationModelFactory import classificationModelFactory
 
 #This list is used to say what combinations are not allowed
 blacklist = [["haarhog", "SVM"],
@@ -61,7 +64,7 @@ def majorityVoting(outputPath, datasetPath, featureExtractors, modelClassifiers,
                 print("The combination(" + fE[0] + "-" + classificationModel + ") is not allowed")
             else:
                 if verbose:
-                    print classificationModel
+                    print(classificationModel)
                 modelClas = factory.getClassificationModel(classificationModel)
                 listAlgorithms.append(modelClas.getModel())
                 listParams.append(modelClas.getParams())
@@ -154,6 +157,17 @@ def majorityVoting(outputPath, datasetPath, featureExtractors, modelClassifiers,
 def statisticalComparison(outputPath, datasetPath, featureExtractors, modelClassifiers, measure, nSteps=10, verbose= False):
     pathAux = outputPath + datasetPath[datasetPath.rfind("/"):]
     filePathAux = pathAux + "/results/kfold-comparison_bestClassifiers.csv"
+    if os.path.isfile(filePathAux):
+        fileResults = open(filePathAux, "w")
+    else:
+        if not (os.path.exists(pathAux + "/results")):
+            os.makedirs(filePathAux[:filePathAux.rfind("/")])
+        fileResults = open(filePathAux, "w")
+        for j in range(int(nSteps)):
+            fileResults.write("," + str(j))
+        fileResults.write("\n")
+
+    alpha = 0.05
     for model in featureExtractors:
         if verbose:
             print(model)
@@ -171,7 +185,7 @@ def statisticalComparison(outputPath, datasetPath, featureExtractors, modelClass
                 print("The combination("+ model[0] + "-" + classificationModel + ") is not allowed")
             else:
                 if verbose:
-                    print classificationModel
+                    print(classificationModel)
                 modelClas = factory.getClassificationModel(classificationModel)
                 cMo = modelClas.getModel()
                 params = modelClas.getParams()
@@ -181,15 +195,7 @@ def statisticalComparison(outputPath, datasetPath, featureExtractors, modelClass
                 listNiter.append(niter)
                 listNames.append(classificationModel)
 
-        if os.path.isfile(filePathAux):
-            fileResults = open(filePathAux, "a")
-        else:
-            if not(os.path.exists(pathAux + "/results")):
-                os.makedirs(filePathAux[:filePathAux.rfind("/")])
-            fileResults = open(filePathAux, "a")
-            for j in range(int(nSteps)):
-                fileResults.write(","+str(j))
-            fileResults.write("\n")
+
 
         # if os.path.exists(pathAux + "/results"):
         #     if not os.path.isfile(filePathAux):
@@ -219,11 +225,11 @@ def statisticalComparison(outputPath, datasetPath, featureExtractors, modelClass
         if (not os.path.exists(KFoldComparisionPathAccuracy[:KFoldComparisionPathAccuracy.rfind("/")])):
             os.mkdir(KFoldComparisionPathAccuracy[:KFoldComparisionPathAccuracy.rfind("/")])
         dfAccuracy.to_csv(KFoldComparisionPathAccuracy)
-        statisticalAnalysis(KFoldComparisionPathAccuracy,filePath, fileResults, verbose)
+        statisticalAnalysis(KFoldComparisionPathAccuracy,filePath, fileResults, alpha, verbose)
     fileResults.close()
     filePath2 = pathAux + "/results/StatisticalComparison_bestClassifiers.txt"
-    fileResults2 = open(pathAux + "/results/bestExtractorClassifier.csv", "a")
-    statisticalAnalysis(pathAux + "/results/kfold-comparison_bestClassifiers.csv", filePath2, fileResults2, verbose)
+    fileResults2 = open(pathAux + "/results/bestExtractorClassifier.csv", "w")
+    statisticalAnalysis(pathAux + "/results/kfold-comparison_bestClassifiers.csv", filePath2, fileResults2, alpha, verbose)
     fileResults2.close()
     file = open(pathAux + "/results/bestExtractorClassifier.csv")
     line = file.read()

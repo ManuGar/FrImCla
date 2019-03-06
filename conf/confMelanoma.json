@@ -2,7 +2,7 @@
   #######
   # DATASET SAMPLING CONFIGURATION
   #######
-  # For only considering images without control image: /home/joheras/Escritorio/Research/Fungi/FungiImagesOverfeat
+  # For only considering images without control image:
   "dataset_path": "/home/magarcd/Escritorio/dataset/melanomaD74747",
 
   #For the output and results of the program
@@ -10,20 +10,24 @@
 
   #######
   # EXPERT USER FLAG
-  # This flag allows the user to select if he is an expert user or not. If you are not a expert usert, the framework
-  # automatically will select all the possible combinations to find the best one. If the user select false, he does not
-  # have to select feature_extractors and model_classifiers .
+  # This flag allows the user to select if he/she is an expert user or not. If you are not a expert usert, the framework
+  # automatically will select all the possible combinations to find the best one. If the user select false, he/she does not
+  # have to select feature_extractors and model_classifiers.
   #######
   "expert":true,
 
   #######
   # ENSEMBLE FLAG
-  # This flag allows the user the possibility of create a model with several different models and feature extractors.
+  # This flag allows the user the possibility of creating a model with several different models and feature extractors.
+  # This technique called majority voting uses all the models generated to predict the class of the image. The framework
+  # only saves the models that have a certain percentage of the measure chosen by the user. Then these models will be
+  # trained to classify the images.
   #######
   "ensemble":false,
 
   #######
   # Batch CONFIGURATION
+  # This parameter configure the size of the batch of images that the framework will use for each step.
   #######
   "batch_size": 32,
 
@@ -45,9 +49,6 @@
   # GradientBoost
   "training_size": 1,
   "model_classifiers" : ["GradientBoost","RandomForest", "SVM","KNN","LogisticRegression", "MLP"],
-
-
-  #Con knn parece que haralick tampoco funciona. probar con el pequeño y faltan por probar los otros dos con el dataset real
 
   #######
   # MEASURE CONFIGURATION

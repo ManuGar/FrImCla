@@ -2,29 +2,32 @@
   #######
   # DATASET SAMPLING CONFIGURATION
   #######
-  # For only considering images without control image: /home/joheras/Escritorio/Research/Fungi/FungiImagesOverfeat
-  "dataset_path": "/home/magarcd/Escritorio/dataset/MalariaD2",
+  # For only considering images without control image:
+  "dataset_path": "../dataset/Malaria",
 
   #For the output and results of the program
-  "output_path": "../output/MalariaD2/googlenet",
+  "output_path": "../output/Malaria",
 
   #######
   # EXPERT USER FLAG
-  # This flag allows the user to select if he is an expert user or not. If you are not a expert usert, the framework
-  # automatically will select all the possible combinations to find the best one. If the user select false, he does not
+  # This flag allows the user to select if he/she is an expert user or not. If you are not a expert usert, the framework
+  # automatically will select all the possible combinations to find the best one. If the user select false, he/she does not
   # have to select feature_extractors and model_classifiers .
   #######
   "expert":true,
 
   #######
   # ENSEMBLE FLAG
-  # This flag allows the user the possibility of create a model with several different models and feature extractors.
+  # This flag allows the user the possibility of creating a model with several different models and feature extractors.
+  # This technique called majority voting uses all the models generated to predict the class of the image. The framework
+  # only saves the models that have a certain percentage of the measure chosen by the user. Then these models will be
+  # trained to classify the images.
   #######
   "ensemble":false,
 
-
   #######
   # Batch CONFIGURATION
+  # This parameter configure the size of the batch of images that the framework will use for each step.
   #######
   "batch_size": 32,
 
@@ -36,15 +39,8 @@
   # and ["densenet"]
   # Shallow features: ["lab888"], ["lab444","4,4,4"], ["hsv888"], ["hsv444","4,4,4"], ["haralick"], ["lbp"], ["hog"], ["haarhog"]
   #######
-  "feature_extractors" : [["googlenet"]],
-// , ["inception", "False"],["googlenet"], ["overfeat", "[-3]"],["resnet", "False"],["xception", "False"],["vgg16", "False"],["vgg19", "False"],
-//        ["lab888"], ["lab444","4,4,4"], ["hsv888"], ["hsv444","4,4,4"], ["hog"], ["haarhog"]
-
-
-
-//        ["densenet"],["inception", "False"],
-//  , ["overfeat", "[-3]"],["resnet", "False"],["xception", "False"],["vgg16", "False"],["vgg19", "False"],
-
+  "feature_extractors" : [["googlenet"] , ["hog"],["overfeat", "[-3]"],["inception", "False"],
+      ["xception", "False"], ["densenet"],["lab888"], ["lab444","4,4,4"], ["hsv888"], ["hsv444","4,4,4"], ["haralick"], ["hog"], ["vgg16", "False"], ["vgg19", "False"],["resnet", "False"], ["haarhog"]],
 
   #######
   # CLASSIFIER CONFIGURATION
@@ -55,9 +51,6 @@
   "training_size": 1,
   "model_classifiers" : ["GradientBoost","RandomForest", "SVM","KNN","LogisticRegression", "MLP"],
 
-
-  #Con knn parece que haralick tampoco funciona. probar con el pequeño y faltan por probar los otros dos con el dataset real
-
   #######
   # MEASURE CONFIGURATION
   #######
@@ -65,5 +58,4 @@
   # Possible values for measures are: f1, accuracy, recall, precision, auroc
   "measure" : "accuracy",
   "n_steps" : 5
-
 }

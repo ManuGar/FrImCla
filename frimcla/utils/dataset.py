@@ -1,7 +1,7 @@
 # import the necessary packages
 import sys
-reload(sys)
-sys.setdefaultencoding('utf-8')
+# reload(sys)
+# sys.setdefaultencoding('utf-8')
 import numpy as np
 from keras.preprocessing.image import img_to_array
 from keras.preprocessing.image import load_img
