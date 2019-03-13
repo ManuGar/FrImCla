@@ -4,7 +4,6 @@
 # import the necessary packages
 from __future__ import print_function
 from __future__ import absolute_import
-from utils.conf import Conf
 from sklearn.model_selection import RandomizedSearchCV
 import argparse
 import _pickle as cPickle
@@ -13,6 +12,8 @@ import h5py
 import shutil
 import json
 import os
+# from .utils.conf import Conf
+from frimcla.utils.conf import Conf
 from frimcla.shallowmodels import classificationModelFactory as cmf
 # from . import shallowmodels.classificationModelFactory as cmf
 import wget

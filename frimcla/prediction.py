@@ -3,10 +3,10 @@
 from __future__ import print_function
 from __future__ import absolute_import
 
-from .extractor.extractor import Extractor
-from .utils.conf import Conf
-from .utils import dataset
-from .index_features import extractFeatures
+from frimcla.extractor.extractor import Extractor
+from frimcla.utils.conf import Conf
+from frimcla.utils import dataset
+from frimcla.index_features import extractFeatures
 from .shallowmodels.classificationModelFactory import classificationModelFactory
 from sklearn.model_selection import RandomizedSearchCV
 from sklearn.preprocessing import LabelEncoder
@@ -14,12 +14,11 @@ from imutils import paths
 from scipy import stats
 import numpy as np
 import argparse
-import cPickle
+import _pickle as cPickle
 import h5py
 import os
 import json
 import random
-
 
 
 def prediction(featExt, classi, imagePath, outputPath, datasetPath):
@@ -37,7 +36,7 @@ def prediction(featExt, classi, imagePath, outputPath, datasetPath):
 
     else: #Aqui es donde deberia hacer la pregunta de que si quiere realmente entrenar ese modelo o el mejor
         print("This is not the best model. Are you sure you want to predict with it?")
-        response = raw_input()
+        response = input()
         if (response.upper() in ("YES", "Y")):
             files = os.walk(auxPath + "/models")
             listFeatExt = []

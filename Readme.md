@@ -45,6 +45,8 @@ To uninstall the library use ``pip uninstall frimcla``.
 * [How to use the framework with majority voting (Ensemble technique).](https://colab.research.google.com/github/ManuGar/FrImCla/blob/master/examples/HowToUse(Ensemble).ipynb)
 * [How to predict an image class.](https://colab.research.google.com/github/ManuGar/FrImCla/blob/master/examples/HowToPredictImageClass.ipynb)
 * [Example of use on the melanomas dataset.](https://colab.research.google.com/github/ManuGar/FrImCla/blob/master/examples/MelanomaNotebook.ipynb)
+* [Example of use on the MIAS dataset.](https://colab.research.google.com/github/ManuGar/FrImCla/blob/master/examples/MIASNotebook.ipynb)
+* [Example of use on the malaria dataset.](https://colab.research.google.com/github/ManuGar/FrImCla/blob/master/examples/MalariaNotebook.ipynb)
 
 ## List of feature extractor models
 

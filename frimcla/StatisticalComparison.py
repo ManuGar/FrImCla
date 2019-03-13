@@ -16,8 +16,10 @@ import _pickle as cPickle
 from sklearn.model_selection import KFold
 from sklearn.metrics import accuracy_score
 from scipy import stats
-from utils.conf import Conf
-from Comparing import compare_methods_h5py, prepareModel
+# from .utils.conf import Conf
+# from .Comparing import compare_methods_h5py, prepareModel
+from frimcla.utils.conf import Conf
+from frimcla.Comparing import compare_methods_h5py, prepareModel
 from frimcla.StatisticalAnalysis.statisticalAnalysis import statisticalAnalysis
 from frimcla.shallowmodels.classificationModelFactory import classificationModelFactory
 

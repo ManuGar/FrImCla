@@ -10,10 +10,15 @@ from imutils import paths
 
 warnings.simplefilter(action="ignore", category=FutureWarning)
 # import the necessary packages
-from extractor.extractor import Extractor
-from indexer.indexer import Indexer
-from utils.conf import Conf
-from utils import dataset
+from frimcla.extractor.extractor import Extractor
+from frimcla.indexer.indexer import Indexer
+from frimcla.utils.conf import Conf
+from frimcla.utils import dataset
+
+# from .extractor.extractor import Extractor
+# from .indexer.indexer import Indexer
+# from .utils.conf import Conf
+# from .utils import dataset
 from sklearn.preprocessing import LabelEncoder
 # from guppy import hpy
 import argparse
