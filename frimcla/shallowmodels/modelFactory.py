@@ -35,7 +35,7 @@ MODELS = {
 
 def listFeatureExtractors():
     listModels = []
-    for (name, mod) in MODELS:
+    for name in MODELS:
         listModels.append(name)
     return listModels
 

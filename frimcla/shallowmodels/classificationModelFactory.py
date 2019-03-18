@@ -12,7 +12,7 @@ CLASSIFICATIONMODELS = {
 
 def ListClassificationModels():
     listClassiModels = []
-    for (name, mod) in CLASSIFICATIONMODELS:
+    for name  in CLASSIFICATIONMODELS:
         listClassiModels.append(name)
     return listClassiModels
 
