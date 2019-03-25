@@ -19,7 +19,7 @@ Now we are going through the most important parts of the framework.
 3. Extract the features of the dataset using the following
    command:
 
-   python index_features.py -c conf/conf.json
+   ``python index_features.py -c conf/conf.json``
 
    New methods can be added in the models.py file.
    Currently the methods that are available are inception, xception, vgg16, vgg19,
@@ -31,7 +31,9 @@ Now we are going through the most important parts of the framework.
    New methods can be added in the classificationModels.py file.
    Currently the methods that are available are RandomForest, SVM, KNN, LR, MLP and GradientBoost.
    To perform the analysis use the command:
-   python StatisticalComparison.py -c conf/conf.json
+
+   ``python StatisticalComparison.py -c conf/conf.json``
+
    This will take some time but at the end you will get a report
    comparing the different methods.
 
@@ -43,7 +45,7 @@ comparison, the user can create and train your model for further use.
 
 1. Train the model executing the command:
 
-   python train.py -c conf/conf.json
+   ``python train.py -c conf/conf.json``
 
 ## Using the trained model to predict the class of a new image
 
@@ -53,16 +55,26 @@ new images.
 
 1. Execute the command:
 
-   python prediction.py -c conf/conf.json -i imagePath -f featureExtractor -p params -m classifierModel
+   ``python prediction.py -c conf/conf.json -i imagePath -f featureExtractor -p params -m classifierModel``
+
    In the above command you must replace imagePath with the path of the image.
 
 ## Executing the full analysis
 
 
 1. The best option to perform the full analysis (feature extractors and
-   classifiers) is by executing the following comand:
+   classifiers) is by executing the following comand:	
 
-   python fullAnalysis.py -c conf/conf.json
+   ``python fullAnalysis.py -c conf/conf.json``
+
+## Generating a web application
+
+1. In the training step there is available an option that allows the user to generate a web application. When FrImCla trains the best model asks to the user if he/she wants to generate a web application. This application only has a text box to introduce the image and a button to predict the class. Once the application is generated, the user obtains in the output path a zip file that contains the application. This application must be decompressed to be used. In a new terminal the user must execute the following command inside the webApp folder:
+
+   ``python3 FlaskApp/app.py``
+
+	Then, the user can execute in a new tab the web application in http://localhost:5000/ and predict the class of the images.
+
 
 ## Adding new machine learning algorithms and feature extractor models
 

@@ -2,7 +2,7 @@
   #######
   # DATASET SAMPLING CONFIGURATION
   #######
-  # For only considering images without control image: /home/joheras/Escritorio/Research/Fungi/FungiImagesOverfeat
+  # For only considering images without control image:
   "dataset_path": "/home/joheras/Escritorio/Research/Fungi/FungiImages_",
   # For only considering images without control image: output/fungi/features.hdf5
   "features_path": "output/fungi/features.hdf5",

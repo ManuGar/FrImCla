@@ -44,7 +44,7 @@ def anova_test(*args):
     x_t = sp.sum(x_j)
 
     # Variances
-    ss_t = sp.sum([v**2 for v in group for group in args]) - x_t**2/float(k*n)
+    ss_t = sp.sum([v**2 for group in args for v in group ]) - x_t**2/float(k*n)
     ss_bg = sp.sum(x_j[j]**2/float(n) for j in range(k)) - x_t**2/float(k*n)
     ss_wg = ss_t - ss_bg
 
@@ -140,13 +140,12 @@ def bonferroni_test(pivots, n):
         D.J. Sheskin, Handbook of parametric and nonparametric statistical procedures. crc Press, 2003, Test 21b: The Bonferroni-Dunn test
     """
     k = len(pivots)
-    values = pivots.values()
-    keys = pivots.keys()
+    values = list(pivots.values())
+    keys = list(pivots.keys())
 
     m = (k*(k-1))/2.
 
     versus = list(it.combinations(range(k), 2))
-
     comparisons = [keys[vs[0]] + " vs " + keys[vs[1]] for vs in versus]
     t_values = [abs(values[vs[0]] - values[vs[1]]) for vs in versus]
     p_values = [1-st.t.cdf(t, n*k-k) for t in t_values]

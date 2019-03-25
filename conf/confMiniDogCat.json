@@ -2,23 +2,26 @@
   #######
   # DATASET SAMPLING CONFIGURATION
   #######
-  # For only considering images without control image: /home/joheras/Escritorio/Research/Fungi/FungiImagesOverfeat
-  "dataset_path": "/home/magarcd/Escritorio/dataset/minidatasetDogCat",
+  # For only considering images without control image:
+  "dataset_path": "/home/magarcd/Escritorio/dataset/DogCat",
 
   #For the output and results of the program
-  "output_path": "../output",
+  "output_path": "../output/BORRARRRRR",
 
   #######
   # EXPERT USER FLAG
-  # This flag allows the user to select if he is an expert user or not. If you are not a expert usert, the framework
-  # automatically will select all the possible combinations to find the best one. If the user select false, he does not
+  # This flag allows the user to select if he/she is an expert user or not. If you are not a expert usert, the framework
+  # automatically will select all the possible combinations to find the best one. If the user select false, he/she does not
   # have to select feature_extractors and model_classifiers .
   #######
   "expert":true,
 
   #######
   # ENSEMBLE FLAG
-  # This flag allows the user the possibility of create a model with several different models and feature extractors.
+  # This flag allows the user the possibility of creating a model with several different models and feature extractors.
+  # This technique called majority voting uses all the models generated to predict the class of the image. The framework
+  # only saves the models that have a certain percentage of the measure chosen by the user. Then these models will be
+  # trained to classify the images.
   #######
   "ensemble":false,
 
@@ -35,7 +38,7 @@
   # and ["densenet"]
   # Shallow features: ["lab888"], ["lab444","4,4,4"], ["hsv888"], ["hsv444","4,4,4"], ["haralick"], ["lbp"], ["hog"], ["haarhog"]
   #######
-  "feature_extractors" : [ ["vgg19", "False"]],
+  "feature_extractors" : [ ["vgg19", "False"], ["lab444","4,4,4"], ["hsv888"]],
 
   #######
   # CLASSIFIER CONFIGURATION
@@ -54,6 +57,6 @@
   #######
   # You can choose one measure
   # Possible values for measures are: f1, accuracy, recall, precision, auroc
-  "measure" : "accuracy",
+  "measure" : "precision",
   "n_steps" : 5
 }

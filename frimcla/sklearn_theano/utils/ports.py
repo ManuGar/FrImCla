@@ -1,5 +1,5 @@
 import warnings
-from sklearn.cross_validation import ShuffleSplit
+from sklearn.model_selection import ShuffleSplit
 from itertools import chain
 from sklearn.utils import safe_indexing
 import numpy as np
@@ -99,7 +99,7 @@ def train_test_split(*arrays, **options):
     Examples
     --------
     >>> import numpy as np
-    >>> from sklearn.cross_validation import train_test_split
+    >>> from sklearn.model_selection import train_test_split
     >>> a, b = np.arange(10).reshape((5, 2)), range(5)
     >>> a
     array([[0, 1],

@@ -292,8 +292,9 @@ def holm_test(ranks, control=None):
         O.J. S. Holm, A simple sequentially rejective multiple test procedure, Scandinavian Journal of Statistics 6 (1979) 65–70.
     """
     k = len(ranks)
-    values = ranks.values()
-    keys = ranks.keys()
+    values = list(ranks.values())
+    keys = list(ranks.keys())
+
     if not control :
         control_i = values.index(min(values))
     else:

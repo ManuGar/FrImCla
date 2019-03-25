@@ -31,14 +31,21 @@ The following packages must be installed:
 *   OpenCV (i.e. cv2 must be available in python)
 *   commentjson
 
+Once the packages are available, `frimcla` can be installed using the following command. If you do not have the libraries availables it will be installed automatically executing the command.
+
+	pip install frimcla
+
+To uninstall the library use ``pip uninstall frimcla``.
+
 ## Documentation
 [Documentation of the framework](docs/documentation.md).
 
 ## Examples
-* [How to use the framework.](examples/HowToUse.ipynb)
-* [How to use the framework with majority voting (Ensemble technique).](examples/HowToUse(Ensemble).ipynb)
-* [How to predict an image class.](examples/HowToPredictImageClass.ipynb)
-* [Example of use on the melanomas dataset.](examples/MelanomaNotebook.ipynb)
+* [How to use the framework.](https://colab.research.google.com/github/ManuGar/FrImCla/blob/master/examples/HowToUse.ipynb)
+* [How to use the framework with majority voting (Ensemble technique).](https://colab.research.google.com/github/ManuGar/FrImCla/blob/master/examples/HowToUse(Ensemble).ipynb)
+* [How to predict an image class.](https://colab.research.google.com/github/ManuGar/FrImCla/blob/updatePython3/examples/HowToPredictImageClass.ipynb)
+* [Example of use on the MIAS dataset.](https://colab.research.google.com/github/ManuGar/FrImCla/blob/updatePython3/examples/MIASNotebook.ipynb)
+* [Example of use on the malaria dataset.](https://colab.research.google.com/github/ManuGar/FrImCla/blob/updatePython3/examples/MalariaNotebook.ipynb)
 
 ## List of feature extractor models
 

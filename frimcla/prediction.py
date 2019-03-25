@@ -1,53 +1,61 @@
 # import the necessary packages
 #Example python prediction.py -c ../conf/confMelanomaDataAugmentation.conf -i ../pos.jpg -f overfeat -p [-3] -m svm
 from __future__ import print_function
+from __future__ import absolute_import
 
-from extractor.extractor import Extractor
-from utils.conf import Conf
-from utils import dataset
-from index_features import extractFeatures
-from shallowmodels.classificationModelFactory import classificationModelFactory
+from frimcla.extractor.extractor import Extractor
+from frimcla.utils.conf import Conf
+from frimcla.utils import dataset
+from frimcla.index_features import extractFeatures
+from .shallowmodels.classificationModelFactory import classificationModelFactory
 from sklearn.model_selection import RandomizedSearchCV
 from sklearn.preprocessing import LabelEncoder
 from imutils import paths
 from scipy import stats
 import numpy as np
 import argparse
-import cPickle
+import _pickle as cPickle
 import h5py
 import os
 import json
 import random
-
+import sys
 
 
 def prediction(featExt, classi, imagePath, outputPath, datasetPath):
     # load the configuration, label encoder, and classifier
     print("[INFO] loading model...")
-    datasetName = datasetPath[datasetPath.rfind("/"):]
-    auxPath = outputPath + datasetName
+    datasetName = datasetPath[datasetPath.rfind("/")+1:]
+    auxPath = outputPath + "/" + datasetName
     factory = classificationModelFactory()
 
-    cPickleFile = auxPath + "/classifiers/classifier_" + featExt[0] + "_" + classi + ".cpickle"
-    if os.path.isfile(cPickleFile):
+    with open(auxPath + "/ConfModel.json") as json_file:
+        data = json.load(json_file)
+
+    extractor = data['featureExtractors'][0]['model']
+    classifier = data['featureExtractors'][0]['classificationModels'][0]
+
+    if (featExt[0] == extractor and classi==classifier):
         labelEncoderPath = auxPath + "/models/le.cpickle"
-        le = cPickle.loads(open(labelEncoderPath).read())
-        model = cPickle.loads(open(cPickleFile).read())
+        cPickleFile = auxPath + "/classifiers/classifier_" + featExt[0] + "_" + classi + ".cpickle"
+        le = cPickle.loads(open(labelEncoderPath, "rb").read())
+        model = cPickle.loads(open(cPickleFile, "rb").read())
 
     else: #Aqui es donde deberia hacer la pregunta de que si quiere realmente entrenar ese modelo o el mejor
         print("This is not the best model. Are you sure you want to predict with it?")
-        response = raw_input()
+        response = input()
         if (response.upper() in ("YES", "Y")):
             files = os.walk(auxPath + "/models")
             listFeatExt = []
             for _, _, file in files:
                 for feat in file:
-                    feat = feat.split("-")[1].split(".")[0]
-                    listFeatExt.append(feat)
+                    if(len(feat.split("-"))>1):
+                        feat = feat.split("-")[1].split(".")[0]
+                        listFeatExt.append(feat)
             listFeatExt = list(set(listFeatExt))
             if (featExt[0] in listFeatExt):
                 labelEncoderPath = auxPath + "/models/le.cpickle"
-                le = cPickle.loads(open(labelEncoderPath).read())
+                le = cPickle.loads(open(labelEncoderPath,"rb").read())
                 featuresPath = auxPath + "/models/features-" + featExt[0] + ".hdf5"
                 db = h5py.File(featuresPath)
                 split = int(db["image_ids"].shape[0])
@@ -58,7 +66,7 @@ def prediction(featExt, classi, imagePath, outputPath, datasetPath):
                 model = RandomizedSearchCV(classifierModel.getModel(), param_distributions=classifierModel.getParams(),
                                            n_iter=classifierModel.getNIterations())
                 model.fit(trainData, trainLabels)
-                f = open(auxPath + "/classifier_" + featExt[0] + "_" + classi + ".cpickle", "w")
+                f = open(auxPath + "/classifiers/classifier_" + featExt[0] + "_" + classi + ".cpickle", "wb")
                 f.write(cPickle.dumps(model))
                 f.close()
                 db.close()
@@ -71,7 +79,7 @@ def prediction(featExt, classi, imagePath, outputPath, datasetPath):
                 le.fit([p.split("/")[-2] for p in imagePaths])
                 extractFeatures(featExt, 32, imagePaths, outputPath, datasetPath, le, False)
                 labelEncoderPath = auxPath + "/models/le.cpickle"
-                le = cPickle.loads(open(labelEncoderPath).read())
+                le = cPickle.loads(open(labelEncoderPath,"rb").read())
                 featuresPath = auxPath + "/models/features-" + featExt[0] + ".hdf5"
                 db = h5py.File(featuresPath)
                 split = int(db["image_ids"].shape[0])
@@ -81,29 +89,42 @@ def prediction(featExt, classi, imagePath, outputPath, datasetPath):
                 model = RandomizedSearchCV(classifierModel.getModel(), param_distributions=classifierModel.getParams(),
                                            n_iter=classifierModel.getNIterations())
                 model.fit(trainData, trainLabels)
-                f = open(auxPath + "/classifier_" + featExt[0] + "_" + classi + ".cpickle", "w")
+                f = open(auxPath + "/classifiers/classifier_" + featExt[0] + "_" + classi + ".cpickle", "wb")
                 f.write(cPickle.dumps(model))
                 f.close()
                 db.close()
         else:
             labelEncoderPath = auxPath + "/models/le.cpickle"
-            le = cPickle.loads(open(labelEncoderPath).read())
-            model = cPickle.loads(open(cPickleFile).read())
+            with open(auxPath + "/ConfModel.json") as json_file:
+                data = json.load(json_file)
+            extractor = data['featureExtractors'][0]['model']
+            classifier = data['featureExtractors'][0]['classificationModels'][0]
+            cPickleFile = auxPath + "/classifiers/classifier_" + extractor + "_" + classifier + ".cpickle"
+            le = cPickle.loads(open(labelEncoderPath, "rb").read())
+            model = cPickle.loads(open(cPickleFile, "rb").read())
 
     filePrediction = open(auxPath+"/predictionResults.csv","a")
-    filePrediction.write("image_id, melanoma\n")
+    filePrediction.write("image_id, " + datasetName +"\n")
     oe = Extractor(featExt)
     imagePaths = list(paths.list_images(imagePath))
 
-    for (i, imPaths) in enumerate(dataset.chunk(imagePaths, 32)):
-        (labels, images) = dataset.build_batch(imPaths, featExt[0])
-
+    if (len(imagePaths)==0):
+        (labels, images) = dataset.build_batch([imagePath], featExt[0])
         features = oe.describe(images)
         for (label, vector) in zip(labels, features):
             prediction = model.predict(np.atleast_2d(vector))[0]
-            filePrediction.write( str(label) + ", " + str(prediction) + "\r\n")
-            prediction = le.inverse_transform(prediction)
+            filePrediction.write(str(label) + ", " + str(prediction) + "\r\n")
+            prediction = le.inverse_transform([prediction])
             print("[INFO] class predicted for the image {}: {}".format(label, prediction))
+    else:
+        for (i, imPaths) in enumerate(dataset.chunk(imagePaths, 32)):
+            (labels, images) = dataset.build_batch(imPaths, featExt[0])
+            features = oe.describe(images)
+            for (label, vector) in zip(labels, features):
+                prediction = model.predict(np.atleast_2d(vector))[0]
+                prediction = le.inverse_transform([prediction])
+                filePrediction.write( str(label) + ", " + str(prediction) + "\r\n")
+                print("[INFO] class predicted for the image {}: {}".format(label, prediction))
 
     filePrediction.close()
 
@@ -119,23 +140,27 @@ def predictionSimple(imagePath, outputPath, datasetPath):
     classifier = data[0]['classifierModel']
     prediction(extractor,classifier,imagePath,outputPath,datasetPath)
 
-def predictionEnsemble(featureExtractors, classifiers, imagePaths, outputPath, datasetName):
-    auxPath = outputPath + datasetName
+def predictionEnsemble(featureExtractors, classifiers, imagePath, outputPath, datasetName):
+    auxPath = outputPath + "/" + datasetName
     filePrediction = open(auxPath + "/predictionResults.csv", "a")
     filePrediction.write("image_id, " + datasetName)
     labelEncoderPath = auxPath + "/models/le.cpickle"
-    le = cPickle.loads(open(labelEncoderPath).read())
+    le = cPickle.loads(open(labelEncoderPath,"rb").read())
+    imagePaths = list(paths.list_images(imagePath))
     predictions = []
     modes = []
 
     for fe in featureExtractors:
-        (labels, images) = dataset.build_batch(imagePaths, fe[0])
+        if (len(imagePaths)==0):
+            (labels, images) = dataset.build_batch([imagePath], fe[0])
+        else:
+            (labels, images) = dataset.build_batch(imagePaths, fe[0])
         oe = Extractor(fe)
         features = oe.describe(images)
         for classi in classifiers:
             cPickleFile = auxPath + "/classifiers/classifier_" + fe[0] + "_" + classi + ".cpickle"
             if os.path.isfile(cPickleFile):
-                model = cPickle.loads(open(cPickleFile).read())
+                model = cPickle.loads(open(cPickleFile,"rb").read())
                 prediction = model.predict(features)
                 predictions.append(prediction)
     # aux = np.array(predictions)
@@ -154,13 +179,12 @@ def predictionEnsemble(featureExtractors, classifiers, imagePaths, outputPath, d
     # prediction = le.inverse_transform(mode[0])
     # filePrediction.write(str(labels) + ", " + str(prediction) + "\r\n")
     # le = cPickle.loads(open(labelEncoderPath).read())
-    prediction = le.inverse_transform(prediction)
     for (image, mode) in zip(imagePaths,modes):
-        print("[INFO] class predicted for the image {}: {}".format(image, mode[0]))
-        filePrediction.write("\n" + str(image) + ", " + str(mode[0]))
+        prediction = le.inverse_transform(mode)
+        print("[INFO] class predicted for the image {}: {}".format(image, prediction[0]))
+        filePrediction.write("\n" + str(image) + ", " + str(prediction[0]))
 
     filePrediction.close()
-
 
 
 def __main__():

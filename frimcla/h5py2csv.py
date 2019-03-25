@@ -1,6 +1,7 @@
+from __future__ import absolute_import
 import h5py
 import argparse
-from utils.conf import Conf
+from .utils.conf import Conf
 import pandas as pd
 import numpy as np
 
