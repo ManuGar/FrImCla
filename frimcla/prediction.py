@@ -25,7 +25,7 @@ import sys
 def prediction(featExt, classi, imagePath, outputPath, datasetPath):
     # load the configuration, label encoder, and classifier
     print("[INFO] loading model...")
-    datasetName = datasetPath[datasetPath.rfind("/"):]
+    datasetName = datasetPath[datasetPath.rfind("/")+1:]
     auxPath = outputPath + "/" + datasetName
     factory = classificationModelFactory()
 
@@ -122,8 +122,8 @@ def prediction(featExt, classi, imagePath, outputPath, datasetPath):
             features = oe.describe(images)
             for (label, vector) in zip(labels, features):
                 prediction = model.predict(np.atleast_2d(vector))[0]
-                filePrediction.write( str(label) + ", " + str(prediction) + "\r\n")
                 prediction = le.inverse_transform([prediction])
+                filePrediction.write( str(label) + ", " + str(prediction) + "\r\n")
                 print("[INFO] class predicted for the image {}: {}".format(label, prediction))
 
     filePrediction.close()
@@ -140,18 +140,21 @@ def predictionSimple(imagePath, outputPath, datasetPath):
     classifier = data[0]['classifierModel']
     prediction(extractor,classifier,imagePath,outputPath,datasetPath)
 
-def predictionEnsemble(featureExtractors, classifiers, imagePaths, outputPath, datasetName):
+def predictionEnsemble(featureExtractors, classifiers, imagePath, outputPath, datasetName):
     auxPath = outputPath + "/" + datasetName
     filePrediction = open(auxPath + "/predictionResults.csv", "a")
     filePrediction.write("image_id, " + datasetName)
     labelEncoderPath = auxPath + "/models/le.cpickle"
     le = cPickle.loads(open(labelEncoderPath,"rb").read())
-    imagePaths = list(paths.list_images(imagePaths))
+    imagePaths = list(paths.list_images(imagePath))
     predictions = []
     modes = []
 
     for fe in featureExtractors:
-        (labels, images) = dataset.build_batch(imagePaths, fe[0])
+        if (len(imagePaths)==0):
+            (labels, images) = dataset.build_batch([imagePath], fe[0])
+        else:
+            (labels, images) = dataset.build_batch(imagePaths, fe[0])
         oe = Extractor(fe)
         features = oe.describe(images)
         for classi in classifiers:
@@ -176,10 +179,10 @@ def predictionEnsemble(featureExtractors, classifiers, imagePaths, outputPath, d
     # prediction = le.inverse_transform(mode[0])
     # filePrediction.write(str(labels) + ", " + str(prediction) + "\r\n")
     # le = cPickle.loads(open(labelEncoderPath).read())
-    prediction = le.inverse_transform(prediction)
     for (image, mode) in zip(imagePaths,modes):
-        print("[INFO] class predicted for the image {}: {}".format(image, mode[0]))
-        filePrediction.write("\n" + str(image) + ", " + str(mode[0]))
+        prediction = le.inverse_transform(mode)
+        print("[INFO] class predicted for the image {}: {}".format(image, prediction[0]))
+        filePrediction.write("\n" + str(image) + ", " + str(prediction[0]))
 
     filePrediction.close()
 

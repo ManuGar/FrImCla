@@ -56,13 +56,14 @@ new images.
 1. Execute the command:
 
    ``python prediction.py -c conf/conf.json -i imagePath -f featureExtractor -p params -m classifierModel``
+
    In the above command you must replace imagePath with the path of the image.
 
 ## Executing the full analysis
 
 
 1. The best option to perform the full analysis (feature extractors and
-   classifiers) is by executing the following comand:
+   classifiers) is by executing the following comand:	
 
    ``python fullAnalysis.py -c conf/conf.json``
 
@@ -70,9 +71,9 @@ new images.
 
 1. In the training step there is available an option that allows the user to generate a web application. When FrImCla trains the best model asks to the user if he/she wants to generate a web application. This application only has a text box to introduce the image and a button to predict the class. Once the application is generated, the user obtains in the output path a zip file that contains the application. This application must be decompressed to be used. In a new terminal the user must execute the following command inside the webApp folder:
 
-``python3 FlaskApp/app.py``
+   ``python3 FlaskApp/app.py``
 
-and automatically the user can execute in a new tab the web application in http://localhost:5000/ 
+	Then, the user can execute in a new tab the web application in http://localhost:5000/ and predict the class of the images.
 
 
 ## Adding new machine learning algorithms and feature extractor models

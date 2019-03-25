@@ -55,7 +55,7 @@ def majorityVoting(outputPath, datasetPath, featureExtractors, modelClassifiers,
         listParams = []
         listNiter = []
         listNames = []
-        fileAux = open(labelEncoderPath)
+        fileAux = open(labelEncoderPath,"rb")
         le = cPickle.loads(fileAux.read())
         fileAux.close()
         fichero = open(filePathAux, "a")

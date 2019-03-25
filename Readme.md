@@ -44,7 +44,6 @@ To uninstall the library use ``pip uninstall frimcla``.
 * [How to use the framework.](https://colab.research.google.com/github/ManuGar/FrImCla/blob/master/examples/HowToUse.ipynb)
 * [How to use the framework with majority voting (Ensemble technique).](https://colab.research.google.com/github/ManuGar/FrImCla/blob/master/examples/HowToUse(Ensemble).ipynb)
 * [How to predict an image class.](https://colab.research.google.com/github/ManuGar/FrImCla/blob/updatePython3/examples/HowToPredictImageClass.ipynb)
-* [Example of use on the melanomas dataset.](https://colab.research.google.com/github/ManuGar/FrImCla/blob/updatePython3/examples/MelanomaNotebook.ipynb)
 * [Example of use on the MIAS dataset.](https://colab.research.google.com/github/ManuGar/FrImCla/blob/updatePython3/examples/MIASNotebook.ipynb)
 * [Example of use on the malaria dataset.](https://colab.research.google.com/github/ManuGar/FrImCla/blob/updatePython3/examples/MalariaNotebook.ipynb)
 
