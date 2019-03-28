@@ -40,9 +40,6 @@ def listFeatureExtractors():
     return listModels
 
 
-
-
-
 class modelFactory():
 
     def __init__(self):
@@ -55,8 +52,6 @@ class modelFactory():
                 return Network(include_top=params[0])
             else:
                 raise ValueError('The number of parameters is not correct')
-        elif modelText in ("googlenet", "lab888", "hsv888", "haralick", "lbp", "hog", "haarhog", "densenet","mymodel"):
-            return MODELS[modelText]()
         elif modelText == "overfeat":
             params = str(params)
             params = literal_eval(params)
@@ -73,6 +68,8 @@ class modelFactory():
                 return MODELS[modelText](bins=[bin1, bin2, bin3])
             else:
                 raise ValueError('The number of parameters is not correct')
+        elif modelText in ("googlenet", "lab888", "hsv888", "haralick", "lbp", "hog", "haarhog", "densenet","mymodel"):
+            return MODELS[modelText]()
         # elif "annulus" in modelText:
         #     params = [int(s) for s in params.split(',')]
         #     if (len(params)==3):

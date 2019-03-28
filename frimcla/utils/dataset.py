@@ -26,7 +26,6 @@ def prepare_image(imagePath,model):
 		image = img_to_array(image)
 		if model == "mymodel":
 			image = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
-
 		image = np.expand_dims(image, axis=0)
 
 		if model not in ("densenet"):

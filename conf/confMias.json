@@ -3,11 +3,10 @@
   # DATASET SAMPLING CONFIGURATION
   #######
   # For only considering images without control image:
-  "dataset_path": "/home/magarcd/Escritorio/dataset/kvasir-dataset",
+  "dataset_path": "/home/magarcd/Escritorio/dataset/DogCat",
 
   #For the output and results of the program
-  "output_path": "../output",
-
+  "output_path": "../output/borrar44",
 
   #######
   # EXPERT USER FLAG
@@ -39,10 +38,10 @@
   # and ["densenet"]
   # Shallow features: ["lab888"], ["lab444","4,4,4"], ["hsv888"], ["hsv444","4,4,4"], ["haralick"], ["lbp"], ["hog"], ["haarhog"]
   #######
-  "feature_extractors" : [["vgg16", "False"], ["vgg19", "False"],["resnet", "False"], ["overfeat", "[-3]"]],
-//["googlenet"], ["inception", "False"],["overfeat", "[-3]"],["resnet", "False"],["vgg16", "False"],["vgg19", "False"],["xception", "False"],
-//        ["overfeat", [-3]], ["vgg16", "False"], ["vgg19", "False"], ["resnet", "False"],                                    , ["inception", "False"],["googlenet"], ["overfeat", "[-3]"],
-//      ["xception", "False"], ["densenet"],["lab888"], ["lab444","4,4,4"], ["hsv888"], ["hsv444","4,4,4"], ["haralick"], ["hog"], ["haarhog"]
+  "feature_extractors" : [["overfeat", "[-3]"], ["inception", "False"]],
+
+//["googlenet"] , ["hog"],["overfeat", "[-3]"],["inception", "False"],
+//      ["xception", "False"], ["densenet"],["lab888"], ["lab444","4,4,4"], ["hsv888"], ["hsv444","4,4,4"], ["haralick"], ["hog"], ["vgg16", "False"], ["vgg19", "False"],["resnet", "False"], ["haarhog"]
 
   #######
   # CLASSIFIER CONFIGURATION
@@ -51,8 +50,8 @@
   # Possible values for classifier model are: RandomForest, SVM, KNN, LogisticRegression, MLP and
   # GradientBoost
   "training_size": 1,
-  "model_classifiers" : ["GradientBoost","RandomForest", "SVM","KNN","LogisticRegression", "MLP"],
-
+  "model_classifiers" : ["LogisticRegression", "MLP","SVM", "KNN"],
+//"GradientBoost","RandomForest", "SVM","KNN","LogisticRegression", "MLP"
 
   #Con knn parece que haralick tampoco funciona. probar con el pequeño y faltan por probar los otros dos con el dataset real
 

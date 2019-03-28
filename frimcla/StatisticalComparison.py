@@ -197,8 +197,6 @@ def statisticalComparison(outputPath, datasetPath, featureExtractors, modelClass
                 listNiter.append(niter)
                 listNames.append(classificationModel)
 
-
-
         # if os.path.exists(pathAux + "/results"):
         #     if not os.path.isfile(filePathAux):
         #         fileResults = open(filePathAux, "a")

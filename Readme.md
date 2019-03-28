@@ -11,7 +11,7 @@ FrImCla is an open-source framework for Image Classification using traditional a
 *   A web application automatically created to predict the image class
 
 ## Requeriments and installation of the library
-The library uses Python 2.7, which must be installed. 
+The library uses Python 3.6, which must be installed. 
 The following packages must be installed:
 
 *   numpy
@@ -43,9 +43,9 @@ To uninstall the library use ``pip uninstall frimcla``.
 ## Examples
 * [How to use the framework.](https://colab.research.google.com/github/ManuGar/FrImCla/blob/master/examples/HowToUse.ipynb)
 * [How to use the framework with majority voting (Ensemble technique).](https://colab.research.google.com/github/ManuGar/FrImCla/blob/master/examples/HowToUse(Ensemble).ipynb)
-* [How to predict an image class.](https://colab.research.google.com/github/ManuGar/FrImCla/blob/updatePython3/examples/HowToPredictImageClass.ipynb)
-* [Example of use on the MIAS dataset.](https://colab.research.google.com/github/ManuGar/FrImCla/blob/updatePython3/examples/MIASNotebook.ipynb)
-* [Example of use on the malaria dataset.](https://colab.research.google.com/github/ManuGar/FrImCla/blob/updatePython3/examples/MalariaNotebook.ipynb)
+* [How to predict an image class.](https://colab.research.google.com/github/ManuGar/FrImCla/blob/master/examples/HowToPredictImageClass.ipynb)
+* [Example of use on the MIAS dataset.](https://colab.research.google.com/github/ManuGar/FrImCla/blob/master/examples/MIASNotebook.ipynb)
+* [Example of use on the malaria dataset.](https://colab.research.google.com/github/ManuGar/FrImCla/blob/master/examples/MalariaNotebook.ipynb)
 
 ## List of feature extractor models
 
