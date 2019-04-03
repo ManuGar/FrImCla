@@ -46,6 +46,7 @@ To uninstall the library use ``pip uninstall frimcla``.
 * [How to predict an image class.](https://colab.research.google.com/github/ManuGar/FrImCla/blob/master/examples/HowToPredictImageClass.ipynb)
 * [Example of use on the MIAS dataset.](https://colab.research.google.com/github/ManuGar/FrImCla/blob/master/examples/MIASNotebook.ipynb)
 * [Example of use on the malaria dataset.](https://colab.research.google.com/github/ManuGar/FrImCla/blob/master/examples/MalariaNotebook.ipynb)
+* [Example of use on a dogs and cats dataset.](https://colab.research.google.com/github/ManuGar/FrImCla/blob/master/examples/DogCatNotebook.ipynb)
 
 ## List of feature extractor models
 
