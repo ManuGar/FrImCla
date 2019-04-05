@@ -46,10 +46,7 @@ def cropDataset(datasetPath,n_images_dataset=100):
 	for subdir in subdirs:
 		_, _, files = next(os.walk(os.path.join(datasetPath, subdir)))
 		files = [os.path.join(datasetPath, subdir, file) for file in files]
-		random.seed(42)
-		random.shuffle(files)
-		images_path+=files[0:(n_images_dataset / n_classes)]
-
+		images_path+=files[0:int(n_images_dataset / n_classes)]
 	return images_path
 
 """
@@ -104,8 +101,8 @@ def extractFeatures(fE, batchSize, imagePaths, outputPath, datasetPath, le, verb
 def generateFeatures(outputPath, batchSize, datasetPath, featureExtractors, verbose=False):
 	# shuffle the image paths to ensure randomness -- this will help make our
 	# training and testing split code more efficient
-	# imagePaths = cropDataset(datasetPath,100)
-	imagePaths = list(paths.list_images(datasetPath))
+	imagePaths = cropDataset(datasetPath,2000)
+	# imagePaths = list(paths.list_images(datasetPath))
 	random.seed(42)
 	random.shuffle(imagePaths)
 	# determine the set of possible class labels from the image dataset assuming

@@ -120,6 +120,7 @@ def multipleAlgorithmsNonParametric(algorithms,accuracies, file, fileResults, al
     else:
         means = np.mean(accuracies, axis=1)
         maximum = max(means)
+
         if verbose:
             print("Null hypothesis is accepted; hence, we can't say that there is a significant difference in the performance of the models")
             print("----------------------------------------------------------")
@@ -232,18 +233,18 @@ def multipleAlgorithmsParametric(algorithms,accuracies, file, fileResults, alpha
                 np.std(algorithmsDataset[c[c.rfind(" ") + 1:]]),cohend,effectsize))
                 #print("There are not significant differences between: %s and %s (Cohen's d=%s, %s)" % (c[0:c.find(" ")],c[c.rfind(" ") + 1:],cohend,effectsize))
 
-                if(np.mean(algorithmsDataset[c[0:c.find(" ")]])>np.mean(algorithmsDataset[c[c.rfind(" ") + 1:]])):
-                    fileResults.write(c[0:c.find(" ")])
-                    for ele in algorithmsDataset[c[0:c.find(" ")]]:
-                        fileResults.write(",")
-                        fileResults.write(str(ele))
-                    fileResults.write("\n")
-                else:
-                    fileResults.write(c[c.rfind(" ") + 1:])
-                    for ele in algorithmsDataset[c[c.rfind(" ") + 1:]]:
-                        fileResults.write(",")
-                        fileResults.write(str(ele))
-                    fileResults.write("\n")
+                # if(np.mean(algorithmsDataset[c[0:c.find(" ")]])>np.mean(algorithmsDataset[c[c.rfind(" ") + 1:]])):
+                #     fileResults.write(c[0:c.find(" ")])
+                #     for ele in algorithmsDataset[c[0:c.find(" ")]]:
+                #         fileResults.write(",")
+                #         fileResults.write(str(ele))
+                #     fileResults.write("\n")
+                # else:
+                #     fileResults.write(c[c.rfind(" ") + 1:])
+                #     for ele in algorithmsDataset[c[c.rfind(" ") + 1:]]:
+                #         fileResults.write(",")
+                #         fileResults.write(str(ele))
+                #     fileResults.write("\n")
 
             else:
                 if verbose:
@@ -265,18 +266,19 @@ def multipleAlgorithmsParametric(algorithms,accuracies, file, fileResults, alpha
                 np.mean(algorithmsDataset[c[c.rfind(" ") + 1:]]),
                 np.std(algorithmsDataset[c[c.rfind(" ") + 1:]]),cohend,effectsize))
 
-                if (np.mean(algorithmsDataset[c[0:c.find(" ")]]) > np.mean(algorithmsDataset[c[c.rfind(" ") + 1:]])):
-                    fileResults.write(c[0:c.find(" ")])
-                    for ele in algorithmsDataset[c[0:c.find(" ")]]:
-                        fileResults.write(",")
-                        fileResults.write(str(ele))
-                    fileResults.write("\n")
-                else:
-                    fileResults.write(c[c.rfind(" ") + 1:])
-                    for ele in algorithmsDataset[c[c.rfind(" ") + 1:]]:
-                        fileResults.write(",")
-                        fileResults.write(str(ele))
-                    fileResults.write("\n")
+                # if (np.mean(algorithmsDataset[c[0:c.find(" ")]]) > np.mean(algorithmsDataset[c[c.rfind(" ") + 1:]])):
+                #     fileResults.write(c[0:c.find(" ")])
+                #     for ele in algorithmsDataset[c[0:c.find(" ")]]:
+                #         fileResults.write(",")
+                #         fileResults.write(str(ele))
+                #     fileResults.write("\n")
+                # else:
+                #     fileResults.write(c[c.rfind(" ") + 1:])
+                #     for ele in algorithmsDataset[c[c.rfind(" ") + 1:]]:
+                #         fileResults.write(",")
+                #         fileResults.write(str(ele))
+                #     fileResults.write("\n")
+
 
     else:
         means = np.mean(accuracies, axis=1)
@@ -294,24 +296,24 @@ def multipleAlgorithmsParametric(algorithms,accuracies, file, fileResults, alpha
         file.write("----------------------------------------------------------\n")
         file.write("We take the model with the best mean (%s, mean: %f) and compare it with the other models: \n" % (algorithms[means.tolist().index(maximum)],maximum))
 
-        filePath = file.name
-        featureExtractor = filePath[filePath.rfind("_") + 1:filePath.rfind(("."))]
-        classifier = (algorithms[means.tolist().index(maximum)])
-        #f = fileResults  # confPath["classifier_path"] + conf["modelClassifiers"]             +filePath[filePath.rfind("_"):filePath.rfind(("."))]
-        # print(filePath[:filePath.rfind("/")] + "/kfold-comparison_" + featureExtractor + ".csv")
-        fStatistical = open(filePath[:filePath.rfind("/")] + "/kfold-comparison_" + featureExtractor + ".csv", "r")
-        fStatistical.readline()
-        for line in fStatistical:
-            line = line.split(",")
-            # print(line[0][1:len(line[0])-1])
-            # print(""+classifier)
-            # print(line[0] == str(classifier))
-            if (line[0] == classifier):
-                fileResults.write(line[0])
-                for it in line[1:]:
-                    fileResults.write(",")
-                    fileResults.write(it)
-        fStatistical.close()
+        # filePath = file.name
+        # featureExtractor = filePath[filePath.rfind("_") + 1:filePath.rfind(("."))]
+        # classifier = (algorithms[means.tolist().index(maximum)])
+        # #f = fileResults  # confPath["classifier_path"] + conf["modelClassifiers"]             +filePath[filePath.rfind("_"):filePath.rfind(("."))]
+        # # print(filePath[:filePath.rfind("/")] + "/kfold-comparison_" + featureExtractor + ".csv")
+        # fStatistical = open(filePath[:filePath.rfind("/")] + "/kfold-comparison_" + featureExtractor + ".csv", "r")
+        # fStatistical.readline()
+        # for line in fStatistical:
+        #     line = line.split(",")
+        #     # print(line[0][1:len(line[0])-1])
+        #     # print(""+classifier)
+        #     # print(line[0] == str(classifier))
+        #     if (line[0] == classifier):
+        #         fileResults.write(line[0])
+        #         for it in line[1:]:
+        #             fileResults.write(",")
+        #             fileResults.write(it)
+        # fStatistical.close()
 
         for i in range(0,len(algorithms)):
             if i != means.tolist().index(maximum):
@@ -326,6 +328,35 @@ def multipleAlgorithmsParametric(algorithms,accuracies, file, fileResults, alpha
                 if verbose:
                     print("Comparing effect size of %s and %s: Cohen's d=%s, %s" % (algorithms[means.tolist().index(maximum)],algorithms[i],cohend, effectsize))
                 file.write("Comparing effect size of %s and %s: Cohen's d=%s, %s\n" % (algorithms[means.tolist().index(maximum)],algorithms[i],cohend, effectsize))
+
+    means = np.mean(accuracies, axis=1)
+    maximum = max(means)
+    if verbose:
+        print("----------------------------------------------------------")
+        print("We take the model with the best mean (%s, mean: %f) and compare it with the other models: " % (
+            algorithms[means.tolist().index(maximum)], maximum))
+
+    file.write("----------------------------------------------------------\n")
+    file.write("We take the model with the best mean (%s, mean: %f) and compare it with the other models: \n" % (
+        algorithms[means.tolist().index(maximum)], maximum))
+
+    filePath = file.name
+    featureExtractor = filePath[filePath.rfind("_") + 1:filePath.rfind(("."))]
+    classifier = (algorithms[means.tolist().index(maximum)])
+    fStatistical = open(filePath[:filePath.rfind("/")] + "/kfold-comparison_" + featureExtractor + ".csv", "r")
+    fStatistical.readline()
+    for line in fStatistical:
+        line = line.split(",")
+        if (line[0] == classifier):
+            fileResults.write(line[0])
+            for it in line[1:]:
+                fileResults.write(",")
+                fileResults.write(it)
+    fStatistical.close()
+
+
+
+
     eta= eta_sqrd(accuracies)
     if (eta <= 0.01):
         effectsize = "Small"

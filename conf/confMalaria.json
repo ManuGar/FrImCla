@@ -3,18 +3,18 @@
   # DATASET SAMPLING CONFIGURATION
   #######
   # For only considering images without control image:
-  "dataset_path": "../dataset/Malaria",
+  "dataset_path": "../dataset/malaria",
 
   #For the output and results of the program
-  "output_path": "../output/Malaria",
+  "output_path": "../output/2000Mal",
 
   #######
   # EXPERT USER FLAG
-  # This flag allows the user to select if he/she is an expert user or not. If you are not a expert usert, the framework
+  # This flag allows the user to select if he/she is an expert user or not. If you are not a expert user, the framework
   # automatically will select all the possible combinations to find the best one. If the user select false, he/she does not
   # have to select feature_extractors and model_classifiers .
   #######
-  "expert":true,
+  "expert":false,
 
   #######
   # ENSEMBLE FLAG

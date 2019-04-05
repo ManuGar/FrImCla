@@ -6,7 +6,7 @@
   "dataset_path": "/home/magarcd/Escritorio/dataset/DogCat",
 
   #For the output and results of the program
-  "output_path": "../output/BORRARRRRR",
+  "output_path": "../output/EURO",
 
   #######
   # EXPERT USER FLAG
@@ -14,7 +14,7 @@
   # automatically will select all the possible combinations to find the best one. If the user select false, he/she does not
   # have to select feature_extractors and model_classifiers .
   #######
-  "expert":true,
+  "expert":false,
 
   #######
   # ENSEMBLE FLAG
@@ -57,6 +57,6 @@
   #######
   # You can choose one measure
   # Possible values for measures are: f1, accuracy, recall, precision, auroc
-  "measure" : "precision",
-  "n_steps" : 5
+  "measure" : "accuracy",
+  "n_steps" : 10
 }
