@@ -6,7 +6,7 @@
   "dataset_path": "../dataset/malaria",
 
   #For the output and results of the program
-  "output_path": "../output/2000Mal",
+  "output_path": "../output",
 
   #######
   # EXPERT USER FLAG

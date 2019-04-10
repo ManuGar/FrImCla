@@ -6,7 +6,7 @@
   "dataset_path": "/home/magarcd/Escritorio/dataset/PetImages",
 
   #For the output and results of the program
-  "output_path": "../output/dat200",
+  "output_path": "../output",
 
   #######
   # EXPERT USER FLAG
