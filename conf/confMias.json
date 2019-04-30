@@ -53,8 +53,6 @@
   "model_classifiers" : ["LogisticRegression", "MLP","SVM", "KNN"],
 //"GradientBoost","RandomForest", "SVM","KNN","LogisticRegression", "MLP"
 
-  #Con knn parece que haralick tampoco funciona. probar con el pequeño y faltan por probar los otros dos con el dataset real
-
   #######
   # MEASURE CONFIGURATION
   #######

@@ -8,7 +8,6 @@
   #For the output and results of the program
   "output_path": "../output",
 
-
   #######
   # EXPERT USER FLAG
   # This flag allows the user to select if he/she is an expert user or not. If you are not a expert usert, the framework
@@ -52,9 +51,6 @@
   # GradientBoost
   "training_size": 1,
   "model_classifiers" : ["GradientBoost","RandomForest", "SVM","KNN","LogisticRegression", "MLP"],
-
-
-  #Con knn parece que haralick tampoco funciona. probar con el pequeño y faltan por probar los otros dos con el dataset real
 
   #######
   # MEASURE CONFIGURATION

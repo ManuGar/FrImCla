@@ -25,7 +25,7 @@ class MyModel(Model):
         #./frimcla/shallowmodels/modeloRaices.h5
 
         url = "https://drive.google.com/uc?id=12IedeLxJ2fLxzb5McsiW2wnSg1Z4iyVw&export=download&authuser=0"
-        file = wget.download(url)
+        file = wget.download(url, "./frimcla/shallowmodels/modeloRaices.h5")
         my_model = load_model(file)
         pruebaModel = Model(my_model.input, my_model.layers[-3].output)
         self.model = pruebaModel

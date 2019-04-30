@@ -101,8 +101,8 @@ def extractFeatures(fE, batchSize, imagePaths, outputPath, datasetPath, le, verb
 def generateFeatures(outputPath, batchSize, datasetPath, featureExtractors, verbose=False):
 	# shuffle the image paths to ensure randomness -- this will help make our
 	# training and testing split code more efficient
-	imagePaths = cropDataset(datasetPath,2000)
-	# imagePaths = list(paths.list_images(datasetPath))
+	# imagePaths = cropDataset(datasetPath,2000)
+	imagePaths = list(paths.list_images(datasetPath))
 	random.seed(42)
 	random.shuffle(imagePaths)
 	# determine the set of possible class labels from the image dataset assuming

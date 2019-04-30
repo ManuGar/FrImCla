@@ -517,7 +517,8 @@ def meanStdReportAndPlot(algorithms,accuracies,file, verbose= False):
     ax = fig.add_subplot(111)
     plt.boxplot(np.transpose(accuracies))
     ax.set_xticklabels(algorithms)
-    plt.savefig("meansSTD.png")
+
+    plt.savefig(file.name[:file.name.rfind("/")] + "/meansSTD" + file.name[file.name.rfind("_"):file.name.rfind(".")] + ".png")
 
 def checkParametricConditions(accuracies,alpha, file, verbose=False):
     (W, p) = shapiro(accuracies)

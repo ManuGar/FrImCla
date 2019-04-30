@@ -3,10 +3,10 @@
   # DATASET SAMPLING CONFIGURATION
   #######
   # For only considering images without control image:
-  "dataset_path": "/home/magarcd/Escritorio/dataset/DogCat",
+  "dataset_path": "/home/magarcd/Escritorio/dataset/MiniDogCat",
 
   #For the output and results of the program
-  "output_path": "../output/PRrPRU",
+  "output_path": "../output/PRUEBITA",
 
   #######
   # EXPERT USER FLAG
@@ -38,7 +38,8 @@
   # and ["densenet"]
   # Shallow features: ["lab888"], ["lab444","4,4,4"], ["hsv888"], ["hsv444","4,4,4"], ["haralick"], ["lbp"], ["hog"], ["haarhog"]
   #######
-  "feature_extractors" : [ ["mymodel"]],
+  "feature_extractors" : [ ["vgg16", "False"], ["vgg19","False"]],
+//["mymodel"]
 
   #######
   # CLASSIFIER CONFIGURATION
@@ -48,9 +49,6 @@
   # GradientBoost
   "training_size": 1,
   "model_classifiers" : ["MLP","SVM","KNN", "LogisticRegression", "GradientBoost", "RandomForest"],
-
-
-  #Con knn parece que haralick tampoco funciona. probar con el pequeño y faltan por probar los otros dos con el dataset real
 
   #######
   # MEASURE CONFIGURATION
