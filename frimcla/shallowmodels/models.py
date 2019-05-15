@@ -19,12 +19,17 @@ from keras.applications import VGG16
 from keras.callbacks import LearningRateScheduler
 from keras import optimizers
 
+import zipfile
+import os
+
 class MyModel(Model):
     def __init__(self):
         # /home/magarcd/Escritorio/frimcla/frimcla/shallowmodels
         #./frimcla/shallowmodels/modeloRaices.h5
+        # https://drive.google.com/file/d/1BLl9B4dryCbAvNPFb9LsNmoO4bqiSCaR/view?usp=sharing
 
-        url = "https://drive.google.com/uc?id=12IedeLxJ2fLxzb5McsiW2wnSg1Z4iyVw&export=download&authuser=0"
+        # https://www.dropbox.com/s/gnd9rbm0igogqrd/modeloRaices.h5?dl=0
+        url = "https://www.dropbox.com/s/gnd9rbm0igogqrd/modeloRaices.h5?dl=1"
         file = wget.download(url, "./frimcla/shallowmodels/modeloRaices.h5")
         my_model = load_model(file)
         pruebaModel = Model(my_model.input, my_model.layers[-3].output)

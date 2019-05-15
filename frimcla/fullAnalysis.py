@@ -23,8 +23,10 @@ from frimcla.train import train
 
 """
 def fullAnalysis(config):
-    featureExtractors = [["mymodel"], ["vgg16", "False"], ["vgg19", "False"],["resnet", "False"], ["inception", "False"],["googlenet"], ["overfeat", "[-3]"], ["xception", "False"],
+    featureExtractors = [["vgg16", "False"], ["vgg19", "False"],["resnet", "False"], ["inception", "False"],["googlenet"], ["overfeat", "[-3]"], ["xception", "False"],
                          ["densenet"], ["lab888"], ["lab444","4,4,4"], ["hsv888"], ["hsv444","4,4,4"], ["haralick"], ["hog"], ["haarhog"]]
+
+    # ["mymodel"],
     modelClassifiers = ["GradientBoost","RandomForest", "SVM","KNN","LogisticRegression", "MLP"]
     conf = Conf(config)
     verbose = False

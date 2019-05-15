@@ -83,7 +83,7 @@ def extractFeatures(fE, batchSize, imagePaths, outputPath, datasetPath, le, verb
 			for (label, vector) in zip(labels, features):
 				oi.add(label, vector)
 			# check to see if progress should be displayed
-			if i > 0 and verbose:
+			if i >= 0 and verbose:
 				oi._debug("processed {} images".format((i + 1) * batchSize, msgType="[PROGRESS]"))
 		# finish the indexing process
 		oi.finish()
