@@ -5,7 +5,6 @@
 
 import warnings
 warnings.simplefilter(action="ignore", category=FutureWarning)
-import time
 import argparse
 import os
 from frimcla.utils.conf import Conf
@@ -30,36 +29,31 @@ def fullAnalysis(config):
     modelClassifiers = ["GradientBoost","RandomForest", "SVM","KNN","LogisticRegression", "MLP"]
     conf = Conf(config)
     verbose = False
-    start1 = time.time()
     if (conf["expert"]):
         featureExtractors = conf["feature_extractors"]
         modelClassifiers = conf["model_classifiers"]
-    generateFeatures(conf["output_path"], conf["batch_size"], conf["dataset_path"], featureExtractors, verbose)
-    end1 = time.time()
-    start2 = time.time()
+    geneFeatuT =generateFeatures(conf["output_path"], conf["batch_size"], conf["dataset_path"], featureExtractors, verbose)
 
     if(conf["ensemble"]):
-        majorityVoting(conf["output_path"], conf["dataset_path"], featureExtractors,
+        comparisonT = majorityVoting(conf["output_path"], conf["dataset_path"], featureExtractors,
                        modelClassifiers, conf["measure"], verbose)
     else:
-        statisticalComparison(conf["output_path"], conf["dataset_path"], featureExtractors,
+        comparisonT = statisticalComparison(conf["output_path"], conf["dataset_path"], featureExtractors,
                               modelClassifiers, conf["measure"], conf["n_steps"], verbose)
 
-    end2 = time.time()
-    start3 = time.time()
-    train(conf["output_path"], conf["dataset_path"], conf["training_size"])
-    end3 = time.time()
+    trainT = train(conf["output_path"], conf["dataset_path"], conf["training_size"])
     dataset = conf["dataset_path"][conf["dataset_path"].rfind("/"):]
 
     f = open(os.path.abspath(conf["output_path"]+ dataset + "/timeFile.txt"), "w")
-    f.write("It has taken " + str(end1 - start1) + " seg to generate the features\n")
-    f.write("It has taken " + str(end2 - start2) + " seg to generate the model comparison and the statistical analysis\n")
-    f.write("It has taken " + str(end3 - start3) + " seg to train the best model\n")
-    f.write("It has taken " + str(end3 - start1) + " seg to run\n")
-    print("\nIt has taken " + str(end1 - start1) + " seg to generate the features")
-    print("It has taken " + str(end2 - start2) + " seg to generate the model comparison and the statistical analysis")
-    print("It has taken " + str(end3 - start3) + " seg to train the best model")
-    print("It has taken " + str(end3 - start1) + " seg to run")
+    f.write("It has taken " + geneFeatuT + " seg to generate the features\n")
+    f.write("It has taken " + comparisonT + " seg to generate the model comparison and the statistical analysis\n")
+    f.write("It has taken " + trainT + " seg to train the best model\n")
+    totalT = geneFeatuT + comparisonT + trainT
+    f.write("It has taken " + str(totalT) + " seg to run\n")
+    print("\nIt has taken " + geneFeatuT + " seg to generate the features")
+    print("It has taken " + comparisonT + " seg to generate the model comparison and the statistical analysis")
+    print("It has taken " + trainT + " seg to train the best model")
+    print("It has taken " + totalT + " seg to run")
 
 
 def __main__():

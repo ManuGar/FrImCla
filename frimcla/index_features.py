@@ -3,7 +3,6 @@
 # suppress any FutureWarning from Theano
 from __future__ import print_function
 from __future__ import absolute_import
-# from mpi4py import MPI
 import warnings
 
 from imutils import paths
@@ -26,6 +25,7 @@ import _pickle as cPickle
 # import cPickle
 import random
 import os
+import time
 
 # hp = hpy()
 
@@ -96,12 +96,14 @@ def extractFeatures(fE, batchSize, imagePaths, outputPath, datasetPath, le, verb
 
 """
 	This is the method that collects the features of all the feature extractors selected. The output are the features of each method that are stored in different files.
+	Returns the execution time.
 
 """
 def generateFeatures(outputPath, batchSize, datasetPath, featureExtractors, verbose=False):
 	# shuffle the image paths to ensure randomness -- this will help make our
 	# training and testing split code more efficient
 	# imagePaths = cropDataset(datasetPath,2000)
+	start = time.time()
 	imagePaths = list(paths.list_images(datasetPath))
 	random.seed(42)
 	random.shuffle(imagePaths)
@@ -116,7 +118,9 @@ def generateFeatures(outputPath, batchSize, datasetPath, featureExtractors, verb
 	for (fE) in featureExtractors:
 		# fParams.write(fE[0] + "," + fE[1])
 		extractFeatures(fE,batchSize, imagePaths, outputPath, datasetPath, le, verbose)
+	finish = time.time()
 	del le, imagePaths
+	return finish-start
 
 def __main__():
 	# construct the argument parser and parse the command line arguments

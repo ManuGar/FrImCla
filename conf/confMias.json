@@ -3,10 +3,10 @@
   # DATASET SAMPLING CONFIGURATION
   #######
   # For only considering images without control image:
-  "dataset_path": "/home/magarcd/Escritorio/dataset/DogCat",
+  "dataset_path": "/home/magarcd/Escritorio/dataset/MiasNBMRecortadas",
 
   #For the output and results of the program
-  "output_path": "../output",
+  "output_path": "../output/PRUEBAMULTICLASE",
 
   #######
   # EXPERT USER FLAG
@@ -14,7 +14,7 @@
   # automatically will select all the possible combinations to find the best one. If the user select false, he/she does not
   # have to select feature_extractors and model_classifiers .
   #######
-  "expert":true,
+  "expert": false,
 
   #######
   # ENSEMBLE FLAG

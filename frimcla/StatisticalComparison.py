@@ -22,6 +22,7 @@ from frimcla.utils.conf import Conf
 from frimcla.Comparing import compare_methods_h5py, prepareModel
 from frimcla.StatisticalAnalysis.statisticalAnalysis import statisticalAnalysis
 from frimcla.shallowmodels.classificationModelFactory import classificationModelFactory
+import time
 
 #This list is used to say what combinations are not allowed
 blacklist = [["haarhog", "SVM"],
@@ -32,8 +33,13 @@ blacklist = [["haarhog", "SVM"],
              ["hog", "SVM"],
              ["hog", "KNN"],
              ["hog", "LogisticRegression"]]
+"""
+    This method uses several models to predict the class of the images.
+    The method returns the execution time.
 
+"""
 def majorityVoting(outputPath, datasetPath, featureExtractors, modelClassifiers, measure, verbose= False):
+    start = time.time()
     pathAux = outputPath + datasetPath[datasetPath.rfind("/"):]
     filePathAux = pathAux + "/results/combinationsAllowedMajorityVoting.txt"
     if not os.path.exists(pathAux + "/results"):
@@ -149,14 +155,18 @@ def majorityVoting(outputPath, datasetPath, featureExtractors, modelClassifiers,
     fichero.close()
     with fileConfModel as outfile:
         json.dump(ConfModel, outfile, indent=4)
+    finish = time.time()
+    return finish-start
 
 """
     This is the method of the second part of FrImCla. The input are the output path, dataset path, the list of feature 
     extractors that have been used in the previous step, the list of classification models, the measure that the user 
     wants to use and the verbose flag. The output is a list of files with the results of the statistical analysis and
     the combination of feature extractor and classifier model with the highest % of the measure selected by the user.
+    The method returns the execution time.
 """
 def statisticalComparison(outputPath, datasetPath, featureExtractors, modelClassifiers, measure, nSteps=10, verbose= False):
+    start = time.time()
     pathAux = outputPath + datasetPath[datasetPath.rfind("/"):]
     filePathAux = pathAux + "/results/kfold-comparison_bestClassifiers.csv"
     if os.path.isfile(filePathAux):
@@ -250,6 +260,8 @@ def statisticalComparison(outputPath, datasetPath, featureExtractors, modelClass
             with fileConfModel as outfile:
                 json.dump(ConfModel, outfile, indent=4)
     del resultsAccuracy, dfAccuracy
+    finish = time.time()
+    return finish - start
         # sys.stdout = sys.__stdout__
 
 def __main__():

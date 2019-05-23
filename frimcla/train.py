@@ -18,6 +18,7 @@ from frimcla.shallowmodels import classificationModelFactory as cmf
 # from . import shallowmodels.classificationModelFactory as cmf
 import wget
 import zipfile
+import time
 
 
 
@@ -26,8 +27,10 @@ import zipfile
 	the params of the extractor and the classifier model. The method returns the model trained and asks to the user if
 	he wants a webapp.  The web application is a simple application that allows the user to exploit the model to predict
 	the classes of the images.
+	The method returns the execution time.
 """
 def train(outputPath, datasetPath, trainingSize):
+	start = time.time()
 	datasetName = datasetPath[datasetPath.rfind("/"):]
 	auxPath = outputPath + datasetName
 	with open(auxPath + "/ConfModel.json") as json_file:
@@ -67,6 +70,7 @@ def train(outputPath, datasetPath, trainingSize):
 			f.close()
 			# close the database
 			db.close()
+	finish = time.time()
 	print("Do you want to generate a web app to classify the images with the best combination? y/n")
 	webapp = input()
 	# with open(auxPath + "/ConfModel.json") as json_file:
@@ -91,6 +95,8 @@ def train(outputPath, datasetPath, trainingSize):
 
 		shutil.make_archive(auxPath + "/webApp", 'zip', auxPath + '/webApp')
 		shutil.rmtree(auxPath + '/webApp')
+	print (str(finish - start))
+	return finish - start
 
 def __main__():
 	# construct the argument parser and parse the command line arguments
