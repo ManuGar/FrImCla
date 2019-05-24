@@ -45,15 +45,15 @@ def fullAnalysis(config):
     dataset = conf["dataset_path"][conf["dataset_path"].rfind("/"):]
 
     f = open(os.path.abspath(conf["output_path"]+ dataset + "/timeFile.txt"), "w")
-    f.write("It has taken " + geneFeatuT + " seg to generate the features\n")
-    f.write("It has taken " + comparisonT + " seg to generate the model comparison and the statistical analysis\n")
-    f.write("It has taken " + trainT + " seg to train the best model\n")
+    f.write("It has taken " + str(geneFeatuT) + " seg to generate the features\n")
+    f.write("It has taken " + str(comparisonT) + " seg to generate the model comparison and the statistical analysis\n")
+    f.write("It has taken " + str(trainT) + " seg to train the best model\n")
     totalT = geneFeatuT + comparisonT + trainT
     f.write("It has taken " + str(totalT) + " seg to run\n")
-    print("\nIt has taken " + geneFeatuT + " seg to generate the features")
-    print("It has taken " + comparisonT + " seg to generate the model comparison and the statistical analysis")
-    print("It has taken " + trainT + " seg to train the best model")
-    print("It has taken " + totalT + " seg to run")
+    print("\nIt has taken " + str(geneFeatuT) + " seg to generate the features")
+    print("It has taken " + str(comparisonT) + " seg to generate the model comparison and the statistical analysis")
+    print("It has taken " + str(trainT) + " seg to train the best model")
+    print("It has taken " + str(totalT) + " seg to run")
 
 
 def __main__():

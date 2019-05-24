@@ -95,7 +95,6 @@ def train(outputPath, datasetPath, trainingSize):
 
 		shutil.make_archive(auxPath + "/webApp", 'zip', auxPath + '/webApp')
 		shutil.rmtree(auxPath + '/webApp')
-	print (str(finish - start))
 	return finish - start
 
 def __main__():
