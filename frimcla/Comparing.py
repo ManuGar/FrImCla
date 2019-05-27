@@ -165,7 +165,7 @@ def compare_methods_h5py(model, featuresPath,labelEncoderPath,listAlgorithms,lis
     fileAux = open(labelEncoderPath, "rb")
     le = cPickle.loads(fileAux.read())
     fileAux.close()
-    labels = np.asarray([le.transform([re.split(":|" + os.sep, l)[-2]])[0] for l in labels])
+    labels = np.asarray([le.transform([re.split(":|\\\\" , l)[-2]])[0] for l in labels])
     # labels = np.asarray([le.transform([l.split(":")[0]])[0] for l in labels])
     del le
     kf = KFold(n_splits=int(nSteps), shuffle=False,random_state=42) #n_splits=10
