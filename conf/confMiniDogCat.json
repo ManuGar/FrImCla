@@ -38,7 +38,7 @@
   # and ["densenet"]
   # Shallow features: ["lab888"], ["lab444","4,4,4"], ["hsv888"], ["hsv444","4,4,4"], ["haralick"], ["lbp"], ["hog"], ["haarhog"]
   #######
-  "feature_extractors" : [ ["vgg16", "False"]],
+  "feature_extractors" : [ ["hsv888"]],
 //["mymodel"]
 
   #######

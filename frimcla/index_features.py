@@ -26,6 +26,7 @@ import _pickle as cPickle
 import random
 import os
 import time
+import re
 
 # hp = hpy()
 
@@ -113,7 +114,8 @@ def generateFeatures(outputPath, batchSize, datasetPath, featureExtractors, verb
 	if verbose:
 		print("[INFO] encoding labels...")
 	le = LabelEncoder()
-	le.fit([p.split("/")[-2] for p in imagePaths])
+	le.fit([p.split(os.sep)[-2] for p in imagePaths])
+	# le.fit([p.split("/")[-2] for p in imagePaths])
 	# Parallel(n_jobs=-1)(delayed(extractFeatures)(fE, batchSize, datasetPath, outputPath,datasetP, le, verbose) for fE in featureExtractors)
 	for (fE) in featureExtractors:
 		# fParams.write(fE[0] + "," + fE[1])

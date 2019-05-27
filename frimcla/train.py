@@ -19,6 +19,7 @@ from frimcla.shallowmodels import classificationModelFactory as cmf
 import wget
 import zipfile
 import time
+import re
 
 
 
@@ -49,7 +50,8 @@ def train(outputPath, datasetPath, trainingSize):
 		split = int(db["image_ids"].shape[0] * trainingSize)
 		(trainData, trainLabels) = (db["features"][:split], db["image_ids"][:split])
 		# use the label encoder to encode the training and testing labels
-		trainLabels = [le.transform([l.split(":")[0]])[0] for l in trainLabels]
+		trainLabels = [le.transform([re.split(":|" + os.sep, l)[-2] ])[0] for l in trainLabels]
+		# trainLabels = [le.transform([l.split(":")[0]])[0] for l in trainLabels]
 		# define the grid of parameters to explore, then start the grid search where
 		# we evaluate a Linear SVM for each value of C
 		print("[INFO] tuning hyperparameters...")
@@ -83,7 +85,6 @@ def train(outputPath, datasetPath, trainingSize):
 		file = wget.download(url, auxPath + "/webApp.zip")
 		zip = zipfile.ZipFile(file)#auxPath + '/webApp.zip'
 		zip.extractall(auxPath)
-		os.remove(auxPath + '/webApp.zip')
 		# shutil.copytree("./frimcla/webApp/", auxPath + "/webApp")
 		shutil.copyfile(auxPath + "/ConfModel.json", auxPath + "/webApp/FlaskApp/ConfModel.json")
 		for ext in extractors:
@@ -93,6 +94,7 @@ def train(outputPath, datasetPath, trainingSize):
 				shutil.copyfile(auxPath + "/models/le.cpickle",
 								auxPath + "/webApp/FlaskApp/le.cpickle")
 
+		os.remove(auxPath + '/webApp.zip')
 		shutil.make_archive(auxPath + "/webApp", 'zip', auxPath + '/webApp')
 		shutil.rmtree(auxPath + '/webApp')
 	return finish - start
