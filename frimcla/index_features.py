@@ -21,8 +21,10 @@ from frimcla.utils import dataset
 from sklearn.preprocessing import LabelEncoder
 # from guppy import hpy
 import argparse
-import _pickle as cPickle
-# import cPickle
+try:
+    import _pickle as cPickle
+except ImportError:
+	import cPickle
 import random
 import os
 import time
@@ -57,6 +59,8 @@ def cropDataset(datasetPath,n_images_dataset=100):
 	in the terminal.
 """
 def extractFeatures(fE, batchSize, imagePaths, outputPath, datasetPath, le, verbose = False):
+	imagePaths = [i.replace("\\ "," ")  for i in imagePaths]
+
 	# initialize the Overfeat extractor and the Overfeat indexer
 	if verbose:
 		print("[INFO] initializing network...")

@@ -6,8 +6,10 @@ from __future__ import print_function
 from __future__ import absolute_import
 from sklearn.model_selection import RandomizedSearchCV
 import argparse
-import _pickle as cPickle
-# import cPickle
+try:
+    import _pickle as cPickle
+except ImportError:
+    import cPickle
 import h5py
 import shutil
 import json

@@ -14,7 +14,11 @@ from imutils import paths
 from scipy import stats
 import numpy as np
 import argparse
-import _pickle as cPickle
+try:
+    import _pickle as cPickle
+except ImportError:
+	import cPickle
+# import _pickle as cPickle
 import h5py
 import os
 import json
@@ -122,7 +126,7 @@ def prediction(featExt, classi, imagePath, outputPath, datasetPath):
             features = oe.describe(images)
             for (label, vector) in zip(labels, features):
                 prediction = model.predict(np.atleast_2d(vector))[0]
-                # prediction = le.inverse_transform([prediction])
+                prediction = le.inverse_transform([prediction])
                 filePrediction.write( str(label) + ", " + str(prediction) + "\r\n")
                 print("[INFO] class predicted for the image {}: {}".format(label, prediction))
 

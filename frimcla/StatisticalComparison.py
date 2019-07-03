@@ -11,8 +11,10 @@ import os
 import json
 import numpy as np
 import h5py
-import _pickle as cPickle
-# import cPickle
+try:
+    import _pickle as cPickle
+except ImportError:
+    import cPickle
 from sklearn.model_selection import KFold
 from sklearn.metrics import accuracy_score
 from scipy import stats

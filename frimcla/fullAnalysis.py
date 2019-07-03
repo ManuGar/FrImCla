@@ -2,7 +2,6 @@
 # python fullAnalysis.py --conf conf/flowers17.json
 # import the necessary packages
 
-
 import warnings
 warnings.simplefilter(action="ignore", category=FutureWarning)
 import argparse
@@ -32,7 +31,12 @@ def fullAnalysis(config):
     if (conf["expert"]):
         featureExtractors = conf["feature_extractors"]
         modelClassifiers = conf["model_classifiers"]
+
+    dataset = conf["dataset_path"][conf["dataset_path"].rfind("/"):]
+    f = open(os.path.abspath(conf["output_path"]+ dataset + "/timeFile.txt"), "w")
+
     geneFeatuT =generateFeatures(conf["output_path"], conf["batch_size"], conf["dataset_path"], featureExtractors, verbose)
+    f.write("It has taken " + str(geneFeatuT) + " seg to generate the features\n")
 
     if(conf["ensemble"]):
         comparisonT = majorityVoting(conf["output_path"], conf["dataset_path"], featureExtractors,
@@ -40,13 +44,9 @@ def fullAnalysis(config):
     else:
         comparisonT = statisticalComparison(conf["output_path"], conf["dataset_path"], featureExtractors,
                               modelClassifiers, conf["measure"], conf["n_steps"], verbose)
-
-    trainT = train(conf["output_path"], conf["dataset_path"], conf["training_size"])
-    dataset = conf["dataset_path"][conf["dataset_path"].rfind("/"):]
-
-    f = open(os.path.abspath(conf["output_path"]+ dataset + "/timeFile.txt"), "w")
-    f.write("It has taken " + str(geneFeatuT) + " seg to generate the features\n")
     f.write("It has taken " + str(comparisonT) + " seg to generate the model comparison and the statistical analysis\n")
+    trainT = train(conf["output_path"], conf["dataset_path"], conf["training_size"])
+
     f.write("It has taken " + str(trainT) + " seg to train the best model\n")
     totalT = geneFeatuT + comparisonT + trainT
     f.write("It has taken " + str(totalT) + " seg to run\n")
@@ -54,6 +54,7 @@ def fullAnalysis(config):
     print("It has taken " + str(comparisonT) + " seg to generate the model comparison and the statistical analysis")
     print("It has taken " + str(trainT) + " seg to train the best model")
     print("It has taken " + str(totalT) + " seg to run")
+    f.close()
 
 
 def __main__():
