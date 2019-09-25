@@ -33,7 +33,9 @@ def fullAnalysis(config):
         modelClassifiers = conf["model_classifiers"]
 
     dataset = conf["dataset_path"][conf["dataset_path"].rfind("/"):]
-    f = open(os.path.abspath(conf["output_path"]+ dataset + "/timeFile.txt"), "w")
+    if (not (os.path.exists(os.path.abspath(conf["output_path"]+ dataset + "/timeFile.txt")))):
+        os.makedirs(os.path.abspath(conf["output_path"]+ dataset))
+    f = open(os.path.abspath(os.path.join(conf["output_path"]+ dataset, "timeFile.txt")), "w")
 
     geneFeatuT =generateFeatures(conf["output_path"], conf["batch_size"], conf["dataset_path"], featureExtractors, verbose)
     f.write("It has taken " + str(geneFeatuT) + " seg to generate the features\n")

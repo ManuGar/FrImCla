@@ -32,6 +32,7 @@ def prediction(featExt, classi, imagePath, outputPath, datasetPath):
     datasetName = datasetPath[datasetPath.rfind("/")+1:]
     auxPath = outputPath + "/" + datasetName
     factory = classificationModelFactory()
+    predictions = []
 
     with open(auxPath + "/ConfModel.json") as json_file:
         data = json.load(json_file)
@@ -119,6 +120,7 @@ def prediction(featExt, classi, imagePath, outputPath, datasetPath):
             prediction = model.predict(np.atleast_2d(vector))[0]
             filePrediction.write(str(label) + ", " + str(prediction) + "\r\n")
             prediction = le.inverse_transform([prediction])
+            predictions.append(prediction)
             print("[INFO] class predicted for the image {}: {}".format(label, prediction))
     else:
         for (i, imPaths) in enumerate(dataset.chunk(imagePaths, 32)):
@@ -127,10 +129,132 @@ def prediction(featExt, classi, imagePath, outputPath, datasetPath):
             for (label, vector) in zip(labels, features):
                 prediction = model.predict(np.atleast_2d(vector))[0]
                 prediction = le.inverse_transform([prediction])
+                predictions.append(prediction)
                 filePrediction.write( str(label) + ", " + str(prediction) + "\r\n")
                 print("[INFO] class predicted for the image {}: {}".format(label, prediction))
 
     filePrediction.close()
+    return predictions
+
+
+
+
+
+
+
+
+
+
+def predictionArray(featExt, classi, imagesPredict, outputPath, datasetPath):
+    # load the configuration, label encoder, and classifier
+    print("[INFO] loading model...")
+    datasetName = datasetPath[datasetPath.rfind("/")+1:]
+    auxPath = outputPath + "/" + datasetName
+    factory = classificationModelFactory()
+    predictions = []
+
+    with open(auxPath + "/ConfModel.json") as json_file:
+        data = json.load(json_file)
+
+    extractor = data['featureExtractors'][0]['model']
+    classifier = data['featureExtractors'][0]['classificationModels'][0]
+
+    if (featExt[0] == extractor and classi==classifier):
+        labelEncoderPath = auxPath + "/models/le.cpickle"
+        cPickleFile = auxPath + "/classifiers/classifier_" + featExt[0] + "_" + classi + ".cpickle"
+        le = cPickle.loads(open(labelEncoderPath, "rb").read())
+        model = cPickle.loads(open(cPickleFile, "rb").read())
+
+    else: #Aqui es donde deberia hacer la pregunta de que si quiere realmente entrenar ese modelo o el mejor
+        print("This is not the best model. Are you sure you want to predict with it?")
+        response = input()
+        if (response.upper() in ("YES", "Y")):
+            files = os.walk(auxPath + "/models")
+            listFeatExt = []
+            for _, _, file in files:
+                for feat in file:
+                    if(len(feat.split("-"))>1):
+                        feat = feat.split("-")[1].split(".")[0]
+                        listFeatExt.append(feat)
+            listFeatExt = list(set(listFeatExt))
+            if (featExt[0] in listFeatExt):
+                labelEncoderPath = auxPath + "/models/le.cpickle"
+                le = cPickle.loads(open(labelEncoderPath,"rb").read())
+                featuresPath = auxPath + "/models/features-" + featExt[0] + ".hdf5"
+                db = h5py.File(featuresPath)
+                split = int(db["image_ids"].shape[0])
+                (trainData, trainLabels) = (db["features"][:split], db["image_ids"][:split])
+                trainLabels = [le.transform([l.split(":")[0]])[0] for l in trainLabels]
+                classifierModel = factory.getClassificationModel(classi)
+
+                model = RandomizedSearchCV(classifierModel.getModel(), param_distributions=classifierModel.getParams(),
+                                           n_iter=classifierModel.getNIterations())
+                model.fit(trainData, trainLabels)
+                f = open(auxPath + "/classifiers/classifier_" + featExt[0] + "_" + classi + ".cpickle", "wb")
+                f.write(cPickle.dumps(model))
+                f.close()
+                db.close()
+
+            else:
+                imagePaths = list(paths.list_images(datasetPath))
+                random.seed(42)
+                random.shuffle(imagePaths)
+                le = LabelEncoder()
+                le.fit([p.split("/")[-2] for p in imagePaths])
+                extractFeatures(featExt, 32, imagePaths, outputPath, datasetPath, le, False)
+                labelEncoderPath = auxPath + "/models/le.cpickle"
+                le = cPickle.loads(open(labelEncoderPath,"rb").read())
+                featuresPath = auxPath + "/models/features-" + featExt[0] + ".hdf5"
+                db = h5py.File(featuresPath)
+                split = int(db["image_ids"].shape[0])
+                (trainData, trainLabels) = (db["features"][:split], db["image_ids"][:split])
+                trainLabels = [le.transform([l.split(":")[0]])[0] for l in trainLabels]
+                classifierModel = factory.getClassificationModel(classi)
+                model = RandomizedSearchCV(classifierModel.getModel(), param_distributions=classifierModel.getParams(),
+                                           n_iter=classifierModel.getNIterations())
+                model.fit(trainData, trainLabels)
+                f = open(auxPath + "/classifiers/classifier_" + featExt[0] + "_" + classi + ".cpickle", "wb")
+                f.write(cPickle.dumps(model))
+                f.close()
+                db.close()
+        else:
+            labelEncoderPath = auxPath + "/models/le.cpickle"
+            with open(auxPath + "/ConfModel.json") as json_file:
+                data = json.load(json_file)
+            extractor = data['featureExtractors'][0]['model']
+            classifier = data['featureExtractors'][0]['classificationModels'][0]
+            cPickleFile = auxPath + "/classifiers/classifier_" + extractor + "_" + classifier + ".cpickle"
+            le = cPickle.loads(open(labelEncoderPath, "rb").read())
+            model = cPickle.loads(open(cPickleFile, "rb").read())
+
+    filePrediction = open(auxPath+"/predictionResults.csv","a")
+    filePrediction.write("image_id, " + datasetName +"\n")
+    oe = Extractor(featExt)
+
+    for (i, imPaths) in enumerate(dataset.chunk(imagesPredict, 32)):
+        (labels, images) = dataset.build_batch(imPaths, featExt[0])
+        features = oe.describe(images)
+        for (label, vector) in zip(labels, features):
+            prediction = model.predict(np.atleast_2d(vector))[0]
+            prediction = le.inverse_transform([prediction])
+            predictions.append(prediction)
+            filePrediction.write( str(label) + ", " + str(prediction) + "\r\n")
+            print("[INFO] class predicted for the image {}: {}".format(label, prediction))
+
+    filePrediction.close()
+    return predictions
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 #This method only if you want to execute the prediction with the output of the previous steps
@@ -153,6 +277,7 @@ def predictionEnsemble(featureExtractors, classifiers, imagePath, outputPath, da
     imagePaths = list(paths.list_images(imagePath))
     predictions = []
     modes = []
+    predictionsout = []
 
     for fe in featureExtractors:
         if (len(imagePaths)==0):
@@ -187,9 +312,10 @@ def predictionEnsemble(featureExtractors, classifiers, imagePath, outputPath, da
         prediction = le.inverse_transform(mode)
         print("[INFO] class predicted for the image {}: {}".format(image, prediction[0]))
         filePrediction.write("\n" + str(image) + ", " + str(prediction[0]))
+        predictionsout.append(prediction)
 
     filePrediction.close()
-
+    return predictionsout
 
 def __main__():
     # construct the argument parser and parse the command line arguments

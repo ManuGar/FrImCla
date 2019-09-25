@@ -24,7 +24,7 @@ import argparse
 try:
     import _pickle as cPickle
 except ImportError:
-	import cPickle
+    import cPickle
 import random
 import os
 import time
@@ -34,8 +34,8 @@ import re
 
 #This method list the dirs and files that are inside the path of the parameter
 def ls(ruta = '.'):
-	dir, subdirs, archivos = next(os.walk(ruta))
-	return subdirs
+    dir, subdirs, archivos = next(os.walk(ruta))
+    return subdirs
 
 
 """
@@ -43,14 +43,14 @@ This method reduces the size of the parameter dataset until the user has the num
 The method randomly chooses the images that enter the dataset. The output is the balanced dataset.
 """
 def cropDataset(datasetPath,n_images_dataset=100):
-	subdirs = ls(datasetPath)
-	n_classes = len(subdirs)
-	images_path = []
-	for subdir in subdirs:
-		_, _, files = next(os.walk(os.path.join(datasetPath, subdir)))
-		files = [os.path.join(datasetPath, subdir, file) for file in files]
-		images_path+=files[0:int(n_images_dataset / n_classes)]
-	return images_path
+    subdirs = ls(datasetPath)
+    n_classes = len(subdirs)
+    images_path = []
+    for subdir in subdirs:
+        _, _, files = next(os.walk(os.path.join(datasetPath, subdir)))
+        files = [os.path.join(datasetPath, subdir, file) for file in files]
+        images_path+=files[0:int(n_images_dataset / n_classes)]
+    return images_path
 
 """
 	This method extract the features of the dataset and needs the feature extractor, the size of the batch, a list of 
@@ -59,45 +59,42 @@ def cropDataset(datasetPath,n_images_dataset=100):
 	in the terminal.
 """
 def extractFeatures(fE, batchSize, imagePaths, outputPath, datasetPath, le, verbose = False):
-	imagePaths = [i.replace("\\ "," ")  for i in imagePaths]
-
-	# initialize the Overfeat extractor and the Overfeat indexer
-	if verbose:
-		print("[INFO] initializing network...")
-	featuresPath = outputPath + datasetPath[datasetPath.rfind("/"):] + \
+    imagePaths = [i.replace("\\ "," ")  for i in imagePaths]
+    # initialize the Overfeat extractor and the Overfeat indexer
+    if verbose:
+        print("[INFO] initializing network...")
+    featuresPath = outputPath + datasetPath[datasetPath.rfind("/"):] + \
 				   "/models/features-" + fE[0] + ".hdf5"
-	labelEncoderPath = featuresPath[:featuresPath.rfind("/")] + "/le.cpickle"
-
-	directory = featuresPath[:featuresPath.rfind("/")]
-	if (not os.path.exists(directory)):
-		os.makedirs(directory)
-	f = open(labelEncoderPath, "wb")
-	f.write(cPickle.dumps(le))
-	f.close()
-	if (not (os.path.isfile(featuresPath))):
-		oe = Extractor(fE)
-		oi = Indexer(featuresPath, estNumImages=len(imagePaths))
-		if verbose:
-			print("[INFO] starting feature extraction...")
-		# loop over the image paths in batches
-		for (i, paths) in enumerate(dataset.chunk(imagePaths, batchSize)):
-			# load the set of images from disk and describe them
-			(labels, images) = dataset.build_batch(paths, fE[0])
-			features = oe.describe(images)
-			# loop over each set of (label, vector) pair and add them to the indexer
-			for (label, vector) in zip(labels, features):
-				oi.add(label, vector)
-			# check to see if progress should be displayed
-			if i >= 0 and verbose:
-				oi._debug("processed {} images".format((i + 1) * batchSize, msgType="[PROGRESS]"))
-		# finish the indexing process
-		oi.finish()
-		# dump the label encoder to file
-		if verbose:
-			print("[INFO] dumping labels to file...")
-
-	else:
-		print("These features (" + fE[0] + ") are already generated")
+    labelEncoderPath = featuresPath[:featuresPath.rfind("/")] + "/le.cpickle"
+    directory = featuresPath[:featuresPath.rfind("/")]
+    if (not os.path.exists(directory)):
+        os.makedirs(directory)
+    f = open(labelEncoderPath, "wb")
+    f.write(cPickle.dumps(le))
+    f.close()
+    if (not (os.path.isfile(featuresPath))):
+        oe = Extractor(fE)
+        oi = Indexer(featuresPath, estNumImages=len(imagePaths))
+        if verbose:
+            print("[INFO] starting feature extraction...")
+        # loop over the image paths in batches
+        for (i, paths) in enumerate(dataset.chunk(imagePaths, batchSize)):
+            # load the set of images from disk and describe them
+            (labels, images) = dataset.build_batch(paths, fE[0])
+            features = oe.describe(images)
+            # loop over each set of (label, vector) pair and add them to the indexer
+            for (label, vector) in zip(labels, features):
+                oi.add(label, vector)
+                # check to see if progress should be displayed
+            if i >= 0 and verbose:
+                oi._debug("processed {} images".format((i + 1) * batchSize, msgType="[PROGRESS]"))
+        # finish the indexing process
+        oi.finish()
+        # dump the label encoder to file
+        if verbose:
+            print("[INFO] dumping labels to file...")
+    else:
+        print("These features (" + fE[0] + ") are already generated")
 
 """
 	This is the method that collects the features of all the feature extractors selected. The output are the features of each method that are stored in different files.
@@ -105,28 +102,32 @@ def extractFeatures(fE, batchSize, imagePaths, outputPath, datasetPath, le, verb
 
 """
 def generateFeatures(outputPath, batchSize, datasetPath, featureExtractors, verbose=False):
-	# shuffle the image paths to ensure randomness -- this will help make our
-	# training and testing split code more efficient
-	# imagePaths = cropDataset(datasetPath,2000)
-	start = time.time()
-	imagePaths = list(paths.list_images(datasetPath))
-	random.seed(42)
-	random.shuffle(imagePaths)
-	# determine the set of possible class labels from the image dataset assuming
-	# that the images are in {directory}/{filename} structure and create the
-	# label encoder
-	if verbose:
-		print("[INFO] encoding labels...")
-	le = LabelEncoder()
-	le.fit([p.split(os.sep)[-2] for p in imagePaths])
-	# le.fit([p.split("/")[-2] for p in imagePaths])
-	# Parallel(n_jobs=-1)(delayed(extractFeatures)(fE, batchSize, datasetPath, outputPath,datasetP, le, verbose) for fE in featureExtractors)
-	for (fE) in featureExtractors:
-		# fParams.write(fE[0] + "," + fE[1])
-		extractFeatures(fE,batchSize, imagePaths, outputPath, datasetPath, le, verbose)
-	finish = time.time()
-	del le, imagePaths
-	return finish-start
+    start = time.time()
+    # shuffle the image paths to ensure randomness -- this will help make our
+    # training and testing split code more efficient
+    imagePaths = cropDataset(datasetPath, 2000)
+    # imagePaths = list(paths.list_images(datasetPath))
+    file = open("/home/magarcd/Escritorio/malaria2000.txt","w")
+    for ima in imagePaths:
+        file.write(ima + "\n")
+    random.seed(42)
+    random.shuffle(imagePaths)
+    # determine the set of possible class labels from the image dataset assuming
+    # that the images are in {directory}/{filename} structure and create the
+    # label encoder
+    if verbose:
+        print("[INFO] encoding labels...")
+
+    le = LabelEncoder()
+    le.fit([p.split(os.sep)[-2] for p in imagePaths])
+    # le.fit([p.split("/")[-2] for p in imagePaths])
+    # Parallel(n_jobs=-1)(delayed(extractFeatures)(fE, batchSize, datasetPath, outputPath,datasetP, le, verbose) for fE in featureExtractors)
+    for (fE) in featureExtractors:
+    	# fParams.write(fE[0] + "," + fE[1])
+    	extractFeatures(fE,batchSize, imagePaths, outputPath, datasetPath, le, verbose)
+    finish = time.time()
+    del le, imagePaths
+    return finish-start
 
 def __main__():
 	# construct the argument parser and parse the command line arguments
