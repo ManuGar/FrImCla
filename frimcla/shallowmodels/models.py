@@ -61,6 +61,7 @@ class DenseNet(Model):
         new_input = modelI.input
         hidden_layer = modelI.layers[-2].output
         new_output = Flatten()(hidden_layer)
+        super(DenseNet,self).__init__()
         self.model = Model(new_input, new_output)
 
     def describe(self,image):

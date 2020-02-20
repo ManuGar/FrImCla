@@ -107,9 +107,6 @@ def generateFeatures(outputPath, batchSize, datasetPath, featureExtractors, verb
     # training and testing split code more efficient
     imagePaths = cropDataset(datasetPath, 2000)
     # imagePaths = list(paths.list_images(datasetPath))
-    file = open("/home/magarcd/Escritorio/malaria2000.txt","w")
-    for ima in imagePaths:
-        file.write(ima + "\n")
     random.seed(42)
     random.shuffle(imagePaths)
     # determine the set of possible class labels from the image dataset assuming
