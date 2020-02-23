@@ -26,7 +26,7 @@ import random
 import sys
 
 
-def prediction(featExt, classi, imagePath, outputPath, datasetPath):
+def prediction(featExt, classi, imagePath, outputPath, datasetPath,multiclass=False):
     # load the configuration, label encoder, and classifier
     print("[INFO] loading model...")
     datasetName = datasetPath[datasetPath.rfind("/")+1:]
@@ -119,7 +119,11 @@ def prediction(featExt, classi, imagePath, outputPath, datasetPath):
         for (label, vector) in zip(labels, features):
             prediction = model.predict(np.atleast_2d(vector))[0]
             filePrediction.write(str(label) + ", " + str(prediction) + "\r\n")
-            prediction = le.inverse_transform([prediction])
+            print(prediction)
+            if multiclass:
+                prediction = le.inverse_transform(np.array([prediction]))
+            else:
+                prediction = le.inverse_transform([prediction])
             predictions.append(prediction)
             print("[INFO] class predicted for the image {}: {}".format(label, prediction))
     else:
@@ -128,7 +132,10 @@ def prediction(featExt, classi, imagePath, outputPath, datasetPath):
             features = oe.describe(images)
             for (label, vector) in zip(labels, features):
                 prediction = model.predict(np.atleast_2d(vector))[0]
-                prediction = le.inverse_transform([prediction])
+                if multiclass:
+                    prediction = le.inverse_transform(np.array([prediction]))
+                else:
+                    prediction = le.inverse_transform([prediction])
                 predictions.append(prediction)
                 filePrediction.write( str(label) + ", " + str(prediction) + "\r\n")
                 print("[INFO] class predicted for the image {}: {}".format(label, prediction))
@@ -145,7 +152,7 @@ def prediction(featExt, classi, imagePath, outputPath, datasetPath):
 
 
 
-def predictionArray(featExt, classi, imagesPredict, outputPath, datasetPath):
+def predictionArray(featExt, classi, imagesPredict, outputPath, datasetPath,multiclass=False):
     # load the configuration, label encoder, and classifier
     print("[INFO] loading model...")
     datasetName = datasetPath[datasetPath.rfind("/")+1:]
@@ -236,7 +243,10 @@ def predictionArray(featExt, classi, imagesPredict, outputPath, datasetPath):
         features = oe.describe(images)
         for (label, vector) in zip(labels, features):
             prediction = model.predict(np.atleast_2d(vector))[0]
-            prediction = le.inverse_transform([prediction])
+            if multiclass:
+                prediction = le.inverse_transform(np.array([prediction]))
+            else:
+                prediction = le.inverse_transform([prediction])
             predictions.append(prediction)
             filePrediction.write( str(label) + ", " + str(prediction) + "\r\n")
             print("[INFO] class predicted for the image {}: {}".format(label, prediction))

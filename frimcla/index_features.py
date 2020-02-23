@@ -119,7 +119,7 @@ def generateFeatures(outputPath, batchSize, datasetPath, featureExtractors, verb
 
     if multiclass:
         le = MultiLabelBinarizer()
-        le.fit([p.split(os.sep)[-2] for p in imagePaths])
+        le.fit([p.split(os.sep)[-2].split("_") for p in imagePaths])
     else:
         le = LabelEncoder()
         le.fit([p.split(os.sep)[-2] for p in imagePaths])

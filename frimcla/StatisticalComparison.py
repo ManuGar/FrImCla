@@ -260,8 +260,17 @@ def statisticalComparison(outputPath, datasetPath, featureExtractors, modelClass
             else:
                 parametros=model[1]
             fileConfModel = open(pathAux + "/ConfModel.json","w+")
-            ConfModel={
-                    'featureExtractors': [{'model': model[0], 'params': str(parametros),'classificationModels': [classifier]}],
+            if multiclass:
+                ConfModel = {
+                    'featureExtractors': [
+                        {'model': model[0], 'params': str(parametros), 'classificationModels': [classifier],
+                         'multiclass': True}],
+
+                }
+            else:
+                ConfModel={
+                    'featureExtractors': [{'model': model[0], 'params': str(parametros),'classificationModels': [classifier],
+                                           'multiclass': False}],
 
                 }
             with fileConfModel as outfile:

@@ -53,19 +53,23 @@ def train(outputPath, datasetPath, trainingSize,multiclass=False):
 		split = int(db["image_ids"].shape[0] * trainingSize)
 		(trainData, trainLabels) = (db["features"][:split], db["image_ids"][:split])
 		# use the label encoder to encode the training and testing labels
-		trainLabels = [le.transform([re.split(":|\\\\", l)[-2] ])[0] for l in trainLabels]
+
 		# trainLabels = [le.transform([l.split(":")[0]])[0] for l in trainLabels]
 		# define the grid of parameters to explore, then start the grid search where
 		# we evaluate a Linear SVM for each value of C
 		print("[INFO] tuning hyperparameters...")
 		if multiclass:
 			factory = cmmcf.classificationModelMultiClassFactory()
+			import numpy as np
+			trainLabels = np.array([list(le.transform([re.split(":|\\\\", l)[-2].split('_')])[0]) for l in trainLabels])
 		else:
 			factory = cmf.classificationModelFactory()
+			trainLabels = [le.transform([re.split(":|\\\\", l)[-2]])[0] for l in trainLabels]
 		for clas in ex["classificationModels"]:
 			classifierModel = factory.getClassificationModel(clas)
 			model = RandomizedSearchCV(classifierModel.getModel(), param_distributions=classifierModel.getParams(),
 							   n_iter=classifierModel.getNIterations())
+
 
 			model.fit(trainData, trainLabels)
 			print("[INFO] best hyperparameters: {}".format(model.best_params_))
