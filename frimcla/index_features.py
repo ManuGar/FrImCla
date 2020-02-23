@@ -19,6 +19,7 @@ from frimcla.utils import dataset
 # from .utils.conf import Conf
 # from .utils import dataset
 from sklearn.preprocessing import LabelEncoder
+from sklearn.preprocessing import MultiLabelBinarizer
 # from guppy import hpy
 import argparse
 try:
@@ -29,6 +30,7 @@ import random
 import os
 import time
 import re
+
 
 # hp = hpy()
 
@@ -101,7 +103,7 @@ def extractFeatures(fE, batchSize, imagePaths, outputPath, datasetPath, le, verb
 	Returns the execution time.
 
 """
-def generateFeatures(outputPath, batchSize, datasetPath, featureExtractors, verbose=False):
+def generateFeatures(outputPath, batchSize, datasetPath, featureExtractors, verbose=False,multiclass=False):
     start = time.time()
     # shuffle the image paths to ensure randomness -- this will help make our
     # training and testing split code more efficient
@@ -115,8 +117,12 @@ def generateFeatures(outputPath, batchSize, datasetPath, featureExtractors, verb
     if verbose:
         print("[INFO] encoding labels...")
 
-    le = LabelEncoder()
-    le.fit([p.split(os.sep)[-2] for p in imagePaths])
+    if multiclass:
+        le = MultiLabelBinarizer()
+        le.fit([p.split(os.sep)[-2] for p in imagePaths])
+    else:
+        le = LabelEncoder()
+        le.fit([p.split(os.sep)[-2] for p in imagePaths])
     # le.fit([p.split("/")[-2] for p in imagePaths])
     # Parallel(n_jobs=-1)(delayed(extractFeatures)(fE, batchSize, datasetPath, outputPath,datasetP, le, verbose) for fE in featureExtractors)
     for (fE) in featureExtractors:

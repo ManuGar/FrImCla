@@ -17,6 +17,7 @@ import os
 # from .utils.conf import Conf
 from frimcla.utils.conf import Conf
 from frimcla.shallowmodels import classificationModelFactory as cmf
+from frimcla.shallowmodels import classificationModelMultiClassFactory as cmmcf
 # from . import shallowmodels.classificationModelFactory as cmf
 import wget
 import zipfile
@@ -32,7 +33,7 @@ import re
 	the classes of the images.
 	The method returns the execution time.
 """
-def train(outputPath, datasetPath, trainingSize):
+def train(outputPath, datasetPath, trainingSize,multiclass=False):
 	start = time.time()
 	datasetName = datasetPath[datasetPath.rfind("/"):]
 	auxPath = outputPath + datasetName
@@ -57,7 +58,10 @@ def train(outputPath, datasetPath, trainingSize):
 		# define the grid of parameters to explore, then start the grid search where
 		# we evaluate a Linear SVM for each value of C
 		print("[INFO] tuning hyperparameters...")
-		factory = cmf.classificationModelFactory()
+		if multiclass:
+			factory = cmmcf.classificationModelMultiClassFactory()
+		else:
+			factory = cmf.classificationModelFactory()
 		for clas in ex["classificationModels"]:
 			classifierModel = factory.getClassificationModel(clas)
 			model = RandomizedSearchCV(classifierModel.getModel(), param_distributions=classifierModel.getParams(),

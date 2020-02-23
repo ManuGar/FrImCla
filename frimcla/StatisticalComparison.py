@@ -24,6 +24,7 @@ from frimcla.utils.conf import Conf
 from frimcla.Comparing import compare_methods_h5py, prepareModel
 from frimcla.StatisticalAnalysis.statisticalAnalysis import statisticalAnalysis
 from frimcla.shallowmodels.classificationModelFactory import classificationModelFactory
+from frimcla.shallowmodels.classificationModelMultiClassFactory import classificationModelMultiClassFactory
 import time
 
 #This list is used to say what combinations are not allowed
@@ -58,6 +59,7 @@ def majorityVoting(outputPath, datasetPath, featureExtractors, modelClassifiers,
 
         featuresPath = pathAux + "/models/features-" + fE[0] + ".hdf5"
         labelEncoderPath = pathAux + "/models/le.cpickle"
+
         factory = classificationModelFactory()
         listAlgorithms = []
         listParams = []
@@ -167,7 +169,7 @@ def majorityVoting(outputPath, datasetPath, featureExtractors, modelClassifiers,
     the combination of feature extractor and classifier model with the highest % of the measure selected by the user.
     The method returns the execution time.
 """
-def statisticalComparison(outputPath, datasetPath, featureExtractors, modelClassifiers, measure, nSteps=10, verbose= False):
+def statisticalComparison(outputPath, datasetPath, featureExtractors, modelClassifiers, measure, nSteps=10, verbose= False,multiclass=False):
     start = time.time()
     pathAux = outputPath + datasetPath[datasetPath.rfind("/"):]
     filePathAux = pathAux + "/results/kfold-comparison_bestClassifiers.csv"
@@ -187,7 +189,10 @@ def statisticalComparison(outputPath, datasetPath, featureExtractors, modelClass
             print(model)
         featuresPath = pathAux + "/models/features-" + model[0] + ".hdf5"
         labelEncoderPath = pathAux + "/models/le.cpickle"
-        factory =classificationModelFactory()
+        if multiclass:
+            factory = classificationModelMultiClassFactory()
+        else:
+            factory =classificationModelFactory()
         listAlgorithms = []
         listParams = []
         listNiter = []
