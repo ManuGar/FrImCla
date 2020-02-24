@@ -12,27 +12,7 @@ FrImCla is an open-source framework for Image Classification using traditional a
 *   A web application automatically created to predict the image class
 
 ## Requeriments and installation of the library
-The library uses Python 3.6, which must be installed. 
-The following packages must be installed:
-
-*   numpy
-*   scikit_learn
-*   scikit-image
-*   Keras (2.1.6)
-*   h5py
-*   mahotas
-*   imutils
-*   tabulate
-*   tensorflow
-*   matplotlib
-*   pandas
-*   guppy
-*   wget
-*   theano
-*   OpenCV (i.e. cv2 must be available in python)
-*   commentjson
-
-Once the packages are available, `frimcla` can be installed using the following command. If you do not have the libraries availables it will be installed automatically executing the command.
+The library uses Python 3.6, which must be installed. `frimcla` can be installed using the following command:
 
 	pip install frimcla
 
