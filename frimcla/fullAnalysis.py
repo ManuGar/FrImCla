@@ -37,17 +37,29 @@ def fullAnalysis(config):
         os.makedirs(os.path.abspath(conf["output_path"]+ dataset))
     f = open(os.path.abspath(os.path.join(conf["output_path"]+ dataset, "timeFile.txt")), "w")
 
-    geneFeatuT =generateFeatures(conf["output_path"], conf["batch_size"], conf["dataset_path"], featureExtractors, verbose)
-    f.write("It has taken " + str(geneFeatuT) + " seg to generate the features\n")
+    if (conf["multiclass"]):
+        geneFeatuT =generateFeatures(conf["output_path"], conf["batch_size"], conf["dataset_path"], featureExtractors, verbose,multiclass=True)
+        f.write("It has taken " + str(geneFeatuT) + " seg to generate the features\n")
+    else:
+        geneFeatuT = generateFeatures(conf["output_path"], conf["batch_size"], conf["dataset_path"], featureExtractors,
+                                      verbose)
+        f.write("It has taken " + str(geneFeatuT) + " seg to generate the features\n")
 
     if(conf["ensemble"]):
         comparisonT = majorityVoting(conf["output_path"], conf["dataset_path"], featureExtractors,
                        modelClassifiers, conf["measure"], verbose)
     else:
-        comparisonT = statisticalComparison(conf["output_path"], conf["dataset_path"], featureExtractors,
-                              modelClassifiers, conf["measure"], conf["n_steps"], verbose)
+        if(conf["multiclass"]):
+            comparisonT = statisticalComparison(conf["output_path"], conf["dataset_path"], featureExtractors,
+                                  modelClassifiers, conf["measure"], conf["n_steps"], verbose,multiclass=True)
+        else:
+            comparisonT = statisticalComparison(conf["output_path"], conf["dataset_path"], featureExtractors,
+                                                modelClassifiers, conf["measure"], conf["n_steps"], verbose)
     f.write("It has taken " + str(comparisonT) + " seg to generate the model comparison and the statistical analysis\n")
-    trainT = train(conf["output_path"], conf["dataset_path"], conf["training_size"])
+    if(conf["multiclass"]):
+        trainT = train(conf["output_path"], conf["dataset_path"], conf["training_size"],multiclass=True)
+    else:
+        trainT = train(conf["output_path"], conf["dataset_path"], conf["training_size"])
 
     f.write("It has taken " + str(trainT) + " seg to train the best model\n")
     totalT = geneFeatuT + comparisonT + trainT
