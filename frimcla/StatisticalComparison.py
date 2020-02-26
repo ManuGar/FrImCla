@@ -234,7 +234,7 @@ def statisticalComparison(outputPath, datasetPath, featureExtractors, modelClass
             print("-------------------------------------------------")
         #Niteraciones de las clases [10, 10, 10, 5, 10]
         resultsAccuracy = compare_methods_h5py(model, featuresPath, labelEncoderPath, listAlgorithms, listParams, listNames,
-                                               listNiter,measure, nSteps, verbose, normalization=False)  # ,10
+                                               listNiter,measure, nSteps, verbose, normalization=False,multiclass=multiclass)  # ,10
 
         dfAccuracy = pd.DataFrame.from_dict(resultsAccuracy, orient='index')
         KFoldComparisionPathAccuracy = pathAux + "/results/kfold-comparison_"+model[0] + ".csv"

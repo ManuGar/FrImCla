@@ -157,7 +157,7 @@ def measurePrediction(clf, params, name, n_iter, trainData, testData, trainLabel
     classification models with their results using the measure selected by the user. 
 """
 def compare_methods_h5py(model, featuresPath,labelEncoderPath,listAlgorithms,listParameters,listAlgorithmNames,
-                         listNiters, measure, nSteps, verbose=False, normalization=False):
+                         listNiters, measure, nSteps, verbose=False, normalization=False,multiclass=False):
     # Loading dataset
     db = h5py.File(featuresPath)
     labels = db["image_ids"]
@@ -165,7 +165,10 @@ def compare_methods_h5py(model, featuresPath,labelEncoderPath,listAlgorithms,lis
     fileAux = open(labelEncoderPath, "rb")
     le = cPickle.loads(fileAux.read())
     fileAux.close()
-    labels = np.asarray([le.transform([re.split(":|\\\\" , l)[-2]])[0] for l in labels])
+    if multiclass:
+        labels = np.array([list(le.transform([re.split(":|\\\\", l)[-2].split('_')])[0]) for l in labels])
+    else:
+        labels = np.asarray([le.transform([re.split(":|\\\\" , l)[-2]])[0] for l in labels])
     # labels = np.asarray([le.transform([l.split(":")[0]])[0] for l in labels])
     del le
     kf = KFold(n_splits=int(nSteps), shuffle=False,random_state=42) #n_splits=10
