@@ -7,7 +7,23 @@ CLASSIFICATIONMODELS = {
     "LogisticRegression" : cM.LogRegression(),
     "MLP" : cM.MultiLayerPerceptron(),
     "GradientBoost" : cM.GradientBoost(),
-    "ExtraTrees" : cM.ExtraTrees()
+    "ExtraTrees" : cM.ExtraTrees(),
+    "ccRandomForest": cM.ccRandomForest(),
+    "ccSVM" : cM.ccSVM(),
+    "ccKNN" : cM.ccKNN(),
+    "ccLogisticRegression" : cM.ccLogRegression(),
+    "ccMLP" : cM.ccMultiLayerPerceptron(),
+    "ccGradientBoost" : cM.ccGradientBoost(),
+    "ccExtraTrees" : cM.ccExtraTrees(),
+    "lpRandomForest": cM.lpRandomForest(),
+    "lpSVM" : cM.lpSVM(),
+    "lpKNN" : cM.lpKNN(),
+    "lpLogisticRegression" : cM.lpLogRegression(),
+    "lpMLP" : cM.lpMultiLayerPerceptron(),
+    "lpGradientBoost" : cM.lpGradientBoost(),
+    "lpExtraTrees" : cM.lpExtraTrees(),
+    "MLTSVM": cM.mMLTSVM(),
+    "MLkNN": cM.mMLkNN(),
 }
 
 def ListClassificationModels():
