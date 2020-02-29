@@ -140,7 +140,7 @@ class MultiLayerPerceptron(classifierModel):
         self.niterations = nIterations
 
 class GradientBoost(classifierModel):
-    def __init__(self, random_state=84, n_classifiers=20,
+    def __init__(self, random_state=84, n_estimators=20,
                  params={"classifier__max_depth": [3, None],
 				  "classifier__max_features": [1, 3, 10],
 				  "classifier__min_samples_leaf": [1, 3, 10]},
