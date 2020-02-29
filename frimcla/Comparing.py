@@ -15,6 +15,7 @@ import os
 import _pickle as cPickle
 # import cPickle
 from sklearn.externals.joblib import Parallel, delayed
+from scipy.sparse import csr_matrix
 
 def hamming_score(y_true, y_pred, normalize=True, sample_weight=None):
     '''
@@ -210,7 +211,19 @@ def compare_methods_h5py(model, featuresPath,labelEncoderPath,listAlgorithms,lis
             testData = np.asarray(testData).astype("float32")
             testData -= np.mean(testData, axis=0)
             testData /= np.std(testData, axis=0)
-        output = Parallel(n_jobs=-1)(delayed(measurePrediction)(clf, params, name, n_iter, trainData, testData, trainLabels, testLabels, measure,verbose)
+
+        if multiclass:
+            from scipy.sparse import csr_matrix
+
+            output = Parallel(n_jobs=-1)(
+                delayed(measurePrediction)(clf, params, name, n_iter, csr_matrix(trainData), csr_matrix(testData),
+                                           csr_matrix(trainLabels), csr_matrix(testLabels),
+                                           measure, verbose)
+                for clf, params, name, n_iter in
+                zip(listAlgorithms, listParameters, listAlgorithmNames, listNiters))
+
+        else:
+            output = Parallel(n_jobs=-1)(delayed(measurePrediction)(clf, params, name, n_iter, trainData, testData, trainLabels, testLabels, measure,verbose)
                            for clf, params, name, n_iter in
                            zip(listAlgorithms, listParameters, listAlgorithmNames, listNiters))
 

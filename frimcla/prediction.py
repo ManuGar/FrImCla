@@ -117,9 +117,12 @@ def prediction(featExt, classi, imagePath, outputPath, datasetPath,multiclass=Fa
         (labels, images) = dataset.build_batch([imagePath], featExt[0])
         features = oe.describe(images)
         for (label, vector) in zip(labels, features):
-            prediction = model.predict(np.atleast_2d(vector))[0]
+            if multiclass:
+                from scipy.sparse import csr_matrix
+                prediction = model.predict(csr_matrix(np.atleast_2d(vector)))[0]
+            else:
+                prediction = model.predict(np.atleast_2d(vector))[0]
             filePrediction.write(str(label) + ", " + str(prediction) + "\r\n")
-            print(prediction)
             if multiclass:
                 prediction = le.inverse_transform(np.array([prediction]))
             else:
@@ -131,10 +134,13 @@ def prediction(featExt, classi, imagePath, outputPath, datasetPath,multiclass=Fa
             (labels, images) = dataset.build_batch(imPaths, featExt[0])
             features = oe.describe(images)
             for (label, vector) in zip(labels, features):
-                prediction = model.predict(np.atleast_2d(vector))[0]
+
                 if multiclass:
+                    from scipy.sparse import csr_matrix
+                    prediction = model.predict(csr_matrix(np.atleast_2d(vector)))[0]
                     prediction = le.inverse_transform(np.array([prediction]))
                 else:
+                    prediction = model.predict(np.atleast_2d(vector))[0]
                     prediction = le.inverse_transform([prediction])
                 predictions.append(prediction)
                 filePrediction.write( str(label) + ", " + str(prediction) + "\r\n")

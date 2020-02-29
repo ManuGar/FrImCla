@@ -61,7 +61,9 @@ def train(outputPath, datasetPath, trainingSize,multiclass=False):
 		if multiclass:
 			factory = cmmcf.classificationModelMultiClassFactory()
 			import numpy as np
+			from scipy.sparse import csr_matrix
 			trainLabels = np.array([list(le.transform([re.split(":|\\\\", l)[-2].split('_')])[0]) for l in trainLabels])
+			trainData = csr_matrix(trainData)
 		else:
 			factory = cmf.classificationModelFactory()
 			trainLabels = [le.transform([re.split(":|\\\\", l)[-2]])[0] for l in trainLabels]

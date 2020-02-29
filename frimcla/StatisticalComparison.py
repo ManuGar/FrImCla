@@ -26,6 +26,7 @@ from frimcla.StatisticalAnalysis.statisticalAnalysis import statisticalAnalysis
 from frimcla.shallowmodels.classificationModelFactory import classificationModelFactory
 from frimcla.shallowmodels.classificationModelMultiClassFactory import classificationModelMultiClassFactory
 import time
+from scipy.sparse import csr_matrix
 
 #This list is used to say what combinations are not allowed
 blacklist = [["haarhog", "SVM"],
