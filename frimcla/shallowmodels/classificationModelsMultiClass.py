@@ -145,7 +145,7 @@ class GradientBoost(classifierModel):
 				  "classifier__max_features": [1, 3, 10],
 				  "classifier__min_samples_leaf": [1, 3, 10]},
                  niterations=10):
-        self.model = BinaryRelevance(GradientBoostingClassifier(random_state=random_state,n_classifiers=n_classifiers))
+        self.model = BinaryRelevance(GradientBoostingClassifier(random_state=random_state,n_estimators=n_estimators))
         self.params = params
         self.niterations = niterations
 
