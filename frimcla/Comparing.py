@@ -23,7 +23,8 @@ def hamming_score(y_true, y_pred, normalize=True, sample_weight=None):
     http://stackoverflow.com/q/32239577/395857
     '''
     acc_list = []
-    y_pred = y_pred.A.astype(int)
+    if not(isinstance(y_pred,np.ndarray)):
+        y_pred = y_pred.A.astype(int)
 
     for i in range(y_true.shape[0]):
         set_true = set( np.where(y_true[i])[0] )
