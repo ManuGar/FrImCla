@@ -53,6 +53,8 @@ To uninstall the library use ``pip uninstall frimcla``.
 
 ## List of classifier models
 
+### List of classifiers for single-label models
+
 | Technique | Description |
 | --- | --- |
 | Multilayer perceptron (MLP)| An MLP consists of at least three layers of nodes. Except for the input nodes, each node is a neuron that uses a nonlinear activation function. MLP utilizes a supervised learning technique called backpropagation for training. | 
@@ -61,3 +63,13 @@ To uninstall the library use ``pip uninstall frimcla``.
 | Logistic Regression (LR) |A logistic model is one where the log-odds of the outputs are a linear function of the input. The two possible output values are often labelled as "0" and "1", which represent outcomes such as pass/fail, win/lose or alive/dead. The logistic model generalizes easily to multiple inputs, where the log-odds are linear in all the inputs; and, with more modification, to more outputs. | 
 | Random Forest (RF)| These models are an ensemble learning method for classification, regression and other tasks, that operate by constructing a multitude of decision trees at training time and outputting the class that is the mode of the classes (classification) or mean prediction (regression) of the individual trees.| 
 |Gradient Boost (GB)|It is a technique for regression and classification techniques. Gradient Boost produces a prediction model in the form of an ensemble of weak prediction models, typically decision trees. It builds the model like other boosting methods do and it generalizes them by allowing optimization of an arbitrary defferentiable loss function.|
+
+### List of classifiers for multi-label models
+
+| Technique | Description |
+| --- | --- |
+| Binary relevance | It treats each label as a separate single-class classification problem. It can use any of the classifiers for single-label models | 
+| ClassifierChain | It treats each label as a part of a conditioned chain of single-class classification problems. It can use any of the classifiers for single-label models| 
+| LabelPowerset|  It treats each label combination as a separate class with one multi-class classification problem. It can use any of the classifiers for single-label models| 
+| MlKnn | A multi-label adapted kNN classifier with bayesian prior corrections.|
+| MLTSVM |	Twin multi-Label Support Vector Machines |
