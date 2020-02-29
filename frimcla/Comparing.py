@@ -217,7 +217,7 @@ def compare_methods_h5py(model, featuresPath,labelEncoderPath,listAlgorithms,lis
 
             output = Parallel(n_jobs=-1)(
                 delayed(measurePrediction)(clf, params, name, n_iter, csr_matrix(trainData), csr_matrix(testData),
-                                           csr_matrix(trainLabels), csr_matrix(testLabels),
+                                           csr_matrix(trainLabels), testLabels,
                                            measure, verbose)
                 for clf, params, name, n_iter in
                 zip(listAlgorithms, listParameters, listAlgorithmNames, listNiters))
