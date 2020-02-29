@@ -23,6 +23,8 @@ def hamming_score(y_true, y_pred, normalize=True, sample_weight=None):
     http://stackoverflow.com/q/32239577/395857
     '''
     acc_list = []
+    y_pred = y_pred.A.astype(int)
+
     for i in range(y_true.shape[0]):
         set_true = set( np.where(y_true[i])[0] )
         set_pred = set( np.where(y_pred[i])[0] )
@@ -214,6 +216,7 @@ def compare_methods_h5py(model, featuresPath,labelEncoderPath,listAlgorithms,lis
 
         if multiclass:
             from scipy.sparse import csr_matrix
+
 
             output = Parallel(n_jobs=-1)(
                 delayed(measurePrediction)(clf, params, name, n_iter, csr_matrix(trainData), csr_matrix(testData),
